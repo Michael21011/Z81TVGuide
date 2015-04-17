@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">TV guide</string>
+    <string name="now_title">On the air %1s</string>
+    <string name="now_title_default">On the air</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="title_activity_display_message">My Message</string>
+    <string name="textView2">Enter a text view</string>
+    <string name="download_message">Downloading a guide&#8230;</string>
+    <string name="action_download">Download</string>
+    <string name="update_list">Updating&#8230;</string>
+    <string name="action_download_previous">Download a previous guide</string>
+    <string name="Hour_short">h.</string>
+    <string name="Minute_short">min.</string>
+</resources>

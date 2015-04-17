@@ -1,0 +1,31 @@
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:sabd="http://schemas.android.com/apk/res-auto">
+         <!-- Search, should appear as action button -->
+    <item android:id="@+id/action_search"
+          android:icon="@drawable/ic_menu_search"
+          android:title="@string/action_search"
+          sabd:showAsAction="always"
+          android:visible="false"/>
+            <item android:id="@+id/action_refresh"
+          android:title="@string/action_refresh"
+          android:icon="@drawable/ic_menu_refresh"
+                sabd:showAsAction="always" />
+                      <item android:id="@+id/action_download"
+          android:title="@string/action_download"
+          android:icon="@drawable/ic_menu_download"
+                          sabd:showAsAction="always" />
+           <item android:id="@+id/action_test"
+        android:title="test"
+        android:icon="@drawable/ic_popup_reminder"
+               sabd:showAsAction="always"
+        android:visible="false" />
+        <item android:id="@+id/action_download_previous"
+            android:title="@string/action_download_previous"
+            android:icon="@drawable/ic_menu_share"
+            sabd:showAsAction="ifRoom" />
+
+        <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings" />
+  
+    </menu>

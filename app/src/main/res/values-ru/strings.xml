@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ТВ программа</string>
+    <string name="now_title">В эфире %1s</string>
+    <string name="now_title_default">В эфире</string>  
+    <string name="action_settings">Настройки</string>
+     <string name="action_search">Поиск</string>
+     <string name="action_refresh">Обновить</string>
+    <string name="hello_world">Привет, мир!</string>
+    <string name="edit_message">Введите сообщение</string>
+    <string name="button_send">Отправить</string>
+    <string name="title_activity_display_message">Мое сообщение</string>
+    <string name="download_message">Скачивать программу&#8230;></string>
+             <string name="action_download">Скачать</string>
+  <string name="update_list">Обновление&#8230;</string>
+    <string name="action_download_previous">Скачивать предыдущую программу</string>
+    <string name="Hour_short">ч.</string>
+    <string name="Minute_short">мин.</string>
+</resources>
