@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="4px"
+        android:layout_marginRight="10px"
+        android:layout_marginTop="4px"
+        android:src="@drawable/belarus1" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/channel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@+id/label"
+        android:textColor="@color/ChannelNameNow"
+        android:textSize="16sp"
+        android:visibility="visible" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/space1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:text=" "
+        android:textSize="16sp" 
+        android:visibility="invisible" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/programm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@+id/label"
+        android:textSize="24sp"
+        android:visibility="invisible">
+    </TextView>
+
+    <TextView
+        android:id="@+id/space2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:textSize="16sp" >
+    </TextView>
+
+
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="4px"
+        android:layout_marginRight="10px"
+        android:layout_marginTop="4px"
+        android:src="@drawable/ic_layout_star" >
+    </ImageView>
+
+</LinearLayout>

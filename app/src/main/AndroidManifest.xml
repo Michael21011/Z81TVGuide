@@ -1,9 +1,21 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="info.z81.z81tvguide">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="info.z81.z81tvguide" >
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <!-- <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"/> -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="info.z81.z81tvguide.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/now_title_default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -12,20 +24,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="info.z81.z81tvguide.DisplayMessageActivity"
+            android:name=".DisplayMessageActivity"
             android:label="@string/title_activity_display_message"
-            android:parentActivityName="info.z81.z81tvguide.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="info.z81.z81tvguide.MainActivity" />
         </activity>
+        <activity
+            android:name=".ChannelListActivity"
+            android:label="@string/title_activity_channel_list" >
+        </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--  <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
-    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
-    <!--  <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"/>-->
-
 
 </manifest>

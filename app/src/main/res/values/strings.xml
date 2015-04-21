@@ -16,4 +16,6 @@
     <string name="action_download_previous">Download a previous guide</string>
     <string name="Hour_short">h.</string>
     <string name="Minute_short">min.</string>
+    <string name="title_activity_channel_list">Channels</string>
+    <string name="action_channellist">Channels</string>
 </resources>

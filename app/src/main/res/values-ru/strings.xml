@@ -17,4 +17,6 @@
     <string name="action_download_previous">Скачивать предыдущую программу</string>
     <string name="Hour_short">ч.</string>
     <string name="Minute_short">мин.</string>
+    <string name="textView2">Введите текст</string>
+    <string name="action_channellist">Каналы</string>
 </resources>

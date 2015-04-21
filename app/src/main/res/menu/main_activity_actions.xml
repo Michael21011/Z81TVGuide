@@ -1,6 +1,11 @@
     <menu xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:sabd="http://schemas.android.com/apk/res-auto">
          <!-- Search, should appear as action button -->
+        <item android:id="@+id/action_channellist"
+            android:icon="@drawable/ic_menu_moreoverflow"
+            android:title="@string/action_channellist"
+            sabd:showAsAction="always"
+            android:visible="true"/>
     <item android:id="@+id/action_search"
           android:icon="@drawable/ic_menu_search"
           android:title="@string/action_search"

@@ -60,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
 	private static String WWWFileName = "program_xml.zip";
 	private Boolean IsForceUnzipFile = false;
 	public NowList nowList;
+    public static ChannelList channelList;
 	private Document d;
 	private int XMLLoadProgress = 20;
 
@@ -78,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
 		mProgressDialog.setCancelable(false);
 		
 		nowList = new NowList();
+        channelList = new ChannelList();
 		
 		
 
@@ -183,9 +185,22 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_test:
             	sortListViewByTime();
                 return true;
+            case R.id.action_channellist:
+                openChannelListActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void openChannelListActivity() {
+        Intent intent = new Intent(this, ChannelListActivity.class);
+        //	EditText editText = (EditText) findViewById(R.id.edit_message);
+        //	String message = editText.getText().toString();
+      //  intent.putExtra("channel", channelList.);
+        startActivity(intent);
+
+
     }
 
     private void doTest(Object object) {
@@ -657,9 +672,13 @@ try
 	    		        String currentDate="";
 	    		        String maxDate="";
 	    		        nowList.Clear();
+                channelList.Clear();
 	    		       // String CurrentTime = (String) DateFormat.format("yyyyMMddhhmmss", new java.util.Date());
 	    		        Calendar c = Calendar.getInstance();
 	    		        String CurrentTime=new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
+                        Date today = new Date();
+                         today.setTime(c.getTimeInMillis()+(1000*5*60));
+                String TimeForProgramCompare = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(today.getTime());
 	    		        String currentText="";
 	    		        NodeList programlist = d.getElementsByTagName("programme");
 	    	        	currentText="";
@@ -691,7 +710,7 @@ try
 
 	    	        			currentDate = program.getAttributes().getNamedItem("start").getNodeValue();
 
-	    	        			if ((currentDate.compareTo(maxDate)>0) & (currentDate.compareTo(CurrentTime)<=0))
+	    	        			if ((currentDate.compareTo(maxDate)>0) & (currentDate.compareTo(TimeForProgramCompare)<=0))
 	    	        			{
 	    	        				currentText = program.getElementsByTagName("title").item(0).getTextContent();
 	    	        				pro.put(channelid, currentDate);
@@ -739,6 +758,7 @@ try
 	    		            else
 	    		            	catnames[i] = String.format("%1$s: empty", fstElmnt.getElementsByTagName("display-name").item(0).getTextContent());
 	    		            nowList.Add(channelid, fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), cha.getProperty(channelid,"Unknown"), dd);
+                            channelList.Add(channelid,fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), false );
 	    		        	/*ListView lv=(ListView)findViewById(R.id.listView1);
 	           	
 	    		        	
