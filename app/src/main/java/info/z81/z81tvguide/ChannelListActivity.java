@@ -1,5 +1,7 @@
 package info.z81.z81tvguide;
 
+import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,12 +18,14 @@ public class ChannelListActivity extends ActionBarActivity {
 
     ChannelList channelList;
     ChannelAdapter adapter;
+    SharedPreferences  favoriteChannelListPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
        channelList = MainActivity.channelList;
         setContentView(R.layout.activity_channel_list);
+        favoriteChannelListPreference = MainActivity.favoriteChannelListPreference;
 
         updateListView();
     }
@@ -52,7 +56,7 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void updateListView()    {
 
         final ListView lv1 = (ListView)findViewById(R.id.listView1);
-        adapter = new ChannelAdapter(this, channelList);
+        adapter = new ChannelAdapter(this, channelList, favoriteChannelListPreference);
         lv1.setAdapter(adapter);
         SetListViewListeners();
     }
@@ -87,9 +91,16 @@ public class ChannelListActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 ChannelItem ni = (ChannelItem)channelList.GetItem(position);
-
+                TextView tw = (TextView)findViewById(R.id.channel);
 
                     ni.Stared = !(ni.Stared);
+
+                SharedPreferences.Editor ed = favoriteChannelListPreference.edit();
+                ed.remove(ni.ChannelName);
+                if (ni.Stared) {
+                    ed.putBoolean(ni.ChannelName, true);
+                }
+                ed.commit();
                 adapter.notifyDataSetChanged();
 
 

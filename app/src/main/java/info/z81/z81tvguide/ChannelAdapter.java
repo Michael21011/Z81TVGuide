@@ -1,6 +1,7 @@
 package info.z81.z81tvguide;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 public class ChannelAdapter extends BaseAdapter{
     private final Context context;
     private final ChannelList list;
+    SharedPreferences favoriteChannelListPreference;
 
-    public ChannelAdapter(Context context, ChannelList values) {
+
+    public ChannelAdapter(Context context, ChannelList values,  SharedPreferences  favoriteChannelListPreference) {
         super();
     	this.list = values;
         this.context = context;
-
+        this.favoriteChannelListPreference = favoriteChannelListPreference;
     }
     
     // ����� ��� ���������� �� ������� ����� � ��� ����������� �������
@@ -50,7 +53,8 @@ public class ChannelAdapter extends BaseAdapter{
         ChannelItem currentItem = (ChannelItem)list.GetItem(position);
         holder.textView.setText(currentItem.ChannelName);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
-        if (currentItem.Stared) {
+
+        if (favoriteChannelListPreference.getBoolean(currentItem.ChannelName, false )) {
             holder.starView.setImageResource(R.drawable.ic_layout_star_selected);
         } else {
         holder.starView.setImageResource(R.drawable.ic_layout_star_op);}

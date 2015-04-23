@@ -29,6 +29,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
 	private Document d;
 	private int XMLLoadProgress = 20;
 
+    public static SharedPreferences favoriteChannelListPreference;
 	
 	// declare the dialog as a member field of your activity
 	ProgressDialog mProgressDialog;
@@ -80,7 +82,7 @@ public class MainActivity extends ActionBarActivity {
 		
 		nowList = new NowList();
         channelList = new ChannelList();
-		
+        favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
 		
 
 	           
@@ -684,6 +686,7 @@ try
 	    	        	currentText="";
 	    	        	maxDate="";
 	    	        	String channelid="";
+                        String channelName="";
 	    	        	Properties pro= new Properties();
 	    	        	Properties cha= new Properties();
 	    	        	
@@ -733,33 +736,33 @@ try
 	    		        	+ ((Node) nameList.item(0)).getNodeValue());
 	    		        	*/
 	    		        	channelid = channellist.item(i).getAttributes().getNamedItem("id").getNodeValue();
-	    		            String dd = pro.getProperty(channelid,"");
-	    		            if (dd!="")
-	    		            {
-	    		        	int year = Integer.parseInt(dd.subSequence(0, 4).toString());
-	    		        	int month = Integer.parseInt(dd.subSequence(4, 6).toString());
-	    		        	int day = Integer.parseInt(dd.subSequence(6, 8).toString());
-	    		        	int hour = Integer.parseInt(dd.subSequence(8, 10).toString());	    		        	
-	    		        	int min = Integer.parseInt(dd.subSequence(10, 12).toString());	    		        	
-	    		        	Calendar StartDate = Calendar.getInstance();
-	    		        	StartDate.set(year, month-1, day, hour, min);
-	    		         	Calendar curr = Calendar.getInstance();
-    		        	    long diffMin = (curr.getTimeInMillis()-StartDate.getTimeInMillis())/1000/60;
-    		        	    String diffString=String.format("%d %s", diffMin, R.string.Minute_short);
-    		        	    if (diffMin>=60)
-    		        	    {
-    		        	    	long diffHour = diffMin/60;
-    		        	    	diffString=String.format("%d %s", diffHour, R.string.Hour_short);
-    		        	    }
-	    		        	
-	    		        	catnames[i] = String.format("%1$s: %3$s %5$s", fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), pro.getProperty(channelid,""),cha.getProperty(channelid,"Unknown"),CurrentTime,diffString);
-	    		        	
-	    		            }
-	    		            else
-	    		            	catnames[i] = String.format("%1$s: empty", fstElmnt.getElementsByTagName("display-name").item(0).getTextContent());
-	    		            nowList.Add(channelid, fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), cha.getProperty(channelid,"Unknown"), dd);
-                            channelList.Add(channelid,fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), false );
-	    		        	/*ListView lv=(ListView)findViewById(R.id.listView1);
+                            channelName = fstElmnt.getElementsByTagName("display-name").item(0).getTextContent();
+                            channelList.Add(channelid, channelName, false);
+
+                            if (favoriteChannelListPreference.getBoolean(channelName, false )) {
+                                String dd = pro.getProperty(channelid, "");
+                                if (dd != "") {
+                                    int year = Integer.parseInt(dd.subSequence(0, 4).toString());
+                                    int month = Integer.parseInt(dd.subSequence(4, 6).toString());
+                                    int day = Integer.parseInt(dd.subSequence(6, 8).toString());
+                                    int hour = Integer.parseInt(dd.subSequence(8, 10).toString());
+                                    int min = Integer.parseInt(dd.subSequence(10, 12).toString());
+                                    Calendar StartDate = Calendar.getInstance();
+                                    StartDate.set(year, month - 1, day, hour, min);
+                                    Calendar curr = Calendar.getInstance();
+                                    long diffMin = (curr.getTimeInMillis() - StartDate.getTimeInMillis()) / 1000 / 60;
+                                    String diffString = String.format("%d %s", diffMin, R.string.Minute_short);
+                                    if (diffMin >= 60) {
+                                        long diffHour = diffMin / 60;
+                                        diffString = String.format("%d %s", diffHour, R.string.Hour_short);
+                                    }
+
+                                    catnames[i] = String.format("%1$s: %3$s %5$s", fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), pro.getProperty(channelid, ""), cha.getProperty(channelid, "Unknown"), CurrentTime, diffString);
+
+                                } else
+                                    catnames[i] = String.format("%1$s: empty", fstElmnt.getElementsByTagName("display-name").item(0).getTextContent());
+                                nowList.Add(channelid, fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), cha.getProperty(channelid, "Unknown"), dd);
+                                 	/*ListView lv=(ListView)findViewById(R.id.listView1);
 	           	
 	    		        	
 
@@ -770,9 +773,8 @@ try
 	    		        		lv.invalidateViews();
 	    		       		*/
 
-	    					
-	    				
 
+                            }
 	    		 
 	           
 	            
