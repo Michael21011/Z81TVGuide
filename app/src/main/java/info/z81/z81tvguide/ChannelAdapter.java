@@ -38,10 +38,10 @@ public class ChannelAdapter extends BaseAdapter{
         if (rowView == null) {
             //LayoutInflater inflater = this.context.getLayoutInflater();
             LayoutInflater inflater = LayoutInflater.from(context);
-            rowView = inflater.inflate(R.layout.rowlayout, null, true);
+            rowView = inflater.inflate(R.layout.channel_row_layout, null, true);
             holder = new ViewHolder();
             holder.textView = (TextView) rowView.findViewById(R.id.channel);
-            holder.imageView = (ImageView) rowView.findViewById(R.id.icon);
+            holder.imageView = (ImageView) rowView.findViewById(R.id.channellogo);
             holder.starView = (ImageView) rowView.findViewById(R.id.star);
             rowView.setTag(holder);
         } else {
@@ -51,9 +51,9 @@ public class ChannelAdapter extends BaseAdapter{
         holder.textView.setText(currentItem.ChannelName);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
         if (currentItem.Stared) {
-            holder.imageView.setImageResource(R.drawable.ic_layout_star_selected);
+            holder.starView.setImageResource(R.drawable.ic_layout_star_selected);
         } else {
-        holder.imageView.setImageResource(R.drawable.ic_layout_star);}
+        holder.starView.setImageResource(R.drawable.ic_layout_star_op);}
         // ��������� ������ ��� Windows � iPhone
    /*     String s = names[position];
         if (s.startsWith("Windows7") || s.startsWith("iPhone")

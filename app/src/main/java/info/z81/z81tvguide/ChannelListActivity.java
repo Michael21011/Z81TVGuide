@@ -8,17 +8,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
 public class ChannelListActivity extends ActionBarActivity {
 
     ChannelList channelList;
+    ChannelAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       channelList = MainActivity.channelList;
         setContentView(R.layout.activity_channel_list);
-        channelList = MainActivity.channelList;
+
         updateListView();
     }
 
@@ -48,14 +52,26 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void updateListView()    {
 
         final ListView lv1 = (ListView)findViewById(R.id.listView1);
-        ChannelAdapter adapter = new ChannelAdapter(this, channelList);
+        adapter = new ChannelAdapter(this, channelList);
         lv1.setAdapter(adapter);
         SetListViewListeners();
     }
     protected void SetListViewListeners()    {
         ListView list = (ListView)findViewById(R.id.listView1);
+        final ImageView starView = (ImageView) findViewById(R.id.star);
 
+      /*  starView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    ChannelItem ni = (ChannelItem)channelList.GetItem(position);
 
+                    TextView tw = (TextView)findViewById(R.id.channel);
+                    Toast.makeText(getBaseContext(),ni.ChannelName, Toast.LENGTH_LONG).show();
+            }
+
+            }
+
+        );
+        */
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,8 +88,12 @@ public class ChannelListActivity extends ActionBarActivity {
                                     int position, long id) {
                 ChannelItem ni = (ChannelItem)channelList.GetItem(position);
 
-                TextView tw = (TextView)findViewById(R.id.channel);
-                Toast.makeText(getBaseContext(),ni.ChannelName, Toast.LENGTH_LONG).show();
+
+                    ni.Stared = !(ni.Stared);
+                adapter.notifyDataSetChanged();
+
+
+
             }
         });
     }
