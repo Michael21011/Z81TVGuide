@@ -40,17 +40,27 @@ public class ChannelListActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return true;
+            case R.id.channels_favorite_all:
+                MarkAllChannels(true);
+                return true;
+         /*   case R.id.action_settings:
+            	sendMessage(null);
+                return true;
+          */  case R.id.channels_favorite_none:
+                MarkAllChannels(false);
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void MarkAllChannels(boolean Starred) {
+
     }
 
     protected void updateListView()    {
@@ -91,17 +101,10 @@ public class ChannelListActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 ChannelItem ni = (ChannelItem)channelList.GetItem(position);
-                TextView tw = (TextView)findViewById(R.id.channel);
-                boolean Stared = ni.Stared;
-                Stared = !(Stared);
+               // TextView tw = (TextView)findViewById(R.id.channel);
 
-                SharedPreferences.Editor ed = favoriteChannelListPreference.edit();
-                ed.remove(ni.ChannelName);
-                if (Stared) {
-                    ed.putBoolean(ni.ChannelName, true);
-                }
-                ed.commit();
-                ni.Stared = Stared;
+                ni.setStared(!ni.getStared());
+
                 adapter.notifyDataSetChanged();
 
 

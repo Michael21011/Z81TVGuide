@@ -33,12 +33,18 @@ public class ChannelList implements  Comparable {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+    public void MarkAll(boolean Starred){
+        for (int i=0;i<this.Count();i++)        {
+            ChannelItem item=(ChannelItem)GetItem(i);
+            item.setStared(Starred);
+        }
+    }
 
-	public void Add(String channelid, String channelName, boolean Stared) {
+	public void Add(String channelid, String channelName) {
 		ChannelItem channelItem = new ChannelItem();
 		channelItem.ChannelId=channelid;
 		channelItem.ChannelName = channelName;
-		channelItem.Stared = Stared;
+		//channelItem.Stared = Stared;
 		
 		list.add(channelItem);
         

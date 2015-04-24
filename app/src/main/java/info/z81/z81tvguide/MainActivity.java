@@ -159,11 +159,12 @@ public class MainActivity extends ActionBarActivity {
     
     /** Called when the user clicks the Send button */
     public void sendMessage(View view) {
-    	Intent intent = new Intent(this, DisplayMessageActivity.class);
+    	/*Intent intent = new Intent(this, DisplayMessageActivity.class);
     //	EditText editText = (EditText) findViewById(R.id.edit_message);
     //	String message = editText.getText().toString();
     //	intent.putExtra(EXTRA_MESSAGE, message);
     	startActivity(intent);
+    	*/
 
     }
     
@@ -458,13 +459,14 @@ try
 	             }
 	             File  outputfile= new File(path, filename);
 	             FileOutputStream fout = new FileOutputStream(outputfile);
-
+                int FileSize = 0;
 	             // cteni zipu a zapis
-	             while ((count = zis.read(buffer)) != -1) 
-	             {
-	                 fout.write(buffer, 0, count);             
-	             }
-
+	             while ((count = zis.read(buffer)) != -1) {
+                     fout.write(buffer, 0, count);
+                     FileSize = FileSize+count;
+                     if (FileSize>1*1024*1024)
+                         break;
+                 }
 	             fout.close();               
 	             zis.closeEntry();
 	             //ResultFile = path +'/'+ filename;
@@ -741,7 +743,7 @@ try
 	    		        	*/
 	    		        	channelid = channellist.item(i).getAttributes().getNamedItem("id").getNodeValue();
                             channelName = fstElmnt.getElementsByTagName("display-name").item(0).getTextContent();
-                            channelList.Add(channelid, channelName, false);
+                            channelList.Add(channelid, channelName);
 
                             if (favoriteChannelListPreference.getBoolean(channelName, false )) {
                                 String dd = pro.getProperty(channelid, "");
