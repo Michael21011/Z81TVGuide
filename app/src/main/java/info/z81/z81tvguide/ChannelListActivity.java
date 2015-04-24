@@ -92,15 +92,16 @@ public class ChannelListActivity extends ActionBarActivity {
                                     int position, long id) {
                 ChannelItem ni = (ChannelItem)channelList.GetItem(position);
                 TextView tw = (TextView)findViewById(R.id.channel);
-
-                    ni.Stared = !(ni.Stared);
+                boolean Stared = ni.Stared;
+                Stared = !(Stared);
 
                 SharedPreferences.Editor ed = favoriteChannelListPreference.edit();
                 ed.remove(ni.ChannelName);
-                if (ni.Stared) {
+                if (Stared) {
                     ed.putBoolean(ni.ChannelName, true);
                 }
                 ed.commit();
+                ni.Stared = Stared;
                 adapter.notifyDataSetChanged();
 
 

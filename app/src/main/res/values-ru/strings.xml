@@ -19,4 +19,7 @@
     <string name="Minute_short">мин.</string>
     <string name="textView2">Введите текст</string>
     <string name="action_channellist">Каналы</string>
+    <string name="title_activity_channel_list">Каналы</string>
+    <string name="mark_all_as_favorite">Отметить все как избранные</string>
+    <string name="unmark_all_as_favorite">Убрать все отметки с избранных</string>
 </resources>

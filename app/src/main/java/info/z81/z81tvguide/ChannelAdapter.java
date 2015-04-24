@@ -55,9 +55,9 @@ public class ChannelAdapter extends BaseAdapter{
         holder.imageView.setImageResource(currentItem.getChannelLogo());
 
         if (favoriteChannelListPreference.getBoolean(currentItem.ChannelName, false )) {
-            holder.starView.setImageResource(R.drawable.ic_layout_star_selected);
+            holder.starView.setImageResource(android.R.drawable.star_on);
         } else {
-        holder.starView.setImageResource(R.drawable.ic_layout_star_op);}
+        holder.starView.setImageResource(android.R.drawable.star_off);}
         // ��������� ������ ��� Windows � iPhone
    /*     String s = names[position];
         if (s.startsWith("Windows7") || s.startsWith("iPhone")
