@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -24,17 +25,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
+
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PowerManager;
+
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -45,12 +45,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
+
 
 
 public class MainActivity extends ActionBarActivity {
@@ -136,8 +136,6 @@ public class MainActivity extends ActionBarActivity {
  			      public void onItemClick(AdapterView<?> parent, View view,
  			          int position, long id) {
  			    	  NowItem ni = (NowItem)nowList.GetItem(position);
- 			    	  
- 			    	 TextView tw = (TextView)findViewById(R.id.channel);
  			    	  Toast.makeText(getBaseContext(),ni.ChannelName, Toast.LENGTH_LONG).show();
  			      }
  			    });
@@ -156,18 +154,6 @@ public class MainActivity extends ActionBarActivity {
      
 
     }
-    
-    /** Called when the user clicks the Send button */
-    public void sendMessage(View view) {
-    	Intent intent = new Intent(this, DisplayMessageActivity.class);
-    //	EditText editText = (EditText) findViewById(R.id.edit_message);
-    //	String message = editText.getText().toString();
-    //	intent.putExtra(EXTRA_MESSAGE, message);
-    	startActivity(intent);
-
-    }
-    
-   
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,8 +192,6 @@ public class MainActivity extends ActionBarActivity {
         //	String message = editText.getText().toString();
       //  intent.putExtra("channel", channelList.);
         startActivity(intent);
-
-
     }
 
     private void doTest(Object object) {
@@ -671,21 +655,17 @@ try
 	        	}
 
 	    		publishProgress(XMLLoadProgress);
-	    		 
-	  
-	    	
-
-
+                boolean FavoritesSelected = getFavoritesSelected();
 	    		        String currentDate="";
 	    		        String maxDate="";
 	    		        nowList.Clear();
-                channelList.Clear();
-	    		       // String CurrentTime = (String) DateFormat.format("yyyyMMddhhmmss", new java.util.Date());
+                        channelList.Clear();
+	    		        // String CurrentTime = (String) DateFormat.format("yyyyMMddhhmmss", new java.util.Date());
 	    		        Calendar c = Calendar.getInstance();
 	    		        String CurrentTime=new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
                         Date today = new Date();
-                         today.setTime(c.getTimeInMillis()+(1000*5*60));
-                String TimeForProgramCompare = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(today.getTime());
+                        today.setTime(c.getTimeInMillis()+(1000*5*60));
+                        String TimeForProgramCompare = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(today.getTime());
 	    		        String currentText="";
 	    		        NodeList programlist = d.getElementsByTagName("programme");
 	    	        	currentText="";
@@ -713,8 +693,6 @@ try
 	    	        			pro.put(channelid, "");
 	    	        			maxDate="0";
 	    	        		}
-	    	        		
-
 
 	    	        			currentDate = program.getAttributes().getNamedItem("start").getNodeValue();
 
@@ -724,26 +702,18 @@ try
 	    	        				pro.put(channelid, currentDate);
 	    	        				cha.put(channelid, currentText);
 	    	        			}
-	            			
-	    	        		
-	                    
 	    	        	}
 	    		        NodeList channellist = d.getElementsByTagName("channel");
 
 	    		        for (int i = 0; i < channellist.getLength(); i++) {
 	    		        	Node node = channellist.item(i);
 	    		        	Element fstElmnt = (Element) node;
-	    		        	//NodeList nameList = fstElmnt.getElementsByTagName("display-name");
-	    		        	/*Element nameElement = (Element) nameList.item(0);
-	    		        	nameList = nameElement.getChildNodes();
-	    		        	name[i].setText("Name = "
-	    		        	+ ((Node) nameList.item(0)).getNodeValue());
-	    		        	*/
+
 	    		        	channelid = channellist.item(i).getAttributes().getNamedItem("id").getNodeValue();
                             channelName = fstElmnt.getElementsByTagName("display-name").item(0).getTextContent();
-                            channelList.Add(channelid, channelName, false);
+                            channelList.Add(channelid, channelName);
 
-                            if (favoriteChannelListPreference.getBoolean(channelName, false )) {
+                            if (!FavoritesSelected || (favoriteChannelListPreference.getBoolean(channelName, false ))) {
                                 String dd = pro.getProperty(channelid, "");
                                 nowList.Add(channelid, fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), cha.getProperty(channelid, "Unknown"), dd);
                              }
@@ -758,6 +728,11 @@ try
 	
 	    
 	}
-	
-	
+
+    private boolean getFavoritesSelected() {
+       Map<String, ?> favorites = favoriteChannelListPreference.getAll();
+        return favorites.size()>0;
+    }
+
+
 }

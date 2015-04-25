@@ -54,7 +54,7 @@ public class ChannelAdapter extends BaseAdapter{
         holder.textView.setText(currentItem.ChannelName);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
 
-        if (favoriteChannelListPreference.getBoolean(currentItem.ChannelName, false )) {
+        if (currentItem.isStared()) {
             holder.starView.setImageResource(android.R.drawable.star_on);
         } else {
         holder.starView.setImageResource(android.R.drawable.star_off);}

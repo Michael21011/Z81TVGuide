@@ -1,22 +1,33 @@
 package info.z81.z81tvguide;
 
-import java.util.Calendar;
+import android.content.SharedPreferences;
 import java.util.Date;
 
 public class ChannelItem {
 	
 	public String ChannelId;
 	public String ChannelName;
-	public String Title;
-	public Date DateStart;
-    public boolean Stared;
+    private Boolean stared;
 
-	private int channelLogo;
 	public int getChannelLogo() {
         return Utils.getChannelLogoByName(ChannelName);
 	}
-	public void setChannelLogo(int newFoo) {
-		channelLogo = newFoo;
-	}
+
+    public boolean isStared() {
+        if (stared==null)
+            stared = MainActivity.favoriteChannelListPreference.getBoolean(ChannelName, false);
+        return stared;
+    }
+
+    public void setStared(boolean stared) {
+        this.stared = stared;
+        SharedPreferences.Editor ed = MainActivity.favoriteChannelListPreference.edit();
+        ed.remove(ChannelName);
+        if (stared) {
+            ed.putBoolean(ChannelName, true);
+        }
+        ed.commit();
+    }
+
 
 }

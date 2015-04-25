@@ -1,7 +1,6 @@
 package info.z81.z81tvguide;
 
 import android.content.SharedPreferences;
-import android.preference.Preference;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,14 +42,38 @@ public class ChannelListActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (item.getItemId()) {
+            case R.id.action_search:
+               // showContentInBackground(null);
+                return true;
+            case R.id.action_refresh:
+                //showContentInBackground(null);
+                return true;
+         /*   case R.id.action_settings:
+            	sendMessage(null);
+                return true;
+          */  case R.id.action_mark_favorite_all:
+                MarkAllFavorites(true);
+                return true;
+            case R.id.action_mark_favorite_none:
+                MarkAllFavorites(false);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void MarkAllFavorites(boolean Stared) {
+        for (int i=0;i<channelList.Count();i++){
+            ChannelItem ci = (ChannelItem)channelList.GetItem(i);
+            ci.setStared(Stared);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     protected void updateListView()    {
@@ -62,27 +85,12 @@ public class ChannelListActivity extends ActionBarActivity {
     }
     protected void SetListViewListeners()    {
         ListView list = (ListView)findViewById(R.id.listView1);
-        final ImageView starView = (ImageView) findViewById(R.id.star);
 
-      /*  starView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    ChannelItem ni = (ChannelItem)channelList.GetItem(position);
-
-                    TextView tw = (TextView)findViewById(R.id.channel);
-                    Toast.makeText(getBaseContext(),ni.ChannelName, Toast.LENGTH_LONG).show();
-            }
-
-            }
-
-        );
-        */
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView tw = (TextView)findViewById(R.id.channel);
                 Toast.makeText(getBaseContext(), tw.getText(), Toast.LENGTH_LONG).show();
-                // ?????????? "??????", ????? ????????? ??????? ?????, ?????
-                // onListItemClick ?????? ?? ?????????
                 return true;
             }
         });
@@ -91,21 +99,8 @@ public class ChannelListActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 ChannelItem ni = (ChannelItem)channelList.GetItem(position);
-                TextView tw = (TextView)findViewById(R.id.channel);
-                boolean Stared = ni.Stared;
-                Stared = !(Stared);
-
-                SharedPreferences.Editor ed = favoriteChannelListPreference.edit();
-                ed.remove(ni.ChannelName);
-                if (Stared) {
-                    ed.putBoolean(ni.ChannelName, true);
-                }
-                ed.commit();
-                ni.Stared = Stared;
+                ni.setStared(!ni.isStared());
                 adapter.notifyDataSetChanged();
-
-
-
             }
         });
     }

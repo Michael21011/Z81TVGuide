@@ -2,12 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="info.z81.z81tvguide.ChannelListActivity">
-    <item android:id="@+id/favorite_all" android:title="@string/mark_all_as_favorite"
+    <item android:id="@+id/action_mark_favorite_all" android:title="@string/mark_all_as_favorite"
         android:icon="@android:drawable/star_on"
         android:orderInCategory="100" app:showAsAction="always" />
-    <item android:id="@+id/favorite_none" android:title="@string/unmark_all_as_favorite"
+    <item android:id="@+id/action_mark_favorite_none" android:title="@string/unmark_all_as_favorite"
         android:icon="@android:drawable/star_off"
         android:orderInCategory="100" app:showAsAction="always" />
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100" app:showAsAction="never" android:visible="false" />
 </menu>

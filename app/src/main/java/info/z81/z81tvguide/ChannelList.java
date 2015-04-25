@@ -1,24 +1,15 @@
 package info.z81.z81tvguide;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-
 
 public class ChannelList implements  Comparable {
-
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private ArrayList<ChannelItem> list;
 
 
     public ChannelList()
     {
-    	list = new ArrayList<ChannelItem>();
+    	list = new ArrayList<>();
     }
     
 	public  void Clear() {
@@ -34,12 +25,11 @@ public class ChannelList implements  Comparable {
 		return 0;
 	}
 
-	public void Add(String channelid, String channelName, boolean Stared) {
+	public void Add(String channelid, String channelName) {
 		ChannelItem channelItem = new ChannelItem();
 		channelItem.ChannelId=channelid;
 		channelItem.ChannelName = channelName;
-		channelItem.Stared = Stared;
-		
+
 		list.add(channelItem);
         
 	}
