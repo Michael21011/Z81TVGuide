@@ -5,6 +5,8 @@ package info.z81.z81tvguide;
  */
 public  class  Utils {
     public static int getChannelLogoByName(String ChannelName){
+        return R.drawable.empty;
+        /*
         int id;
         if (ChannelName.equalsIgnoreCase("24 Техно")){
             id = R.drawable.a24tehno;
@@ -203,5 +205,6 @@ public  class  Utils {
 
 
         return id;
+        */
     }
 }
