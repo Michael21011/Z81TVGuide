@@ -13,7 +13,7 @@
     <string name="title_activity_display_message">Мое сообщение</string>
     <string name="download_message">Скачивание программы&#8230;></string>
              <string name="action_download">Скачать программу</string>
-  <string name="update_list">Обновление&#8230;</string>
+  <string name="update_list">Чтение списка&#8230;</string>
     <string name="action_download_previous">Скачать предыдущую программу</string>
     <string name="Hour_short">ч.</string>
     <string name="Minute_short">мин.</string>
@@ -22,4 +22,5 @@
     <string name="title_activity_channel_list">Каналы</string>
     <string name="mark_all_as_favorite">Отметить все как избранные</string>
     <string name="unmark_all_as_favorite">Убрать все отметки с избранных</string>
+    <string name="action_ShowOnlyFavorites">Только избранное или все</string>
 </resources>

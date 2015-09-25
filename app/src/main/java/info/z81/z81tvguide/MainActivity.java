@@ -56,22 +56,20 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MainActivity extends ActionBarActivity {
 
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    public static ChannelList channelList;
+    public static SharedPreferences favoriteChannelListPreference;
+    public static Resources MyResources;
 	private static String FileURL = "http://mtis.by/program_xml.zip";
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
-	//private static String FileURL = "http://mail.lewis.com.au/public/xmltv/xmltv.zip";
 	private static String WWWFileName = "program_xml.zip";
-	private Boolean IsForceUnzipFile = false;
 	public NowList nowList;
-    public static ChannelList channelList;
+	ProgressDialog mProgressDialog;
+	private Boolean IsForceUnzipFile = false;
 	private Document d;
 	private int XMLLoadProgress = 20;
+    private Boolean ShowOnlyFavorites = true;
+    private Boolean NeedRefreshList = false;
 
-    public static SharedPreferences favoriteChannelListPreference;
-
-    public static Resources MyResources;
-	
-	// declare the dialog as a member field of your activity
-	ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,8 +99,17 @@ public class MainActivity extends ActionBarActivity {
         super.onPause();
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
+		if (NeedRefreshList)
+		{showContentInBackground(null);}
     }
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (mProgressDialog != null)
+			mProgressDialog.dismiss();
+
+	}
 
     protected void updateListView()    {
     	
@@ -122,23 +129,22 @@ public class MainActivity extends ActionBarActivity {
 
 
  			list.setOnItemLongClickListener(new OnItemLongClickListener() {
- 				@Override
- 		        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
- 					TextView tw = (TextView)findViewById(R.id.channel);
- 					  Toast.makeText(getBaseContext(), tw.getText(), Toast.LENGTH_LONG).show();
- 		                // ���������� "������", ����� ��������� ������� �����, �����
- 		                // onListItemClick ������ �� ���������
- 		                return true;
- 		        }
- 		    });
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView tw = (TextView) findViewById(R.id.channel);
+                    Toast.makeText(getBaseContext(), tw.getText(), Toast.LENGTH_LONG).show();
+
+                    return true;
+                }
+            });
  			
  			list.setOnItemClickListener(new OnItemClickListener() {
- 			      public void onItemClick(AdapterView<?> parent, View view,
- 			          int position, long id) {
- 			    	  NowItem ni = (NowItem)nowList.GetItem(position);
- 			    	  Toast.makeText(getBaseContext(),ni.ChannelName, Toast.LENGTH_LONG).show();
- 			      }
- 			    });
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    NowItem ni = (NowItem) nowList.GetItem(position);
+                    Toast.makeText(getBaseContext(), ni.ChannelName, Toast.LENGTH_LONG).show();
+                }
+            });
     }
 	        
 
@@ -159,6 +165,9 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+			case R.id.action_ShowOnlyFavorites:
+				SwithShowOnlyFavorites(item);
+                return true;
             case R.id.action_search:
             	showContentInBackground(null);
                 return true;
@@ -169,10 +178,10 @@ public class MainActivity extends ActionBarActivity {
             	sendMessage(null);
                 return true;
           */  case R.id.action_download:
-            	refreshList(false);
+                downloadList(false);
                 return true;
             case R.id.action_download_previous:
-                refreshList(true);
+                downloadList(true);
                 return true;
 
             case R.id.action_test:
@@ -186,11 +195,17 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private void SwithShowOnlyFavorites(MenuItem item) {
+        ShowOnlyFavorites = !ShowOnlyFavorites;
+        if (ShowOnlyFavorites)        {
+            item.setIcon(R.drawable.ic_layout_star_selected);}
+        else item.setIcon(R.drawable.ic_layout_star);
+        showContentInBackground(null);
+    }
+
     private void openChannelListActivity() {
         Intent intent = new Intent(this, ChannelListActivity.class);
-        //	EditText editText = (EditText) findViewById(R.id.edit_message);
-        //	String message = editText.getText().toString();
-      //  intent.putExtra("channel", channelList.);
+
         startActivity(intent);
     }
 
@@ -212,12 +227,7 @@ public class MainActivity extends ActionBarActivity {
 
      	Calendar c = Calendar.getInstance();
      	
-   //  String rr=c.getTime().toString();
-   //  String rr2=StartDate.getTime().toString();
- 	//    long diffMin = (c.getTimeInMillis()-StartDate.getTimeInMillis())/(1000*60);
 
- 	  // Toast.makeText(getBaseContext(),rr+"\n"+rr2, Toast.LENGTH_LONG).show();
- 	   
  	   
 	}
 
@@ -252,16 +262,7 @@ public class MainActivity extends ActionBarActivity {
 	private void showContent(Object object) {
 		String ResultFile = "";
 		ResultFile = unpackZip(this.getFilesDir().getPath(),WWWFileName, ResultFile);
-	//	EditText editText = (EditText) findViewById(R.id.edit_message);
-	//	editText.setText(ResultFile);
-		
 
-		// Load XML for parsing.
-	/*	File f = new File("/data/data/com.example.firstapp/files");
-		String[] sss = f.list();
-		f = new File("/data/com.example.firstapp/files");
-		 sss = f.list();
-	*/	
 		 
 try
 {
@@ -275,7 +276,7 @@ try
 
 		        String currentDate="";
 		        String maxDate="";
-		       // String CurrentTime = (String) DateFormat.format("yyyyMMddhhmmss", new java.util.Date());
+
 		        Calendar c = Calendar.getInstance();
                 Date today = c.getTime();
                 today.setTime(c.getTimeInMillis()+(1000*60*60));
@@ -322,47 +323,20 @@ try
 		        for (int i = 0; i < channellist.getLength(); i++) {
 		        	Node node = channellist.item(i);
 		        	Element fstElmnt = (Element) node;
-		        	//NodeList nameList = fstElmnt.getElementsByTagName("display-name");
-		        	/*Element nameElement = (Element) nameList.item(0);
-		        	nameList = nameElement.getChildNodes();
-		        	name[i].setText("Name = "
-		        	+ ((Node) nameList.item(0)).getNodeValue());
-		        	*/
+
 		        	channelid = channellist.item(i).getAttributes().getNamedItem("id").getNodeValue();
 
 		        	catnames[i] = String.format("%s: %s %s %s", fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), pro.getProperty(channelid,""),cha.getProperty(channelid,"Unknown"),CurrentTime);
-			       //TextView tv = (TextView)findViewById(R.id.textView2);
-		        	ListView lv=(ListView)findViewById(R.id.listView1);
-       	
-		        	
 
-		        		// ���������� ������� ������
+		        	ListView lv=(ListView)findViewById(R.id.listView1);
+
+
 		        		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,	android.R.layout.simple_list_item_1, catnames);
 
 		        		lv.setAdapter(adapter);
-		        		
-
-		        //	lv.a
-	        //	tv.append(fstElmnt.getElementsByTagName("display-name").item(0).getTextContent()+": pro.getProperty(channelid,"")+":"+cha.getProperty(channelid,"Unknown")+"\n");
-					
 				}
 }
  catch (Exception e){Log.e("tag", e.getMessage());}
-		 
-       /* AssetManager assetManager = getAssets();
-        InputStream inputStream = null;
-        try {
-        	inputStream= new FileInputStream(ResultFile);//  getApplicationContext().getAssets().open("/data/data/com.example.firstapp/files/program_xml.xml", 1);
-          //  inputStream = assetManager.open(ResultFile);
-        } catch (IOException e) {
-            Log.e("tag", e.getMessage());
-        }
-
-       String s = readTextFile(inputStream);
-       // editText.setText(s);
-        TextView tv = (TextView)findViewById(R.id.textView2);
-        tv.setText(s.substring(20, 100));
-		*/
 	}
 
 	private String readTextFile(InputStream inputStream) {
@@ -382,7 +356,7 @@ try
 	    return outputStream.toString();
 	}
 
-	private void refreshList(boolean old) {
+	private void downloadList(boolean old) {
 	//	EditText editText = (EditText) findViewById(R.id.edit_message);
 
 //		editText.setText("Time: "+DateFormat.format("yyyy-MM-dd hh:mm:ss", new java.util.Date()));
@@ -466,6 +440,11 @@ try
 	    return ResultFile;
 	}
 	
+    private boolean getFavoritesSelected() {
+       Map<String, ?> favorites = favoriteChannelListPreference.getAll();
+        return favorites.size()>0;
+    }
+    
 	// usually, subclasses of AsyncTask are declared inside the activity class.
 	// that way, you can easily modify the UI thread from here
 	private class DownloadTask extends AsyncTask<String, Integer, String> {
@@ -505,10 +484,10 @@ try
 	            showContentInBackground(null);
 	        }
 	    }
-	    
+
 	    @Override
 	    protected String doInBackground(String... sUrl) {
-	        // take CPU lock to prevent CPU from going off if the user 
+	        // take CPU lock to prevent CPU from going off if the user
 	        // presses the power button during download
 	       // PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 	       // PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
@@ -523,10 +502,10 @@ try
 	                connection = (HttpURLConnection) url.openConnection();
 	                connection.connect();
 
-	                // expect HTTP 200 OK, so we don't mistakenly save error report 
+	                // expect HTTP 200 OK, so we don't mistakenly save error report
 	                // instead of the file
 	                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
-	                     return "Server returned HTTP " + connection.getResponseCode() 
+	                     return "Server returned HTTP " + connection.getResponseCode()
 	                         + " " + connection.getResponseMessage();
 
 	                // this will be useful to display download percentage
@@ -558,7 +537,7 @@ try
 	                        output.close();
 	                    if (input != null)
 	                        input.close();
-	                } 
+	                }
 	                catch (IOException ignored) { }
 
 	                if (connection != null)
@@ -570,7 +549,7 @@ try
 	        return null;
 	    }
 	}
-    
+
 	private class ParseFileTask extends AsyncTask<String, Integer, String> {
 		  private Context context;
 	    private String[] catnames=new String[1000];
@@ -601,27 +580,27 @@ try
 	        if (result != null)
 	            Toast.makeText(context,"Parse file error: "+result, Toast.LENGTH_LONG).show();
 	        else
-	        {   
+	        {
 	        	 runOnUiThread(new Runnable(){
 	        	        public void run(){
 	        	        	updateListView();
 
-    		        		
+
 	        	        }
 	        });
 	        }
 	    }
-	    
+
 	    @Override
 	    protected String doInBackground(String... Params) {
-	        // take CPU lock to prevent CPU from going off if the user 
+	        // take CPU lock to prevent CPU from going off if the user
 	        // presses the power button during download
 	      //  PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 	      //  PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,  getClass().getName());
 	      //  wl.acquire();
 
 	        try {
-	 
+
 	        	if ((IsForceUnzipFile) || (d==null))
 	        	{
                	publishProgress((int) (1));
@@ -638,7 +617,7 @@ try
 		    		{
  		        dbf.setNamespaceAware(false);
  		        dbf.setValidating(false);
- 		        
+
  		        DocumentBuilder db = dbf.newDocumentBuilder();
  		        InputStream inputStream = new FileInputStream(ResultFile);
  		        d=db.parse(inputStream);
@@ -646,11 +625,11 @@ try
 	    		}
 
 	    		 catch (Exception e){Log.e("tag", e.getMessage());}
-	    		 
-		           
-	            
+
+
+
 		         finally {
-		
+
 		        }
 	        	}
 
@@ -660,7 +639,6 @@ try
 	    		        String maxDate="";
 	    		        nowList.Clear();
                         channelList.Clear();
-	    		        // String CurrentTime = (String) DateFormat.format("yyyyMMddhhmmss", new java.util.Date());
 	    		        Calendar c = Calendar.getInstance();
 	    		        String CurrentTime=new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
                         Date today = new Date();
@@ -674,11 +652,10 @@ try
                         String channelName="";
 	    	        	Properties pro= new Properties();
 	    	        	Properties cha= new Properties();
-	    	        	
+
 	    	        	DateFormat df = new DateFormat();
 	    	        	String currentTitleDate=(String) df.format("yyyy-MM-dd hh:mm:ss", new Date());
-	    	       	 // setTitle(String.format(getString(R.string.now_title),currentTitleDate));
-	    	       	  
+
 	    	        	for (int j = 0; j < programlist.getLength(); j++) {
 	    	        		publishProgress((int) (XMLLoadProgress+j * (100-XMLLoadProgress) / programlist.getLength()));
 	    	        		Node programNode  = programlist.item(j);
@@ -713,7 +690,7 @@ try
                             channelName = fstElmnt.getElementsByTagName("display-name").item(0).getTextContent();
                             channelList.Add(channelid, channelName);
 
-                            if (!FavoritesSelected || (favoriteChannelListPreference.getBoolean(channelName, false ))) {
+                            if (!FavoritesSelected ||!ShowOnlyFavorites|| (favoriteChannelListPreference.getBoolean(channelName, false ))) {
                                 String dd = pro.getProperty(channelid, "");
                                 nowList.Add(channelid, fstElmnt.getElementsByTagName("display-name").item(0).getTextContent(), cha.getProperty(channelid, "Unknown"), dd);
                              }
@@ -725,14 +702,9 @@ try
 	        }
 	        return null;
 	    }
-	
-	    
-	}
 
-    private boolean getFavoritesSelected() {
-       Map<String, ?> favorites = favoriteChannelListPreference.getAll();
-        return favorites.size()>0;
-    }
+
+	}
 
 
 }

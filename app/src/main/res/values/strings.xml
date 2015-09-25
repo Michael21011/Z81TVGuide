@@ -20,4 +20,5 @@
     <string name="action_channellist">Channels</string>
     <string name="mark_all_as_favorite">Mark all as favorites</string>
     <string name="unmark_all_as_favorite">Unmark all favorites</string>
+    <string name="action_ShowOnlyFavorites">Switch favorites only</string>
 </resources>
