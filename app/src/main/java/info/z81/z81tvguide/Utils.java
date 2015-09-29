@@ -5,8 +5,7 @@ package info.z81.z81tvguide;
  */
 public  class  Utils {
     public static int getChannelLogoByName(String ChannelName){
-        return R.drawable.empty;
-        /*
+
         int id;
         if (ChannelName.equalsIgnoreCase("24 Техно")){
             id = R.drawable.a24tehno;
@@ -17,7 +16,16 @@ public  class  Utils {
         else if (ChannelName.equalsIgnoreCase("Animal Planet")) {
             id =R.drawable.animalplanet;
         }
-        else if (ChannelName.equalsIgnoreCase("Да Винчи")) {
+        else if (ChannelName.equalsIgnoreCase("Беларусь 1")) {
+            id =R.drawable.belarus1;
+        }
+        else
+            id = R.drawable.empty;
+
+
+
+        return id;
+        /*else if (ChannelName.equalsIgnoreCase("Да Винчи")) {
             id =R.drawable.davinci;
         }
         else if (ChannelName.equalsIgnoreCase("Discovery")) {
@@ -71,9 +79,7 @@ public  class  Utils {
         else if (ChannelName.equalsIgnoreCase("Авто Плюс")) {
             id =R.drawable.autoplus;
         }
-        else if (ChannelName.equalsIgnoreCase("Беларусь 1")) {
-            id =R.drawable.belarus1;
-        }
+
         else if (ChannelName.equalsIgnoreCase("Беларусь 2")) {
             id =R.drawable.belarus2;
         }

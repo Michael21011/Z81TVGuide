@@ -99,8 +99,6 @@ public class MainActivity extends ActionBarActivity {
         super.onPause();
         if (mProgressDialog != null)
             mProgressDialog.dismiss();
-		if (NeedRefreshList)
-		{showContentInBackground(null);}
     }
 
 	@Override
@@ -108,6 +106,10 @@ public class MainActivity extends ActionBarActivity {
 		super.onResume();
 		if (mProgressDialog != null)
 			mProgressDialog.dismiss();
+		if (NeedRefreshList)
+		{NeedRefreshList = false;
+			showContentInBackground(null);
+		}
 
 	}
 
@@ -205,7 +207,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void openChannelListActivity() {
         Intent intent = new Intent(this, ChannelListActivity.class);
-
+		NeedRefreshList = true;
         startActivity(intent);
     }
 

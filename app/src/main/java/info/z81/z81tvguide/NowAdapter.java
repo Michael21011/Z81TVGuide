@@ -20,8 +20,6 @@ public class NowAdapter extends BaseAdapter{
 
     }
     
-    // ����� ��� ���������� �� ������� ����� � ��� ����������� �������
-    // �� �������� ������
     static class ViewHolder {
         public ImageView imageView;
         public TextView textView;
