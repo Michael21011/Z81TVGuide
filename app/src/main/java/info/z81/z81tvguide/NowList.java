@@ -36,25 +36,14 @@ public class NowList  implements  Comparable {
 		return 0;
 	}
 
-	public void Add(String channelid, String channelName, String programTitle, String startTime) {
+	public void Add(String channelid, String channelName, String programTitle, Date startTime) {
 		NowItem nowItem = new NowItem();
 		nowItem.ChannelId=channelid;
 		nowItem.ChannelName = channelName;
 		nowItem.Title = programTitle;
 		
-		if (startTime!="")
-        {
-    	int year = Integer.parseInt(startTime.subSequence(0, 4).toString());
-    	int month = Integer.parseInt(startTime.subSequence(4, 6).toString());
-    	int day = Integer.parseInt(startTime.subSequence(6, 8).toString());
-    	int hour = Integer.parseInt(startTime.subSequence(8, 10).toString());	    		        	
-    	int min = Integer.parseInt(startTime.subSequence(10, 12).toString());	    		        	
-    	Calendar StartDate = Calendar.getInstance();
-    	StartDate.set(year, month-1, day, hour, min);
-		nowItem.DateStart=StartDate.getTime();
-        }
-		else
-			nowItem.DateStart = new Date(Long.MIN_VALUE);
+
+    	nowItem.DateStart = startTime;
 		list.add(nowItem);
         
 	}

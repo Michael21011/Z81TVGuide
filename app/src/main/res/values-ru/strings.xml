@@ -11,9 +11,12 @@
     <string name="edit_message">Введите сообщение</string>
     <string name="button_send">Отправить</string>
     <string name="title_activity_display_message">Мое сообщение</string>
-    <string name="download_message">Скачивание программы&#8230;></string>
+
              <string name="action_download">Скачать программу</string>
-  <string name="update_list">Чтение списка&#8230;</string>
+
+    <string name="task_download_file">Скачивание программы&#8230;</string>
+    <string name="task_load_list">Чтение из файла&#8230;</string>
+    <string name="task_update_list">Обновление списка&#8230;</string>
     <string name="action_download_previous">Скачать предыдущую программу</string>
     <string name="Hour_short">ч.</string>
     <string name="Minute_short">мин.</string>

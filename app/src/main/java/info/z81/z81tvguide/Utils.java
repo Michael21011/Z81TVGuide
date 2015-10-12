@@ -1,5 +1,8 @@
 package info.z81.z81tvguide;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by Michael on 24.04.2015.
  */
@@ -212,5 +215,16 @@ public  class  Utils {
 
         return id;
         */
+    }
+    public static Date StringToDate(String InputString)
+    {
+        int year = Integer.parseInt(InputString.subSequence(0, 4).toString());
+        int month = Integer.parseInt(InputString.subSequence(4, 6).toString());
+        int day = Integer.parseInt(InputString.subSequence(6, 8).toString());
+        int hour = Integer.parseInt(InputString.subSequence(8, 10).toString());
+        int min = Integer.parseInt(InputString.subSequence(10, 12).toString());
+        Calendar StartDate = Calendar.getInstance();
+        StartDate.set(year, month - 1, day, hour, min);
+        return StartDate.getTime();
     }
 }
