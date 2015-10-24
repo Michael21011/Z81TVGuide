@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
     private int XMLLoadProgress = 20;
     private Boolean ShowOnlyFavorites = true;
     private Boolean NeedRefreshList = false;
-    private TVProgram tvProgram;
+    public static TVProgram tvProgram;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,13 +233,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private void showContentInBackground(Object object) {
+    private void  showContentInBackground(Object object) {
         // execute this when the downloader must be fired
 
         String DownloadFileName = GetDownloadedFileName();
         File myF = new File(DownloadFileName);
-        if (tvProgram.ChannelCount()>0)
-        {
+        if (tvProgram.ChannelCount() > 0) {
             final UpdateProgramTask updateProgramTask = new UpdateProgramTask(this);
             updateProgramTask.execute(this.getFilesDir().getPath());
 
@@ -249,8 +248,7 @@ public class MainActivity extends ActionBarActivity {
                     updateProgramTask.cancel(true);
                 }
             });
-        }
-        else if (myF.exists()) {
+        } else if (myF.exists()) {
 
             final ParseFileTask parseFileTask = new ParseFileTask(this);
             parseFileTask.execute(this.getFilesDir().getPath());
@@ -519,7 +517,7 @@ public class MainActivity extends ActionBarActivity {
                     publishProgress((int) (1));
                     String ResultFile = "";
                     ResultFile = unpackZip(Params[0], WWWFileName, ResultFile);
-                    if (ResultFile == "") {
+                    if (ResultFile.equals("")) {
                         // refreshList(null);
                         return null;
                     }
@@ -708,20 +706,20 @@ public class MainActivity extends ActionBarActivity {
                 for (int i = 0; i < tvProgram.ChannelCount(); i++) {
                     ProgramList pl = tvProgram.GetItem(i);
                     if (!FavoritesSelected || !ShowOnlyFavorites || (favoriteChannelListPreference.getBoolean(pl.ChannelName, false))) {
-                        ProgramItem pi=null;
+                        ProgramItem pi = null;
                         for (int j = 0; j < pl.Count(); j++) {
                             Date programDate = pl.GetItem(j).DateStart;
                             if (pi != null) {
 
-                                if ( ((programDate.compareTo(pi.DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
+                                if (((programDate.compareTo(pi.DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
                                     pi = pl.GetItem(j);
 
                                 }
-                                else pi =  pl.GetItem(j);
                             }
+                            else pi = pl.GetItem(j);
                         }
                         if (pi != null) {
-                            nowList.Add(pl.ChannelId, pi.Title, pl.ChannelName, pi.DateStart);
+                            nowList.Add(pl.ChannelId,  pl.ChannelName,pi.Title, pi.DateStart);
                         }
                     }
                 }

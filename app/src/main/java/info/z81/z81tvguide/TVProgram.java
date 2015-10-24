@@ -36,7 +36,7 @@ public class TVProgram {
 
     private boolean IsChannelExists(String ChannelId) {
         for (ProgramList item : list) {
-            if (item.ChannelId == ChannelId) {
+            if (item.ChannelId.equals(ChannelId)) {
                 return true;
             }
             ;
@@ -46,7 +46,7 @@ public class TVProgram {
     private ProgramList GetProgramList(String ChannelId)
     {
         for (ProgramList item : list) {
-            if (item.ChannelId == ChannelId) {
+            if (item.ChannelId.equals(ChannelId)) {
                 return item;
             }
             ;
@@ -61,5 +61,10 @@ public class TVProgram {
     public ProgramList GetItem(int arg0) {
 
         return list.get(arg0);
+    }
+
+    public long GetItemId(int arg0) {
+        // TODO Auto-generated method stub
+        return list.get(arg0).hashCode();
     }
 }

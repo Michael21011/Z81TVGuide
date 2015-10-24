@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 public class ChannelAdapter extends BaseAdapter{
     private final Context context;
-    private final ChannelList list;
+    private final TVProgram list;
     SharedPreferences favoriteChannelListPreference;
 
 
-    public ChannelAdapter(Context context, ChannelList values,  SharedPreferences  favoriteChannelListPreference) {
+    public ChannelAdapter(Context context, TVProgram values,  SharedPreferences  favoriteChannelListPreference) {
         super();
     	this.list = values;
         this.context = context;
@@ -50,7 +50,7 @@ public class ChannelAdapter extends BaseAdapter{
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
-        ChannelItem currentItem = (ChannelItem)list.GetItem(position);
+        ProgramList currentItem = list.GetItem(position);
         holder.textView.setText(currentItem.ChannelName);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
 
@@ -58,15 +58,6 @@ public class ChannelAdapter extends BaseAdapter{
             holder.starView.setImageResource(android.R.drawable.star_on);
         } else {
         holder.starView.setImageResource(android.R.drawable.star_off);}
-        // ��������� ������ ��� Windows � iPhone
-   /*     String s = names[position];
-        if (s.startsWith("Windows7") || s.startsWith("iPhone")
-                || s.startsWith("Solaris")) {
-
-            holder.imageView.setImageResource(R.drawable.no);
-        } else {
-            holder.imageView.setImageResource(R.drawable.ok);
-        } */
 
         return rowView;
     }
@@ -74,7 +65,7 @@ public class ChannelAdapter extends BaseAdapter{
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return list.Count();
+		return list.ChannelCount();
 	}
 
 	@Override
