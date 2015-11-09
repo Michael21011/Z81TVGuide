@@ -26,4 +26,5 @@
     <string name="mark_all_as_favorite">Отметить все как избранные</string>
     <string name="unmark_all_as_favorite">Убрать все отметки с избранных</string>
     <string name="action_ShowOnlyFavorites">Только избранное или все</string>
+    <string name="needclosebecausenocurrent">На сайте МТИС отсуствует текущая телепрограмма. Попробуйте позже, пожалуйста.</string>
 </resources>

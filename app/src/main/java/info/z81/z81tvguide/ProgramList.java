@@ -18,20 +18,21 @@ public class ProgramList {
     private Boolean stared;
 
 
-    public ProgramList()
-    {
+    public ProgramList() {
         list = new ArrayList<>();
     }
-    public  void Clear() {
+
+    public void Clear() {
         list.clear();
 
     }
+
     public int getChannelLogo() {
         return Utils.getChannelLogoByName(ChannelName);
     }
 
     public boolean isStared() {
-        if (stared==null)
+        if (stared == null)
             stared = MainActivity.favoriteChannelListPreference.getBoolean(ChannelName, false);
         return stared;
     }
@@ -66,6 +67,37 @@ public class ProgramList {
     public long GetItemId(int arg0) {
         // TODO Auto-generated method stub
         return list.get(arg0).hashCode();
+    }
+
+    public Date FirstDate() {
+        ProgramList pl = this;
+
+        Date mindate = pl.GetItem(0).DateStart;
+
+        for (int j = 0; j < pl.Count(); j++) {
+            Date programDate = pl.GetItem(j).DateStart;
+            if (programDate.compareTo(mindate) < 0) {
+                mindate = pl.GetItem(j).DateStart;
+
+            }
+        }
+        return mindate;
+    }
+
+
+    public Date LastDate() {
+        ProgramList pl = this;
+
+        Date maxdate = pl.GetItem(0).DateStart;
+
+        for (int j = 0; j < pl.Count(); j++) {
+            Date programDate = pl.GetItem(j).DateStart;
+            if (programDate.compareTo(maxdate) > 0) {
+                maxdate = pl.GetItem(j).DateStart;
+
+            }
+        }
+        return maxdate;
     }
 
 

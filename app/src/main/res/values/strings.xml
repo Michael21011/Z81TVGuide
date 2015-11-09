@@ -23,4 +23,5 @@
     <string name="mark_all_as_favorite">Mark all as favorites</string>
     <string name="unmark_all_as_favorite">Unmark all favorites</string>
     <string name="action_ShowOnlyFavorites">Switch favorites only</string>
+    <string name="needclosebecausenocurrent">There is no current TV Guide on MTIS site. Please, try again later.</string>
 </resources>
