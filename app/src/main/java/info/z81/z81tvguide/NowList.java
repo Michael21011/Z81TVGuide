@@ -1,8 +1,6 @@
 package info.z81.z81tvguide;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
@@ -36,12 +34,13 @@ public class NowList  implements  Comparable {
 		return 0;
 	}
 
-	public void Add(String channelid, String channelName, String programTitle, Date startTime) {
+	public void Add(String channelid, String channelName, String programTitle, Date startTime, String description, String digitalNumber) {
 		NowItem nowItem = new NowItem();
 		nowItem.ChannelId=channelid;
 		nowItem.ChannelName = channelName;
 		nowItem.Title = programTitle;
-		
+		nowItem.Description = description;
+		nowItem.DigitalNumber = digitalNumber;
 
     	nowItem.DateStart = startTime;
 		list.add(nowItem);

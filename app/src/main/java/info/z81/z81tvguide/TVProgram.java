@@ -29,11 +29,11 @@ public class TVProgram {
         }
     }
 
-    public void AddProgram(String ChannelId, String ProgramTitle, Date DateStart) {
+    public void AddProgram(String ChannelId, String ProgramTitle, Date DateStart, String Description) {
         ProgramList pl = GetProgramList(ChannelId);
         if (pl == null)
             return;
-        pl.Add(ProgramTitle, DateStart);
+        pl.Add(ProgramTitle, DateStart, Description);
 
     }
 

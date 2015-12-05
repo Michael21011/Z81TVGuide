@@ -16,10 +16,15 @@ public class ProgramList {
     public String ChannelId;
     public String ChannelName;
     private Boolean stared;
+    public Integer DigitalNumber;
+    public Integer AnalogNumber;
+    private ChannelNumbers channelNumbers;
+
 
 
     public ProgramList() {
         list = new ArrayList<>();
+        ChannelNumbers channelNumbers = new ChannelNumbers();
     }
 
     public void Clear() {
@@ -47,10 +52,11 @@ public class ProgramList {
         ed.commit();
     }
 
-    public void Add(String Title, Date DateFrom) {
+    public void Add(String Title, Date DateFrom, String Description) {
         ProgramItem programItem = new ProgramItem();
         programItem.Title = Title;
         programItem.DateStart = DateFrom;
+        programItem.Description = Description;
         list.add(programItem);
 
     }
@@ -100,5 +106,11 @@ public class ProgramList {
         return maxdate;
     }
 
-
+    public String GetChannelDigitalNumber()
+    {
+        Integer n = channelNumbers.GetByName(ChannelName);
+        if (n.equals(-1))
+            return "";
+        else return n.toString();
+    }
 }

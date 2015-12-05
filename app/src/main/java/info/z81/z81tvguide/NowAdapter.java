@@ -25,6 +25,7 @@ public class NowAdapter extends BaseAdapter{
         public TextView textView;
         public TextView programmView;
         public TextView diffView;
+        public TextView descView;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class NowAdapter extends BaseAdapter{
             holder.programmView = (TextView) rowView.findViewById(R.id.programm);
             holder.diffView = (TextView) rowView.findViewById(R.id.diff);
             holder.imageView = (ImageView) rowView.findViewById(R.id.icon);
-            
+            holder.descView = (TextView) rowView.findViewById(R.id.desc);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -54,6 +55,7 @@ public class NowAdapter extends BaseAdapter{
         holder.diffView.setText(currentItem.getAgoTime());
         holder.programmView.setText(currentItem.Title);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
+        holder.descView.setText(currentItem.Description);
         // ��������� ������ ��� Windows � iPhone
    /*     String s = names[position];
         if (s.startsWith("Windows7") || s.startsWith("iPhone")

@@ -12,7 +12,10 @@ public class NowItem {
 	public String Title;
 	public Date DateStart;
 	public String AgoTime;
+	public String Description;
+	public String DigitalNumber;
 	public String getAgoTime()
+
 	{
 		String diffString="";
 		if (DateStart.equals(new Date(Long.MIN_VALUE))){

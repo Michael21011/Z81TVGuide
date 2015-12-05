@@ -35,7 +35,8 @@ public  class  Utils {
 
         alert.show();
     }
-    public static int getChannelLogoByName(String ChannelName){
+    public static int getChannelLogoByName(String ChannelName)
+    {
 
         int id;
         if (ChannelName.equalsIgnoreCase("24 Техно")){
@@ -255,4 +256,5 @@ public  class  Utils {
         StartDate.set(year, month - 1, day, hour, min);
         return StartDate.getTime();
     }
+
 }

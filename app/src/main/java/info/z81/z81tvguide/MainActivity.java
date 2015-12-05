@@ -136,8 +136,8 @@ public class MainActivity extends ActionBarActivity {
         list.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView tw = (TextView) findViewById(R.id.channel);
-                Toast.makeText(getBaseContext(), tw.getText(), Toast.LENGTH_LONG).show();
+                NowItem ni = (NowItem) nowList.GetItem(position);
+                Toast.makeText(getBaseContext(), ni.ChannelName, Toast.LENGTH_LONG).show();
 
                 return true;
             }
@@ -147,7 +147,7 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 NowItem ni = (NowItem) nowList.GetItem(position);
-                Toast.makeText(getBaseContext(), ni.ChannelName, Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), String.format("%s Ц:%s",ni.ChannelName, ni.DigitalNumber) , Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -490,35 +490,35 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(context, "Parse file error: " + result, Toast.LENGTH_LONG).show();
 
 
-                else {
-                    int val = tvProgram.IsCurrent();
-                    if (val == 0) {
-                        NeedDownloadPast = false;
-                        NeedDownloadFuture = false;
-                        final UpdateProgramTask updateProgramTask = new UpdateProgramTask(context);
-                        updateProgramTask.execute();
+            else {
+                int val = tvProgram.IsCurrent();
+                if (val == 0) {
+                    NeedDownloadPast = false;
+                    NeedDownloadFuture = false;
+                    final UpdateProgramTask updateProgramTask = new UpdateProgramTask(context);
+                    updateProgramTask.execute();
 
-                        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                updateProgramTask.cancel(true);
-                            }
-                        });
-                    } else if (val == 1) {
-                        if (NeedDownloadPast) {
-                            mProgressDialog.dismiss();
-                            Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                    mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            updateProgramTask.cancel(true);
                         }
-                        NeedDownloadPast = true;
-                        downloadList(true);
-                    } else if (val == -1) {
-                        if (NeedDownloadFuture) {
-                            mProgressDialog.dismiss();
-                            Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
-                        }
-                        NeedDownloadFuture = true;
-                        downloadList(false);
+                    });
+                } else if (val == 1) {
+                    if (NeedDownloadPast) {
+                        mProgressDialog.dismiss();
+                        Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
                     }
+                    NeedDownloadPast = true;
+                    downloadList(true);
+                } else if (val == -1) {
+                    if (NeedDownloadFuture) {
+                        mProgressDialog.dismiss();
+                        Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                    }
+                    NeedDownloadFuture = true;
+                    downloadList(false);
+                }
 
 
               /*  runOnUiThread(new Runnable() {
@@ -584,6 +584,7 @@ public class MainActivity extends ActionBarActivity {
                 maxDate = "";
                 String channelid = "";
                 String channelName = "";
+                String description = "";
                 Properties pro = new Properties();
                 Properties cha = new Properties();
 
@@ -606,7 +607,13 @@ public class MainActivity extends ActionBarActivity {
                     channelid = program.getAttributes().getNamedItem("channel").getNodeValue();
 
                     currentDate = program.getAttributes().getNamedItem("start").getNodeValue();
-                    tvProgram.AddProgram(channelid, program.getElementsByTagName("title").item(0).getTextContent(), Utils.StringToDate(currentDate));
+                    NodeList dlist = program.getElementsByTagName("desc");
+                    if (dlist == null)
+                        description = "";
+                    else
+                        description = dlist.item(0).getTextContent();
+
+                    tvProgram.AddProgram(channelid, program.getElementsByTagName("title").item(0).getTextContent(), Utils.StringToDate(currentDate), description);
                 }
                 NeedRebuildList = false;
 
@@ -651,16 +658,15 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(context, "Parse file error: " + result, Toast.LENGTH_LONG).show();
             else {
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            updateListView();
-                        }
-                    });
-                }
-
-
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateListView();
+                    }
+                });
             }
 
+
+        }
 
 
         @Override
@@ -710,7 +716,7 @@ public class MainActivity extends ActionBarActivity {
                             } else pi = pl.GetItem(j);
                         }
                         if (pi != null) {
-                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart);
+                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.GetChannelDigitalNumber());
                         }
                     }
                 }

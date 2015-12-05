@@ -9,4 +9,5 @@ public class ProgramItem {
     public String Title;
     public Date DateStart;
     public Date DateEnd;
+    public String Description;
 }
