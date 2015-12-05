@@ -20,7 +20,7 @@
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_menu_refresh"
         sabd:showAsAction="always" />
-    <item android:id="@+id/action_download"
+   <!-- <item android:id="@+id/action_download"
         android:title="@string/action_download"
         android:icon="@drawable/ic_menu_download"
         sabd:showAsAction="always" />
@@ -33,6 +33,7 @@
         android:title="@string/action_download_previous"
         android:icon="@android:drawable/stat_sys_download"
         sabd:showAsAction="never" />
+        -->
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"

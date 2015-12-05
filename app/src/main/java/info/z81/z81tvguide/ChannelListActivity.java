@@ -1,6 +1,8 @@
 package info.z81.z81tvguide;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,16 +17,18 @@ import android.widget.Toast;
 
 public class ChannelListActivity extends ActionBarActivity {
 
-    ChannelList channelList;
+
+    TVProgram tvProgram;
     ChannelAdapter adapter;
     SharedPreferences  favoriteChannelListPreference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       channelList = MainActivity.channelList;
+        tvProgram = MainActivity.tvProgram;
         setContentView(R.layout.activity_channel_list);
         favoriteChannelListPreference = MainActivity.favoriteChannelListPreference;
+
 
         updateListView();
     }
@@ -68,9 +72,9 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     private void MarkAllFavorites(boolean Stared) {
-        for (int i=0;i<channelList.Count();i++){
-            ChannelItem ci = (ChannelItem)channelList.GetItem(i);
-            ci.setStared(Stared);
+        for (int i=0;i<tvProgram.ChannelCount();i++){
+            ProgramList pl = tvProgram.GetItem(i);
+            pl.setStared(Stared);
             adapter.notifyDataSetChanged();
         }
 
@@ -79,7 +83,7 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void updateListView()    {
 
         final ListView lv1 = (ListView)findViewById(R.id.listView1);
-        adapter = new ChannelAdapter(this, channelList, favoriteChannelListPreference);
+        adapter = new ChannelAdapter(this, tvProgram, favoriteChannelListPreference);
         lv1.setAdapter(adapter);
         SetListViewListeners();
     }
@@ -98,8 +102,8 @@ public class ChannelListActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                ChannelItem ni = (ChannelItem)channelList.GetItem(position);
-                ni.setStared(!ni.isStared());
+                ProgramList pl = tvProgram.GetItem(position);
+                pl.setStared(!pl.isStared());
                 adapter.notifyDataSetChanged();
             }
         });

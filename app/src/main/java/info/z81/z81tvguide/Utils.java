@@ -1,12 +1,40 @@
 package info.z81.z81tvguide;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by Michael on 24.04.2015.
  */
+
+
 public  class  Utils {
+    public static void ShowMessage(Context context, String title, String text)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle(title);
+        alert.setMessage(text);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                System.exit(0);
+            }
+        });
+
+        /*
+        alert.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+                */
+
+        alert.show();
+    }
     public static int getChannelLogoByName(String ChannelName){
 
         int id;

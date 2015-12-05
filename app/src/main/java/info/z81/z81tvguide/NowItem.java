@@ -15,7 +15,7 @@ public class NowItem {
 	public String getAgoTime()
 	{
 		String diffString="";
-		if (DateStart== new Date(Long.MIN_VALUE)){
+		if (DateStart.equals(new Date(Long.MIN_VALUE))){
 			diffString="";}
 		else
 		{
