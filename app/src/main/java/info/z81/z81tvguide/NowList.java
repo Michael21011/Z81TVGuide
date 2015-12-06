@@ -34,7 +34,7 @@ public class NowList  implements  Comparable {
 		return 0;
 	}
 
-	public void Add(String channelid, String channelName, String programTitle, Date startTime, String description, String digitalNumber) {
+	public void Add(String channelid, String channelName, String programTitle, Date startTime, String description, Integer digitalNumber) {
 		NowItem nowItem = new NowItem();
 		nowItem.ChannelId=channelid;
 		nowItem.ChannelName = channelName;

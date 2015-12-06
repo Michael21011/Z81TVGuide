@@ -56,6 +56,10 @@ public class NowAdapter extends BaseAdapter{
         holder.programmView.setText(currentItem.Title);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
         holder.descView.setText(currentItem.Description);
+        if (currentItem.Description.isEmpty())
+            holder.descView.setVisibility(View.GONE);
+        else
+            holder.descView.setVisibility(View.VISIBLE);
         // ��������� ������ ��� Windows � iPhone
    /*     String s = names[position];
         if (s.startsWith("Windows7") || s.startsWith("iPhone")

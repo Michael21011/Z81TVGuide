@@ -18,13 +18,13 @@ public class ProgramList {
     private Boolean stared;
     public Integer DigitalNumber;
     public Integer AnalogNumber;
-    private ChannelNumbers channelNumbers;
+
 
 
 
     public ProgramList() {
         list = new ArrayList<>();
-        ChannelNumbers channelNumbers = new ChannelNumbers();
+
     }
 
     public void Clear() {
@@ -106,11 +106,5 @@ public class ProgramList {
         return maxdate;
     }
 
-    public String GetChannelDigitalNumber()
-    {
-        Integer n = channelNumbers.GetByName(ChannelName);
-        if (n.equals(-1))
-            return "";
-        else return n.toString();
-    }
+
 }

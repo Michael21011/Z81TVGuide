@@ -11,9 +11,11 @@ import java.util.Date;
  */
 public class TVProgram {
     private ArrayList<ProgramList> list;
+    private ChannelNumbers channelNumbers;
 
     public TVProgram() {
         list = new ArrayList<>();
+        channelNumbers = new ChannelNumbers();
     }
 
     public void Clear() {
@@ -25,6 +27,7 @@ public class TVProgram {
             ProgramList pl = new ProgramList();
             pl.ChannelId = ChannelId;
             pl.ChannelName = ChannelName;
+            pl.DigitalNumber = GetChannelDigitalNumber(ChannelName);
             list.add(pl);
         }
     }
@@ -94,4 +97,14 @@ public class TVProgram {
         // TODO Auto-generated method stub
         return list.get(arg0).hashCode();
     }
+
+    public Integer GetChannelDigitalNumber(String ChannelName)
+    {
+        Integer n = channelNumbers.GetByName(ChannelName);
+        if (n.equals(-1))
+            return -1;
+        else return n;
+    }
+
+
 }

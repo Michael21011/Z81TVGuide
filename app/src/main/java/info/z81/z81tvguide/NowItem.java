@@ -13,7 +13,7 @@ public class NowItem {
 	public Date DateStart;
 	public String AgoTime;
 	public String Description;
-	public String DigitalNumber;
+	public Integer DigitalNumber;
 	public String getAgoTime()
 
 	{

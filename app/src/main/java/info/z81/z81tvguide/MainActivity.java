@@ -146,8 +146,12 @@ public class MainActivity extends ActionBarActivity {
         list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                String ChanellNumber = "";
+
                 NowItem ni = (NowItem) nowList.GetItem(position);
-                Toast.makeText(getBaseContext(), String.format("%s Ц:%s",ni.ChannelName, ni.DigitalNumber) , Toast.LENGTH_LONG).show();
+                if (ni.DigitalNumber!=-1)
+                    ChanellNumber = String.format(" Ц:%s", ni.DigitalNumber);
+                Toast.makeText(getBaseContext(), String.format("%s%s",ni.ChannelName, ChanellNumber) , Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -608,7 +612,7 @@ public class MainActivity extends ActionBarActivity {
 
                     currentDate = program.getAttributes().getNamedItem("start").getNodeValue();
                     NodeList dlist = program.getElementsByTagName("desc");
-                    if (dlist == null)
+                    if (dlist.getLength() == 0)
                         description = "";
                     else
                         description = dlist.item(0).getTextContent();
@@ -716,7 +720,7 @@ public class MainActivity extends ActionBarActivity {
                             } else pi = pl.GetItem(j);
                         }
                         if (pi != null) {
-                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.GetChannelDigitalNumber());
+                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.DigitalNumber);
                         }
                     }
                 }
