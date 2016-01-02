@@ -7,10 +7,10 @@ package info.z81.z81tvguide;
 
 import java.util.HashMap;
 
-public class ChannelNumbers {
+public class DefaultChannelNumbers {
     private HashMap<String, Integer> digitalMap;
 
-    public ChannelNumbers() {
+    public DefaultChannelNumbers() {
         digitalMap = new HashMap<>(200);
         digitalMap.put("24 Техно", 35);
         digitalMap.put("8 канал", 1);

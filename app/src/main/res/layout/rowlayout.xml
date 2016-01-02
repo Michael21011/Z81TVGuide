@@ -5,7 +5,9 @@
     android:orientation="vertical">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_weight="100">
 
     <ImageView
         android:id="@+id/icon"
@@ -41,7 +43,7 @@
         android:id="@+id/programm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="100"
         android:text="@+id/label"
         android:textSize="24sp" >
     </TextView>
@@ -58,6 +60,7 @@
         android:id="@+id/diff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:minWidth="30sp"
         android:text="@+id/label"
         android:textColor="@color/AgoNow"
@@ -68,7 +71,7 @@
     <TextView
         android:id="@+id/desc"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:text="Description"
         android:textSize="18sp" >

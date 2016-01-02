@@ -1,5 +1,6 @@
 package info.z81.z81tvguide;
 
+import android.content.SharedPreferences;
 import android.hardware.camera2.params.BlackLevelPattern;
 
 import java.util.ArrayList;
@@ -10,12 +11,14 @@ import java.util.Date;
  * Created by michael on 08.10.15.
  */
 public class TVProgram {
+
     private ArrayList<ProgramList> list;
-    private ChannelNumbers channelNumbers;
+    private DefaultChannelNumbers defaultChannelNumbers;
 
     public TVProgram() {
         list = new ArrayList<>();
-        channelNumbers = new ChannelNumbers();
+        defaultChannelNumbers = new DefaultChannelNumbers();
+
     }
 
     public void Clear() {
@@ -28,6 +31,7 @@ public class TVProgram {
             pl.ChannelId = ChannelId;
             pl.ChannelName = ChannelName;
             pl.DigitalNumber = GetChannelDigitalNumber(ChannelName);
+            pl.tvProgram = this;
             list.add(pl);
         }
     }
@@ -50,7 +54,7 @@ public class TVProgram {
         return false;
     }
 
-    private ProgramList GetProgramList(String ChannelId) {
+    public ProgramList GetProgramList(String ChannelId) {
         for (ProgramList item : list) {
             if (item.ChannelId.equals(ChannelId)) {
                 return item;
@@ -100,11 +104,13 @@ public class TVProgram {
 
     public Integer GetChannelDigitalNumber(String ChannelName)
     {
-        Integer n = channelNumbers.GetByName(ChannelName);
-        if (n.equals(-1))
-            return -1;
-        else return n;
+        Integer n = MainActivity.digitalNumberPreference.getInt(ChannelName, -1);
+        if (n.equals(-1)) {
+            n = defaultChannelNumbers.GetByName(ChannelName);
+        }
+        return n;
     }
+
 
 
 }

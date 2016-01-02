@@ -12,19 +12,24 @@ import java.util.Date;
  */
 
 public class ProgramList {
-    private ArrayList<ProgramItem> list;
+
     public String ChannelId;
     public String ChannelName;
-    private Boolean stared;
     public Integer DigitalNumber;
     public Integer AnalogNumber;
-
-
-
+    private ArrayList<ProgramItem> list;
+    private Boolean stared;
+    public TVProgram tvProgram;
 
     public ProgramList() {
         list = new ArrayList<>();
 
+    }
+
+    public String getDigitalNumberLabel() {
+        if (DigitalNumber.equals(-1))
+            return "";
+        else return DigitalNumber.toString();
     }
 
     public void Clear() {
@@ -50,6 +55,16 @@ public class ProgramList {
             ed.putBoolean(ChannelName, true);
         }
         ed.commit();
+    }
+
+    public void setDigitalNumber(Integer dn) {
+        if (!this.DigitalNumber.equals(dn)) {
+            this.DigitalNumber = dn;
+            SharedPreferences.Editor ed = MainActivity.digitalNumberPreference.edit();
+            ed.putInt(ChannelName, dn);
+            ed.commit();
+        }
+
     }
 
     public void Add(String Title, Date DateFrom, String Description) {

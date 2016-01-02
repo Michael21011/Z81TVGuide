@@ -39,7 +39,7 @@ public  class  Utils {
     {
 
         int id;
-        if (ChannelName.equalsIgnoreCase("24 Техно")){
+        if (ChannelName.equalsIgnoreCase("Техно 24")){
             id = R.drawable.a24tehno;
         }
         else if (ChannelName.equalsIgnoreCase("8 канал")) {
@@ -49,15 +49,9 @@ public  class  Utils {
             id =R.drawable.animalplanet;
         }
         else if (ChannelName.equalsIgnoreCase("Беларусь 1")) {
-            id =R.drawable.belarus1;
+            id = R.drawable.belarus1;
         }
-        else
-            id = R.drawable.empty;
-
-
-
-        return id;
-        /*else if (ChannelName.equalsIgnoreCase("Да Винчи")) {
+  else if (ChannelName.equalsIgnoreCase("Да Винчи")) {
             id =R.drawable.davinci;
         }
         else if (ChannelName.equalsIgnoreCase("Discovery")) {
@@ -237,13 +231,25 @@ public  class  Utils {
         else if (ChannelName.equalsIgnoreCase("ТНТ Int")) {
             id =R.drawable.tnt;
         }
+        else if (ChannelName.equalsIgnoreCase("MIНСК ТV"))
+        {
+            id = R.drawable.minsk_tv;
+        }
+        else if (ChannelName.equalsIgnoreCase("Мама"))
+        {
+            id = R.drawable.mama;
+        }
+        else if (ChannelName.equalsIgnoreCase("Морской (nautical channel)"))
+        {
+            id = R.drawable.morskoj;
+        }
         else
             id = R.drawable.empty;
 
 
 
         return id;
-        */
+
     }
     public static Date StringToDate(String InputString)
     {

@@ -30,11 +30,10 @@ public class NowAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // ViewHolder ������������ ������ ��������� ����� ������� ��������
+
 
         ViewHolder holder;
-        // ������� ������������ ������, ���� �������� �����
-        // �������� ������ ���� ������� ������ ��� ���� ������� ���� � ��� ��
+
         View rowView = convertView;
         if (rowView == null) {
             //LayoutInflater inflater = this.context.getLayoutInflater();

@@ -12,31 +12,30 @@ import android.widget.TextView;
 public class ChannelAdapter extends BaseAdapter{
     private final Context context;
     private final TVProgram list;
-    SharedPreferences favoriteChannelListPreference;
 
 
-    public ChannelAdapter(Context context, TVProgram values,  SharedPreferences  favoriteChannelListPreference) {
+
+    public ChannelAdapter(Context context, TVProgram values) {
         super();
     	this.list = values;
         this.context = context;
-        this.favoriteChannelListPreference = favoriteChannelListPreference;
     }
     
-    // ����� ��� ���������� �� ������� ����� � ��� ����������� �������
-    // �� �������� ������
+
     static class ViewHolder {
         public ImageView imageView;
         public TextView textView;
         public ImageView starView;
+        public TextView NumberDigitalView;
+        public TextView channelIdView;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // ViewHolder ������������ ������ ��������� ����� ������� ��������
+
 
         ViewHolder holder;
-        // ������� ������������ ������, ���� �������� �����
-        // �������� ������ ���� ������� ������ ��� ���� ������� ���� � ��� ��
+
         View rowView = convertView;
         if (rowView == null) {
             //LayoutInflater inflater = this.context.getLayoutInflater();
@@ -46,6 +45,9 @@ public class ChannelAdapter extends BaseAdapter{
             holder.textView = (TextView) rowView.findViewById(R.id.channel);
             holder.imageView = (ImageView) rowView.findViewById(R.id.channellogo);
             holder.starView = (ImageView) rowView.findViewById(R.id.star);
+            holder.NumberDigitalView = (TextView) rowView.findViewById(R.id.numberDigital);
+            holder.channelIdView = (TextView) rowView.findViewById(R.id.channelId);
+
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -53,12 +55,15 @@ public class ChannelAdapter extends BaseAdapter{
         ProgramList currentItem = list.GetItem(position);
         holder.textView.setText(currentItem.ChannelName);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
+        holder.NumberDigitalView.setText(currentItem.getDigitalNumberLabel());
+        holder.channelIdView.setText(currentItem.ChannelId);
+
 
         if (currentItem.isStared()) {
             holder.starView.setImageResource(android.R.drawable.star_on);
         } else {
         holder.starView.setImageResource(android.R.drawable.star_off);}
-
+        holder.starView.setTag(Integer.valueOf(currentItem.ChannelId));
         return rowView;
     }
 

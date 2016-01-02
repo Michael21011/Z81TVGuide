@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,7 +56,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MainActivity extends ActionBarActivity {
 
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-    public static ChannelList channelList;
+    public static SharedPreferences digitalNumberPreference;
     public static SharedPreferences favoriteChannelListPreference;
     public static Resources MyResources;
     private static String FileURL = "http://mtis.by/program_xml.zip";
@@ -86,8 +87,8 @@ public class MainActivity extends ActionBarActivity {
 
         MyResources = getResources();
         nowList = new NowList();
-        channelList = new ChannelList();
         favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
+        digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
         tvProgram = new TVProgram();
 
 
@@ -512,6 +513,7 @@ public class MainActivity extends ActionBarActivity {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();
                         Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        System.exit(0);
                     }
                     NeedDownloadPast = true;
                     downloadList(true);
@@ -519,6 +521,7 @@ public class MainActivity extends ActionBarActivity {
                     if (NeedDownloadFuture) {
                         mProgressDialog.dismiss();
                         Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        System.exit(0);
                     }
                     NeedDownloadFuture = true;
                     downloadList(false);
@@ -576,7 +579,6 @@ public class MainActivity extends ActionBarActivity {
                 String currentDate = "";
                 String maxDate = "";
                 nowList.Clear();
-                channelList.Clear();
                 Calendar c = Calendar.getInstance();
                 String CurrentTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
                 Date today = new Date();
@@ -687,7 +689,6 @@ public class MainActivity extends ActionBarActivity {
                 String currentDate = "";
                 String maxDate = "";
                 nowList.Clear();
-                channelList.Clear();
                 Calendar c = Calendar.getInstance();
                 String CurrentTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
                 Date today = new Date();
