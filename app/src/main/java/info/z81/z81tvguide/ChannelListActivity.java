@@ -1,6 +1,7 @@
 package info.z81.z81tvguide;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
@@ -96,16 +97,16 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void SetListViewListeners()    {
         ListView list = (ListView)findViewById(R.id.listView1);
 
-        /*
+
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView tw = (TextView) findViewById(R.id.channel);
-                Toast.makeText(getBaseContext(), tw.getText(), Toast.LENGTH_LONG).show();
+                OpenOneChannelProgramActivity(position);
+
                 return true;
             }
         });
-        */
+
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -118,12 +119,25 @@ public class ChannelListActivity extends ActionBarActivity {
         });
     }
 
+    public void OpenOneChannelProgramActivity(int ItemIndex)
+    {
+        Intent intent = new Intent(ChannelListActivity.this, OneChannelProgramActivity.class);
+        intent.putExtra(MainActivity.const_programListIndex, ItemIndex);
+        startActivity(intent);
+    }
+
     public void onStarClick(View v){
-  Integer  tag1  =  (Integer) v.getTag();
-    String tag =  tag1.toString();
+        Integer  tag1  =  (Integer)v.getTag();
+        String tag =  tag1.toString();
         ProgramList pl =  tvProgram.GetProgramList(tag);
         pl.setStared(!pl.isStared());
         adapter.notifyDataSetChanged();
+
+    }
+
+    public void onChannelLogoClick(View v){
+        Integer  tag1  =  (Integer)v.getTag();
+        OpenOneChannelProgramActivity(tag1);
 
     }
 

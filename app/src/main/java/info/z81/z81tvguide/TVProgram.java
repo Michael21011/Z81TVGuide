@@ -55,14 +55,26 @@ public class TVProgram {
     }
 
     public ProgramList GetProgramList(String ChannelId) {
-        for (ProgramList item : list) {
-            if (item.ChannelId.equals(ChannelId)) {
-                return item;
-            }
-            ;
-        }
-        return null;
+        int Index=-1;
+        Index = GetProgramListIndex(ChannelId);
+        if (Index==-1)
+            return null;
+                else return this.GetItem(Index);
     }
+
+    public int GetProgramListIndex(String ChannelId)
+    {
+        for (int j=0;j<ChannelCount();j++) {
+            if (this.GetItem(j).ChannelId.equals(ChannelId)) {
+                return j;
+            }
+
+
+        }
+        return -1;
+    }
+
+
 
     public boolean IsEmpty() {
         return ChannelCount() == 0;

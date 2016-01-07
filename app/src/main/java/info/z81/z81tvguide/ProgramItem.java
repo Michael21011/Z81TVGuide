@@ -1,5 +1,6 @@
 package info.z81.z81tvguide;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -10,4 +11,16 @@ public class ProgramItem {
     public Date DateStart;
     public Date DateEnd;
     public String Description;
+
+
+    public String GetDateStartTimeOnly()
+    {
+        return new SimpleDateFormat("HH:mm").format(DateStart);
+    }
+    public String GetDayHeader()
+    {
+        return new SimpleDateFormat("EEEE, d MMMM").format(DateStart);
+    }
+
+
 }

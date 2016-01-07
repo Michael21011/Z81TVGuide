@@ -54,16 +54,20 @@ public class ChannelAdapter extends BaseAdapter{
         }
         ProgramList currentItem = list.GetItem(position);
         holder.textView.setText(currentItem.ChannelName);
+
         holder.imageView.setImageResource(currentItem.getChannelLogo());
+        holder.imageView.setTag(position);
+
         holder.NumberDigitalView.setText(currentItem.getDigitalNumberLabel());
         holder.channelIdView.setText(currentItem.ChannelId);
-
 
         if (currentItem.isStared()) {
             holder.starView.setImageResource(android.R.drawable.star_on);
         } else {
         holder.starView.setImageResource(android.R.drawable.star_off);}
+
         holder.starView.setTag(Integer.valueOf(currentItem.ChannelId));
+
         return rowView;
     }
 

@@ -62,6 +62,7 @@ public class MainActivity extends ActionBarActivity {
     private static String FileURL = "http://mtis.by/program_xml.zip";
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
     private static String WWWFileName = "program_xml.zip";
+    public final static String const_programListIndex="ProgramListIndex";
     public NowList nowList;
     ProgressDialog mProgressDialog;
     private Boolean IsForceUnzipFile = false;
@@ -150,9 +151,9 @@ public class MainActivity extends ActionBarActivity {
                 String ChanellNumber = "";
 
                 NowItem ni = (NowItem) nowList.GetItem(position);
-                if (ni.DigitalNumber!=-1)
+                if (ni.DigitalNumber != -1)
                     ChanellNumber = String.format(" Ц:%s", ni.DigitalNumber);
-                Toast.makeText(getBaseContext(), String.format("%s%s",ni.ChannelName, ChanellNumber) , Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), String.format("%s%s", ni.ChannelName, ChanellNumber), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -217,6 +218,19 @@ public class MainActivity extends ActionBarActivity {
     private void openChannelListActivity() {
         Intent intent = new Intent(this, ChannelListActivity.class);
         NeedRefreshList = true;
+        startActivity(intent);
+    }
+
+    public void onChannelLogoClick(View view){
+
+        Integer  tag1  =  (Integer)view.getTag();
+        String tag =  tag1.toString();
+        int index =  tvProgram.GetProgramListIndex(tag);
+
+
+
+        Intent intent = new Intent(this, OneChannelProgramActivity.class);
+        intent.putExtra(MainActivity.const_programListIndex, index);
         startActivity(intent);
     }
 

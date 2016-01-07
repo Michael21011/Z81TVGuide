@@ -54,6 +54,7 @@ public class NowAdapter extends BaseAdapter{
         holder.diffView.setText(currentItem.getAgoTime());
         holder.programmView.setText(currentItem.Title);
         holder.imageView.setImageResource(currentItem.getChannelLogo());
+        holder.imageView.setTag(Integer.valueOf(currentItem.ChannelId));
         holder.descView.setText(currentItem.Description);
         if (currentItem.Description.isEmpty())
             holder.descView.setVisibility(View.GONE);

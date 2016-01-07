@@ -3,9 +3,11 @@ package info.z81.z81tvguide;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by michael on 08.10.15.
@@ -119,6 +121,47 @@ public class ProgramList {
             }
         }
         return maxdate;
+    }
+
+    public boolean IsFirstItemForDay(int position)
+    {
+        Date currentDate = GetItem(position).DateStart;
+        if (position>0) {
+            Date prevDate = GetItem(position-1).DateStart;
+            if (prevDate.getDay()!= currentDate.getDay()) {
+                return true;
+            }
+            else return false;
+        }
+        else return true;
+
+    }
+
+
+    public ProgramItem GetCurrentItem(int shiftInMinutes)
+    {
+        return this.GetItem(GetCurrentItemIndex(shiftInMinutes));
+    }
+
+    public int GetCurrentItemIndex(int shiftInMinutes)
+    {
+        Calendar c = Calendar.getInstance();
+        String CurrentTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
+        Date today = new Date();
+        today.setTime(c.getTimeInMillis() + (1000 * shiftInMinutes * 60));
+
+        int index = 0;
+        for (int j = 0; j < this.Count(); j++) {
+            Date programDate = this.GetItem(j).DateStart;
+
+
+                if (((programDate.compareTo(this.GetItem(index).DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
+                    index = j;
+
+                }
+
+        }
+        return index;
     }
 
 
