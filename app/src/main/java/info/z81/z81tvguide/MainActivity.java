@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,6 +25,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import android.app.Application;
 import android.app.ProgressDialog;
@@ -101,15 +103,17 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (mProgressDialog != null)
+    /*    if (mProgressDialog != null)
             mProgressDialog.dismiss();
+            */
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mProgressDialog != null)
+        /* if (mProgressDialog != null)
             mProgressDialog.dismiss();
+            */
         if (NeedRefreshList) {
             NeedRefreshList = false;
             showContentInBackground(null);
@@ -188,10 +192,10 @@ public class MainActivity extends ActionBarActivity {
                 sendMessage(null);
                 return true;
           */
-          /*  case R.id.action_download:
+            case R.id.action_download:
                 downloadList(false);
                 return true;
-            case R.id.action_download_previous:
+          /*  case R.id.action_download_previous:
                 downloadList(true);
                 return true;
 
@@ -469,7 +473,11 @@ public class MainActivity extends ActionBarActivity {
                     if (connection != null)
                         connection.disconnect();
                 }
-            } finally {
+            }
+            catch( Exception e ){
+                System.err.println( e.getMessage() );
+            }
+            finally {
                 //  wl.release();
             }
             return null;
@@ -579,7 +587,28 @@ public class MainActivity extends ActionBarActivity {
 
                         DocumentBuilder db = dbf.newDocumentBuilder();
                         InputStream inputStream = new FileInputStream(ResultFile);
+
                         d = db.parse(inputStream);
+
+                        NodeList checkChannelNodeList = d.getElementsByTagName("channel");
+                        boolean wrongEncoding = true;
+                        for (int j = 0; j < checkChannelNodeList.getLength(); j++) {
+                            Node checkChannelNode = checkChannelNodeList.item(j);
+                            Element checkElement = (Element) checkChannelNode;
+                            String checkName = checkElement.getElementsByTagName("display-name").item(0).getTextContent();
+                            if (checkName.equals("8 канал") || checkName.equals("Беларусь 1") || checkName.equals("ОНТ"))
+                            {
+                                wrongEncoding = false;
+                                break;
+                            }
+                        }
+                        if (wrongEncoding)
+                        {
+                            DocumentBuilder db2 = dbf.newDocumentBuilder();
+                            InputStream inputStream2 = new FileInputStream(ResultFile);
+
+                            d = db2.parse(new InputSource(new InputStreamReader(inputStream2, "windows-1251")));
+                        }
 
                     } catch (Exception e) {
                         Log.e("tag", e.getMessage());
@@ -637,7 +666,11 @@ public class MainActivity extends ActionBarActivity {
                 }
                 NeedRebuildList = false;
 
-            } finally {
+            }
+            catch( Exception e ){
+                System.err.println( e.getMessage() );
+            }
+            finally {
                 //    wl.release();
             }
             return null;
@@ -724,7 +757,12 @@ public class MainActivity extends ActionBarActivity {
                     ProgramList pl = tvProgram.GetItem(i);
                     if (!FavoritesSelected || !ShowOnlyFavorites || (favoriteChannelListPreference.getBoolean(pl.ChannelName, false))) {
                         ProgramItem pi = null;
-                        for (int j = 0; j < pl.Count(); j++) {
+                        int CurrentItemIndex = pl.GetCurrentItemIndex(5);
+                        if (CurrentItemIndex!=-1) {
+                            pi = pl.GetItem(CurrentItemIndex);
+                        }
+
+                        /*    for (int j = 0; j < pl.Count(); j++) {
                             Date programDate = pl.GetItem(j).DateStart;
                             if (pi != null) {
 
@@ -733,7 +771,7 @@ public class MainActivity extends ActionBarActivity {
 
                                 }
                             } else pi = pl.GetItem(j);
-                        }
+                        } */
                         if (pi != null) {
                             nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.DigitalNumber);
                         }
@@ -741,7 +779,11 @@ public class MainActivity extends ActionBarActivity {
                 }
                 nowList.sort(1);
 
-            } finally {
+            }
+            catch( Exception e ){
+                System.err.println( e.getMessage() );
+            }
+            finally {
                 //    wl.release();
             }
             return null;

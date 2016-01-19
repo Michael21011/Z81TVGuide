@@ -19,9 +19,9 @@ public class ProgramList {
     public String ChannelName;
     public Integer DigitalNumber;
     public Integer AnalogNumber;
+    public TVProgram tvProgram;
     private ArrayList<ProgramItem> list;
     private Boolean stared;
-    public TVProgram tvProgram;
 
     public ProgramList() {
         list = new ArrayList<>();
@@ -123,44 +123,51 @@ public class ProgramList {
         return maxdate;
     }
 
-    public boolean IsFirstItemForDay(int position)
-    {
+    public boolean IsFirstItemForDay(int position) {
         Date currentDate = GetItem(position).DateStart;
-        if (position>0) {
-            Date prevDate = GetItem(position-1).DateStart;
-            if (prevDate.getDay()!= currentDate.getDay()) {
+        if (position > 0) {
+            Date prevDate = GetItem(position - 1).DateStart;
+            if (prevDate.getDay() != currentDate.getDay()) {
                 return true;
-            }
-            else return false;
-        }
-        else return true;
+            } else return false;
+        } else return true;
 
     }
 
 
-    public ProgramItem GetCurrentItem(int shiftInMinutes)
-    {
+    public ProgramItem GetCurrentItem(int shiftInMinutes) {
         return this.GetItem(GetCurrentItemIndex(shiftInMinutes));
     }
 
-    public int GetCurrentItemIndex(int shiftInMinutes)
-    {
+    public int GetCurrentItemIndex(int shiftInMinutes) {
         Calendar c = Calendar.getInstance();
         String CurrentTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
         Date today = new Date();
         today.setTime(c.getTimeInMillis() + (1000 * shiftInMinutes * 60));
+        c.setTime(today);
 
-        int index = 0;
+        int index = -1;
         for (int j = 0; j < this.Count(); j++) {
             Date programDate = this.GetItem(j).DateStart;
 
 
-                if (((programDate.compareTo(this.GetItem(index).DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
-                    index = j;
+            if ((j == 0) || ((programDate.compareTo(this.GetItem(index).DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
+                index = j;
 
-                }
+            }
 
         }
+        if (!(index == -1)) {
+            Calendar indexCalendar = Calendar.getInstance();
+            indexCalendar.setTime(this.GetItem(index).DateStart);
+
+            long millisecondsNow = c.getTimeInMillis();
+            long millisecondsItem = indexCalendar.getTimeInMillis();
+            if ((millisecondsItem - millisecondsNow > 1 * 1000 * 60) || (millisecondsNow - millisecondsItem > 1000 * 60 * 60 * 4)) {
+                index = -1;
+            }
+        }
+
         return index;
     }
 

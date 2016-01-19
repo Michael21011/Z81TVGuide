@@ -8,8 +8,8 @@ android {
         applicationId "info.z81.z81tvguide"
         minSdkVersion 8
         targetSdkVersion 21
-        versionCode 19
-        versionName "1.9"
+        versionCode 21
+        versionName "1.11"
     }
     buildTypes {
         release {

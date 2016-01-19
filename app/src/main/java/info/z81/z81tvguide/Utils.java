@@ -243,6 +243,10 @@ public  class  Utils {
         {
             id = R.drawable.morskoj;
         }
+        else if (ChannelName.equalsIgnoreCase("КХЛ ТВ"))
+        {
+            id = R.drawable.khl;
+        }
         else
             id = R.drawable.empty;
 

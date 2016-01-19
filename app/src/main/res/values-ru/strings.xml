@@ -27,4 +27,6 @@
     <string name="unmark_all_as_favorite">Убрать все отметки с избранных</string>
     <string name="action_ShowOnlyFavorites">Только избранное или все</string>
     <string name="needclosebecausenocurrent">На сайте МТИС отсуствует текущая телепрограмма. Попробуйте позже, пожалуйста.</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_createevent">Добавить в Календарь</string>
 </resources>
