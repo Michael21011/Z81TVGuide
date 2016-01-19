@@ -11,16 +11,23 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class OneChannelProgramActivity extends ActionBarActivity {
     
     private ProgramList programList;
     private int programListIndex;
     private int programItemIndex;
     private ContextMenu popupMenu;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Z81TVGuide application = (Z81TVGuide) getApplication();
+        mTracker = application.getDefaultTracker();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
@@ -32,6 +39,15 @@ public class OneChannelProgramActivity extends ActionBarActivity {
    /*     MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.one_channel_program_popupmenu, popupMenu);
         */
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Log.i(TAG, "Setting screen name: " + name);
+        mTracker.setScreenName("Image~OneChannelProgramActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
     }
 
     protected void SetListViewListeners()    {
@@ -68,6 +84,10 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         SetListViewListeners();
      //    lv1.setOnCreateContextMenuListener(this);
         lv1.setSelection(programList.GetCurrentItemIndex(0));
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Event")
+                .setAction("updateListView")
+                .build());
 
 
     }

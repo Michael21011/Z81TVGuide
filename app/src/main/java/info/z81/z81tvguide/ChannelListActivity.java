@@ -19,6 +19,9 @@ import android.app.AlertDialog;
 import android.widget.EditText;
 import android.content.DialogInterface;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class ChannelListActivity extends ActionBarActivity {
 
     private String m_Text = "";
@@ -26,9 +29,13 @@ public class ChannelListActivity extends ActionBarActivity {
     TVProgram tvProgram;
     ChannelAdapter adapter;
     SharedPreferences  favoriteChannelListPreference;
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Z81TVGuide application = (Z81TVGuide) getApplication();
+        mTracker = application.getDefaultTracker();
 
         tvProgram = MainActivity.tvProgram;
         setContentView(R.layout.activity_channel_list);
@@ -38,6 +45,14 @@ public class ChannelListActivity extends ActionBarActivity {
         updateListView();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Log.i(TAG, "Setting screen name: " + name);
+        mTracker.setScreenName("Image~ChannelListActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,9 +79,18 @@ public class ChannelListActivity extends ActionBarActivity {
             	sendMessage(null);
                 return true;
           */  case R.id.action_mark_favorite_all:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("MarkAllAsFavorites")
+                        .build());
                 MarkAllFavorites(true);
                 return true;
             case R.id.action_mark_favorite_none:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("MarkAllAsNonFavorites")
+                        .build());
+
                 MarkAllFavorites(false);
                 return true;
 
@@ -101,6 +125,10 @@ public class ChannelListActivity extends ActionBarActivity {
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("RowClick")
+                        .setAction("onItemLongClick")
+                        .build());
                 OpenOneChannelProgramActivity(position);
 
                 return true;
@@ -111,6 +139,10 @@ public class ChannelListActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("RowClick")
+                        .setAction("onItemClick")
+                        .build());
                 currentProgram = tvProgram.GetItem(position);
 
                 InputText(m_Text);
@@ -127,6 +159,10 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     public void onStarClick(View v){
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RowClick")
+                .setAction("onStarClick")
+                .build());
         Integer  tag1  =  (Integer)v.getTag();
         String tag =  tag1.toString();
         ProgramList pl =  tvProgram.GetProgramList(tag);
@@ -136,6 +172,10 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     public void onChannelLogoClick(View v){
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RowClick")
+                .setAction("onChannelLogoClick")
+                .build());
         Integer  tag1  =  (Integer)v.getTag();
         OpenOneChannelProgramActivity(tag1);
 

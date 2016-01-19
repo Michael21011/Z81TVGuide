@@ -54,6 +54,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -76,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
     private Boolean NeedDownloadFuture = false;
     private Boolean NeedDownloadPast = false;
     public static TVProgram tvProgram;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,9 @@ public class MainActivity extends ActionBarActivity {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
 
+        Z81TVGuide application = (Z81TVGuide) getApplication();
+        mTracker = application.getDefaultTracker();
+
         MyResources = getResources();
         nowList = new NowList();
         favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
@@ -97,6 +104,7 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
         showContentInBackground(null);
+
 
     }
 
@@ -118,6 +126,9 @@ public class MainActivity extends ActionBarActivity {
             NeedRefreshList = false;
             showContentInBackground(null);
         }
+        //Log.i(TAG, "Setting screen name: " + name);
+        mTracker.setScreenName("Image~MainActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
@@ -142,6 +153,10 @@ public class MainActivity extends ActionBarActivity {
         list.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("RowClick")
+                        .setAction("onItemLongClick")
+                        .build());
                 NowItem ni = (NowItem) nowList.GetItem(position);
                 Toast.makeText(getBaseContext(), ni.ChannelName, Toast.LENGTH_LONG).show();
 
@@ -153,7 +168,10 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 String ChanellNumber = "";
-
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("RowClick")
+                        .setAction("onItemClick")
+                        .build());
                 NowItem ni = (NowItem) nowList.GetItem(position);
                 if (ni.DigitalNumber != -1)
                     ChanellNumber = String.format(" Ц:%s", ni.DigitalNumber);
@@ -180,12 +198,21 @@ public class MainActivity extends ActionBarActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_ShowOnlyFavorites:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("SwithShowOnlyFavorites")
+                        .build());
                 SwithShowOnlyFavorites(item);
                 return true;
             case R.id.action_search:
                 showContentInBackground(null);
                 return true;
             case R.id.action_refresh:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Refresh")
+                        .build());
+                downloadList(false);
                 showContentInBackground(null);
                 return true;
          /*   case R.id.action_settings:
@@ -193,6 +220,10 @@ public class MainActivity extends ActionBarActivity {
                 return true;
           */
             case R.id.action_download:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Download")
+                        .build());
                 downloadList(false);
                 return true;
           /*  case R.id.action_download_previous:
@@ -204,6 +235,10 @@ public class MainActivity extends ActionBarActivity {
                 return true;
                 */
             case R.id.action_channellist:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("OpenChannelList")
+                        .build());
                 openChannelListActivity();
                 return true;
             default:
@@ -227,6 +262,10 @@ public class MainActivity extends ActionBarActivity {
 
     public void onChannelLogoClick(View view){
 
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RowClick")
+                .setAction("ChannelLogoClick")
+                .build());
         Integer  tag1  =  (Integer)view.getTag();
         String tag =  tag1.toString();
         int index =  tvProgram.GetProgramListIndex(tag);
@@ -473,6 +512,10 @@ public class MainActivity extends ActionBarActivity {
                     if (connection != null)
                         connection.disconnect();
                 }
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Event")
+                        .setAction("DownloadTask")
+                        .build());
             }
             catch( Exception e ){
                 System.err.println( e.getMessage() );
@@ -665,6 +708,10 @@ public class MainActivity extends ActionBarActivity {
                     tvProgram.AddProgram(channelid, program.getElementsByTagName("title").item(0).getTextContent(), Utils.StringToDate(currentDate), description);
                 }
                 NeedRebuildList = false;
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Event")
+                        .setAction("ParseFileTask")
+                        .build());
 
             }
             catch( Exception e ){
@@ -778,7 +825,10 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
                 nowList.sort(1);
-
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Event")
+                        .setAction("UpdateProgramTask")
+                        .build());
             }
             catch( Exception e ){
                 System.err.println( e.getMessage() );

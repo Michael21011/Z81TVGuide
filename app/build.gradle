@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 21
@@ -8,8 +9,9 @@ android {
         applicationId "info.z81.z81tvguide"
         minSdkVersion 8
         targetSdkVersion 21
-        versionCode 21
+        versionCode 22
         versionName "1.11"
+
     }
     buildTypes {
         release {
