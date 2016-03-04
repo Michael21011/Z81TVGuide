@@ -28,4 +28,5 @@
     <string name="title_activity_search_results">SearchResultsActivity</string>
     <string name="menu_share">Share</string>
     <string name="menu_createevent">Add to Calendar</string>
+    <string name="search_title">Search</string>
 </resources>

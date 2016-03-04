@@ -42,7 +42,7 @@ public  class  Utils {
         if (ChannelName.equalsIgnoreCase("Техно 24")){
             id = R.drawable.a24tehno;
         }
-        else if (ChannelName.equalsIgnoreCase("8 канал")) {
+    /*    else if (ChannelName.equalsIgnoreCase("8 канал")) {
             id = R.drawable.a8moj;
         }
         else if (ChannelName.equalsIgnoreCase("Animal Planet")) {
@@ -246,7 +246,7 @@ public  class  Utils {
         else if (ChannelName.equalsIgnoreCase("КХЛ ТВ"))
         {
             id = R.drawable.khl;
-        }
+        } */
         else
             id = R.drawable.empty;
 
