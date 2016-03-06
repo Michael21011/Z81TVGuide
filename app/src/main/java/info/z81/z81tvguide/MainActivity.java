@@ -85,26 +85,27 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // instantiate it within the onCreate method
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getResources().getString(R.string.task_download_file));
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setCancelable(false);
+        if (NeedRefreshList) {
+            // instantiate it within the onCreate method
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getResources().getString(R.string.task_download_file));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mProgressDialog.setCancelable(false);
 
-        Z81TVGuide application = (Z81TVGuide) getApplication();
-        mTracker = application.getDefaultTracker();
+            Z81TVGuide application = (Z81TVGuide) getApplication();
+            mTracker = application.getDefaultTracker();
 
-        MyResources = getResources();
-        nowList = new NowList();
-        favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
-        digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
-        tvProgram = new TVProgram();
+            MyResources = getResources();
+            nowList = new NowList();
+            favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
+            digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
+            tvProgram = new TVProgram();
 
 
-        setContentView(R.layout.activity_main);
-        showContentInBackground(null);
-
+            setContentView(R.layout.activity_main);
+            showContentInBackground(null);
+        }
 
     }
 

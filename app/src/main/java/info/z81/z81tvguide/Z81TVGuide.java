@@ -1,6 +1,7 @@
 package info.z81.z81tvguide;
 
         import android.app.Application;
+        import android.content.Context;
 
         import com.google.android.gms.analytics.GoogleAnalytics;
         import com.google.android.gms.analytics.Logger;
@@ -12,7 +13,16 @@ package info.z81.z81tvguide;
  */
 public class Z81TVGuide extends Application {
     private Tracker mTracker;
+    private static Context context;
 
+    public void onCreate() {
+        super.onCreate();
+        Z81TVGuide.context = getApplicationContext();
+    }
+
+    public static Context getAppContext() {
+        return Z81TVGuide.context;
+    }
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
      * @return tracker

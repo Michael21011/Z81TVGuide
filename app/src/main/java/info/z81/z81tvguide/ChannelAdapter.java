@@ -58,7 +58,9 @@ public class ChannelAdapter extends BaseAdapter{
         holder.imageView.setImageResource(currentItem.getChannelLogo());
         holder.imageView.setTag(position);
 
-        holder.NumberDigitalView.setText(currentItem.getDigitalNumberLabel());
+        holder.NumberDigitalView.setText(currentItem.getDigitalNumberLabel(true));
+        holder.NumberDigitalView.setTag(Integer.valueOf(currentItem.ChannelId));
+
         holder.channelIdView.setText(currentItem.ChannelId);
 
         if (currentItem.isStared()) {

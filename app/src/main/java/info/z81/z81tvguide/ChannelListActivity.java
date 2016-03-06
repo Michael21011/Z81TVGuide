@@ -143,10 +143,7 @@ public class ChannelListActivity extends ActionBarActivity {
                         .setCategory("RowClick")
                         .setAction("onItemClick")
                         .build());
-                currentProgram = tvProgram.GetItem(position);
-
-                InputText(m_Text);
-
+                OpenOneChannelProgramActivity(position);
             }
         });
     }
@@ -181,6 +178,17 @@ public class ChannelListActivity extends ActionBarActivity {
 
     }
 
+    public void onNumberDigitalClick(View v){
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RowClick")
+                .setAction("onNumberDigitalClick")
+                .build());
+        Integer  tag1  =  (Integer)v.getTag();
+        currentProgram = tvProgram.GetItem(tvProgram.GetProgramListIndex(tag1.toString()));
+        InputText(m_Text);
+    }
+
+
     private void InputText(String value)
     {
 
@@ -191,7 +199,7 @@ public class ChannelListActivity extends ActionBarActivity {
         final EditText input = new EditText(this);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        m_Text = currentProgram.getDigitalNumberLabel();
+        m_Text = currentProgram.getDigitalNumberLabel(false);
         input.setText(m_Text);
         input.selectAll();
         builder.setView(input);
@@ -208,6 +216,8 @@ public class ChannelListActivity extends ActionBarActivity {
                         adapter.notifyDataSetChanged();
                     }
                 } catch (NumberFormatException ex) {
+                    currentProgram.setDigitalNumber(-1);
+                    adapter.notifyDataSetChanged();
                 }
 
 

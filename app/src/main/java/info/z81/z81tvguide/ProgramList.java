@@ -1,5 +1,6 @@
 package info.z81.z81tvguide;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.Collections;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+
 
 /**
  * Created by michael on 08.10.15.
@@ -28,9 +31,16 @@ public class ProgramList {
 
     }
 
-    public String getDigitalNumberLabel() {
+    public String getDigitalNumberLabel(boolean ShowEmpty) {
         if (DigitalNumber.equals(-1))
-            return "";
+        {
+            if (ShowEmpty) {
+                return Z81TVGuide.getAppContext().getString(R.string.empty_channel_number);
+            }
+                else
+                return "";
+        }
+
         else return DigitalNumber.toString();
     }
 
