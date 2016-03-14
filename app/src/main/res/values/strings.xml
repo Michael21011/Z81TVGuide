@@ -29,4 +29,5 @@
     <string name="menu_share">Share</string>
     <string name="menu_createevent">Add to Calendar</string>
     <string name="empty_channel_number">n/d</string>
+    <string name="search_title">Search</string>
 </resources>

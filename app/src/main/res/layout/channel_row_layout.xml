@@ -5,8 +5,8 @@
 
     <ImageView
         android:id="@+id/channellogo"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="4px"
         android:layout_marginRight="10px"
         android:layout_marginTop="4px"
@@ -32,8 +32,7 @@
         android:visibility="visible"
         android:gravity="center_vertical"
         android:layout_weight="1"
-        android:textSize="24sp"
-        android:layout_marginRight="10px">
+        android:textSize="24sp" >
     </TextView>
 
     <TextView
@@ -52,9 +51,7 @@
 
         android:text=" "
         android:textSize="24sp"
-        android:visibility="visible"
-        android:onClick="onNumberDigitalClick"
-        android:clickable="true">
+        android:visibility="visible" >
     </TextView>
     <TextView
         android:id="@+id/space2"
@@ -68,8 +65,8 @@
 
     <ImageView
         android:id="@+id/star"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="4px"
         android:layout_marginRight="10px"
         android:layout_marginTop="4px"

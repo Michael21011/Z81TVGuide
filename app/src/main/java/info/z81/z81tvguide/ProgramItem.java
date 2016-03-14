@@ -21,6 +21,11 @@ public class ProgramItem {
     {
         return new SimpleDateFormat("EEEE, d MMMM").format(DateStart);
     }
+    public boolean Match(String FilterString){
+        boolean result;
+        result = (FilterString==null || FilterString.equals("") ||Title.toLowerCase().contains(FilterString.toLowerCase()) || Description.toLowerCase().contains(FilterString.toLowerCase()));
+        return result;
+    };
 
 
 }

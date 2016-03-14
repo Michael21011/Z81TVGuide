@@ -1,5 +1,8 @@
 package info.z81.z81tvguide;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
@@ -9,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -21,10 +25,12 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     private int programItemIndex;
     private ContextMenu popupMenu;
     private Tracker mTracker;
+    private String filterString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        filterString = new String("");
 
         Z81TVGuide application = (Z81TVGuide) getApplication();
         mTracker = application.getDefaultTracker();
@@ -35,11 +41,26 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         setContentView(R.layout.one_channel_program);
         setTitle(programList.ChannelName);
         updateListView();
+        handleIntent(getIntent());
+
 
    /*     MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.one_channel_program_popupmenu, popupMenu);
         */
     }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doMySearch(query);
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -47,6 +68,13 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         //Log.i(TAG, "Setting screen name: " + name);
         mTracker.setScreenName("Image~OneChannelProgramActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+    }
+
+    private void doMySearch(String query) {
+        filterString = query;
+        updateListView();
+        Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
 
     }
 
@@ -79,7 +107,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
-        OneChannelProgramAdapter adapter = new OneChannelProgramAdapter(this, programList);
+        OneChannelProgramAdapter adapter = new OneChannelProgramAdapter(this, programList, filterString);
         lv1.setAdapter(adapter);
         SetListViewListeners();
      //    lv1.setOnCreateContextMenuListener(this);
@@ -92,7 +120,84 @@ public class OneChannelProgramActivity extends ActionBarActivity {
 
     }
 
-   /* @Override
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.onechannel_option, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+            // Assumes current activity is the searchable activity
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+            searchView.setOnQueryTextListener(
+                    new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            doMySearch(newText);
+                            /*
+                            if (newText == null || newText.equals("")) {
+                                doMySearch(newText);
+                                return true;
+                            } else
+                            */
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            doMySearch(query);
+                            return false;
+                        }
+
+                    });
+            searchView.setOnQueryTextFocusChangeListener(
+                    new SearchView.OnFocusChangeListener(){
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus){
+
+                            if (!hasFocus)
+                            {doMySearch("");}
+
+                        }
+                    });
+
+            searchView.setOnCloseListener(
+                    new SearchView.OnCloseListener(){
+                        @Override
+                    public boolean onClose(){
+
+                            doMySearch("");
+                            return false;
+                        }
+                    });
+
+
+
+        }
+
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+      //  appData.putBoolean(this.JARGON, true);
+        startSearch(null, false, appData, false);
+        return true;
+    }
+
+/*    @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         //Do the initial here

@@ -24,10 +24,13 @@ public class ProgramList {
     public Integer AnalogNumber;
     public TVProgram tvProgram;
     private ArrayList<ProgramItem> list;
+    private ArrayList<ProgramItem> filteredList;
+    
     private Boolean stared;
 
     public ProgramList() {
         list = new ArrayList<>();
+        filteredList = list;
 
     }
 
@@ -89,17 +92,22 @@ public class ProgramList {
     }
 
     public int Count() {
-        return list.size();
+        return filteredList.size();
     }
 
     public ProgramItem GetItem(int arg0) {
+        // TODO Auto-generated method stub
+        return filteredList.get(arg0);
+    }
+
+    private ProgramItem  GetListItem(int arg0) {
         // TODO Auto-generated method stub
         return list.get(arg0);
     }
 
     public long GetItemId(int arg0) {
         // TODO Auto-generated method stub
-        return list.get(arg0).hashCode();
+        return filteredList.get(arg0).hashCode();
     }
 
     public Date FirstDate() {
@@ -157,11 +165,11 @@ public class ProgramList {
         c.setTime(today);
 
         int index = -1;
-        for (int j = 0; j < this.Count(); j++) {
-            Date programDate = this.GetItem(j).DateStart;
+        for (int j = 0; j < list.size(); j++) {
+            Date programDate = this.GetListItem(j).DateStart;
 
 
-            if ((j == 0) || ((programDate.compareTo(this.GetItem(index).DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
+            if ((j == 0) || ((programDate.compareTo(this.GetListItem(index).DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
                 index = j;
 
             }
@@ -169,7 +177,7 @@ public class ProgramList {
         }
         if (!(index == -1)) {
             Calendar indexCalendar = Calendar.getInstance();
-            indexCalendar.setTime(this.GetItem(index).DateStart);
+            indexCalendar.setTime(this.GetListItem(index).DateStart);
 
             long millisecondsNow = c.getTimeInMillis();
             long millisecondsItem = indexCalendar.getTimeInMillis();
@@ -177,8 +185,40 @@ public class ProgramList {
                 index = -1;
             }
         }
+        if (!(index == -1)) {
+            long listHash=list.get(index).hashCode();
+            index = -1;
+            for (int j = 0; j < this.Count(); j++)
+            {
+                if (GetItemId(j)==listHash){
+                    index=j;
+                    break;
+                }
 
-        return index;
+
+            }
+
+
+        }
+            return index;
+    }
+    
+    public void ApplyFilter(String FilterString){
+        if (FilterString==null || FilterString.equals("")) {
+            filteredList = new ArrayList<>();
+            filteredList.addAll(list);
+        }
+        else
+        {
+            filteredList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++)
+            {
+                if (GetListItem(j).Match(FilterString))
+                    filteredList.add(this.GetListItem(j));
+                
+            }
+            
+        }
     }
 
 

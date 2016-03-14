@@ -14,11 +14,17 @@ import android.widget.TextView;
 public class OneChannelProgramAdapter extends BaseAdapter{
     private final Context context;
     private final ProgramList list;
+    private int currentItemIndex;
 
-    public OneChannelProgramAdapter(Context context, ProgramList values) {
+
+
+    public OneChannelProgramAdapter(Context context, ProgramList values, String FilterString) {
         super();
+
         this.list = values;
         this.context = context;
+        this.list.ApplyFilter(FilterString);
+        this.currentItemIndex = list.GetCurrentItemIndex(0);
 
     }
 
@@ -60,7 +66,7 @@ public class OneChannelProgramAdapter extends BaseAdapter{
         else
             holder.dayHeaderView.setVisibility(View.GONE);
 
-        if (list.GetCurrentItemIndex(0)==position)
+        if (currentItemIndex==position)
         {
             //rowView.setBackgroundColor(Color.GRAY);
             holder.itemTimeView.setTypeface(holder.itemTimeView.getTypeface(), Typeface.BOLD);
