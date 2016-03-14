@@ -74,7 +74,6 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     private void doMySearch(String query) {
         filterString = query;
         updateListView();
-        Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
 
     }
 

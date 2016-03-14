@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (NeedRefreshList) {
+      //  if (NeedRefreshList) {
             // instantiate it within the onCreate method
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getResources().getString(R.string.task_download_file));
@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
 
             setContentView(R.layout.activity_main);
             showContentInBackground(null);
-        }
+       //}
 
     }
 
