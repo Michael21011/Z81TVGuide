@@ -3,7 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "20.0.0"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "info.z81.z81tvguide"
@@ -13,6 +13,11 @@ android {
         versionName "1.11"
 
     }
+    dexOptions {
+        javaMaxHeapSize "4g" //specify the heap size for the dex process
+        preDexLibraries = false //delete the already predexed libraries
+    }
+
     buildTypes {
         release {
             minifyEnabled false

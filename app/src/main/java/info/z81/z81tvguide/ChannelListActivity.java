@@ -1,6 +1,8 @@
 package info.z81.z81tvguide;
 
 import android.app.ActionBar;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -8,10 +10,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,6 +30,7 @@ public class ChannelListActivity extends ActionBarActivity {
 
     private String m_Text = "";
     private ProgramList currentProgram;
+    private String filterString;
     TVProgram tvProgram;
     ChannelAdapter adapter;
     SharedPreferences  favoriteChannelListPreference;
@@ -43,6 +48,8 @@ public class ChannelListActivity extends ActionBarActivity {
 
 
         updateListView();
+        handleIntent(getIntent());
+
     }
 
     @Override
@@ -55,9 +62,88 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doMySearch(query);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_channel_list, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_channel_list, menu);
+
+        inflater.inflate(R.menu.onechannel_option, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+
+            // Assumes current activity is the searchable activity
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+            searchView.setQueryHint(getString(R.string.SearchQueryHint));
+
+            searchView.setOnQueryTextListener(
+                    new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            doMySearch(newText);
+
+                            if (newText == null || newText.equals("")) {
+                                doMySearch(newText);
+                                return true;
+                            } else
+
+                                return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            doMySearch(query);
+                            return false;
+                        }
+
+                    });
+            searchView.setOnQueryTextFocusChangeListener(
+                    new SearchView.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+
+                            if (!hasFocus) {
+                                doMySearch("");
+                                v.clearFocus();
+                            }
+
+                        }
+                    });
+
+
+
+            searchView.setOnCloseListener(
+                    new SearchView.OnCloseListener() {
+                        @Override
+                        public boolean onClose() {
+
+                            doMySearch("");
+                            return false;
+                        }
+                    });
+
+
+
+        }
+
+
         return true;
     }
 
@@ -114,7 +200,7 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void updateListView()    {
 
         final ListView lv1 = (ListView)findViewById(R.id.listView1);
-        adapter = new ChannelAdapter(this, tvProgram);
+        adapter = new ChannelAdapter(this, tvProgram, filterString);
         lv1.setAdapter(adapter);
         SetListViewListeners();
     }
@@ -232,5 +318,11 @@ public class ChannelListActivity extends ActionBarActivity {
         });
 
         builder.show();
+    }
+
+    private void doMySearch(String query) {
+        filterString = query;
+        updateListView();
+
     }
 }

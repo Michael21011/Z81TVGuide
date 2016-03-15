@@ -222,5 +222,22 @@ public class ProgramList  {
         }
     }
 
+    public boolean Match(String FilterString)
+    {
+        boolean result = this.ChannelName.toLowerCase().contains(FilterString.toLowerCase());
+      /*  if (!result) {
+            for (int j = 0; j < list.size(); j++)
+            {
+                if (GetListItem(j).Match(FilterString))
+                {
+                    result = true;
+                    break;
+                }
+
+            }
+        }
+        */
+        return result;
+    }
 
 }

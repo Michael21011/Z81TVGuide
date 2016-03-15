@@ -15,9 +15,10 @@ public class ChannelAdapter extends BaseAdapter{
 
 
 
-    public ChannelAdapter(Context context, TVProgram values) {
+    public ChannelAdapter(Context context, TVProgram values, String FilterString) {
         super();
     	this.list = values;
+        this.list.ApplyFilter(FilterString);
         this.context = context;
     }
     
@@ -52,7 +53,7 @@ public class ChannelAdapter extends BaseAdapter{
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
-        ProgramList currentItem = list.GetItem(position);
+        ProgramList currentItem = list.GetFilteredItem(position);
         holder.textView.setText(currentItem.ChannelName);
 
         holder.imageView.setImageResource(currentItem.getChannelLogo());
@@ -76,19 +77,19 @@ public class ChannelAdapter extends BaseAdapter{
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return list.ChannelCount();
+		return list.FilteredChannelCount();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return list.GetItem(arg0);
+		return list.GetFilteredItem(arg0);
 	}
 
 	@Override
 	public long getItemId(int arg0) {
 		// TODO Auto-generated method stub
-		return list.GetItemId(arg0);
+		return list.GetFilteredItemId(arg0);
 	}
 
 }

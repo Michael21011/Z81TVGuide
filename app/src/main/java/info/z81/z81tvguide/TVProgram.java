@@ -14,11 +14,13 @@ import java.util.Date;
 public class TVProgram  {
 
     private ArrayList<ProgramList> list;
+    private ArrayList<ProgramList> filteredList;
     private DefaultChannelNumbers defaultChannelNumbers;
 
     public TVProgram() {
         list = new ArrayList<>();
         defaultChannelNumbers = new DefaultChannelNumbers();
+        filteredList = list;
 
     }
 
@@ -84,10 +86,19 @@ public class TVProgram  {
     public int ChannelCount() {
         return list.size();
     }
+    public int FilteredChannelCount() {
+        return filteredList.size();
+    }
+
 
     public ProgramList GetItem(int arg0) {
 
         return list.get(arg0);
+    }
+
+    public ProgramList GetFilteredItem(int arg0) {
+
+        return filteredList.get(arg0);
     }
 
     public int IsCurrent() {
@@ -114,6 +125,10 @@ public class TVProgram  {
         // TODO Auto-generated method stub
         return list.get(arg0).hashCode();
     }
+    public long GetFilteredItemId(int arg0) {
+        // TODO Auto-generated method stub
+        return filteredList.get(arg0).hashCode();
+    }
 
     public Integer GetChannelDigitalNumber(String ChannelName)
     {
@@ -124,6 +139,23 @@ public class TVProgram  {
         return n;
     }
 
+    public void ApplyFilter(String FilterString){
+        if (FilterString==null || FilterString.equals("")) {
+            filteredList = new ArrayList<>();
+            filteredList.addAll(list);
+        }
+        else
+        {
+            filteredList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++)
+            {
+                if (GetFilteredItem(j).Match(FilterString))
+                    filteredList.add(this.GetFilteredItem(j));
+
+            }
+
+        }
+    }
 
 
 }
