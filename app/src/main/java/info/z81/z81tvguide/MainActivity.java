@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -67,6 +68,7 @@ public class MainActivity extends ActionBarActivity {
     private static String FileURL = "http://mtis.by/program_xml.zip";
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
     private static String WWWFileName = "program_xml.zip";
+    private static String internalFilePath="z81_program.txt";
     public final static String const_programListIndex="ProgramListIndex";
     public NowList nowList;
     ProgressDialog mProgressDialog;
@@ -708,6 +710,19 @@ public class MainActivity extends ActionBarActivity {
 
                     tvProgram.AddProgram(channelid, program.getElementsByTagName("title").item(0).getTextContent(), Utils.StringToDate(currentDate), description);
                 }
+
+            /*    File yourFile = new File(context.getFilesDir()+ "/" +internalFilePath);
+                if(!yourFile.exists()) {
+                    yourFile.createNewFile();
+                }
+                FileOutputStream oFile = new FileOutputStream(yourFile, false);
+
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(yourFile, false));
+                out.writeObject(tvProgram);
+                out.flush();
+                out.close();
+                */
+
                 NeedRebuildList = false;
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Event")

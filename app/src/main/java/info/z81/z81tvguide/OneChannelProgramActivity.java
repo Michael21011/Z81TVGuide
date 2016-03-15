@@ -4,12 +4,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -132,22 +134,24 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         SearchView searchView = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+
             // Assumes current activity is the searchable activity
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+            searchView.setQueryHint(getString(R.string.SearchQueryHint));
 
             searchView.setOnQueryTextListener(
                     new SearchView.OnQueryTextListener() {
                         @Override
                         public boolean onQueryTextChange(String newText) {
                             doMySearch(newText);
-                            /*
+
                             if (newText == null || newText.equals("")) {
                                 doMySearch(newText);
                                 return true;
                             } else
-                            */
-                            return false;
+
+                                return false;
                         }
 
                         @Override
@@ -158,20 +162,24 @@ public class OneChannelProgramActivity extends ActionBarActivity {
 
                     });
             searchView.setOnQueryTextFocusChangeListener(
-                    new SearchView.OnFocusChangeListener(){
+                    new SearchView.OnFocusChangeListener() {
                         @Override
-                        public void onFocusChange(View v, boolean hasFocus){
+                        public void onFocusChange(View v, boolean hasFocus) {
 
-                            if (!hasFocus)
-                            {doMySearch("");}
+                            if (!hasFocus) {
+                                doMySearch("");
+                                v.clearFocus();
+                            }
 
                         }
                     });
 
+
+
             searchView.setOnCloseListener(
-                    new SearchView.OnCloseListener(){
+                    new SearchView.OnCloseListener() {
                         @Override
-                    public boolean onClose(){
+                        public boolean onClose() {
 
                             doMySearch("");
                             return false;

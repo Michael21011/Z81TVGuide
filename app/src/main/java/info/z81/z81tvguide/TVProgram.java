@@ -3,6 +3,7 @@ package info.z81.z81tvguide;
 import android.content.SharedPreferences;
 import android.hardware.camera2.params.BlackLevelPattern;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
 /**
  * Created by michael on 08.10.15.
  */
-public class TVProgram {
+public class TVProgram  {
 
     private ArrayList<ProgramList> list;
     private DefaultChannelNumbers defaultChannelNumbers;

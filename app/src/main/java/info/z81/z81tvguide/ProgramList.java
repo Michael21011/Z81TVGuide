@@ -3,6 +3,7 @@ package info.z81.z81tvguide;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -16,7 +17,7 @@ import java.util.GregorianCalendar;
  * Created by michael on 08.10.15.
  */
 
-public class ProgramList {
+public class ProgramList  {
 
     public String ChannelId;
     public String ChannelName;

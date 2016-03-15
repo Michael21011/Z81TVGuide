@@ -247,6 +247,11 @@ public  class  Utils {
         {
             id = R.drawable.khl;
         }
+        else if (ChannelName.equalsIgnoreCase("Домашний I"))
+        {
+            id = R.drawable.domashniy;
+        }
+
         else
             id = R.drawable.empty;
 
