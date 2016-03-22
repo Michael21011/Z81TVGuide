@@ -14,6 +14,7 @@ package info.z81.z81tvguide;
 public class Z81TVGuide extends Application {
     private Tracker mTracker;
     private static Context context;
+    public TVProgram tvProgram;
 
     public void onCreate() {
         super.onCreate();

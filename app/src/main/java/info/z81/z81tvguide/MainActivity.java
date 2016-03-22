@@ -1,14 +1,12 @@
 package info.z81.z81tvguide;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -48,10 +46,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -70,6 +66,9 @@ public class MainActivity extends ActionBarActivity {
     private static String WWWFileName = "program_xml.zip";
     private static String internalFilePath="z81_program.txt";
     public final static String const_programListIndex="ProgramListIndex";
+    public final static String const_filterString="FilterString";
+    private Z81TVGuide myApplication;
+
     public NowList nowList;
     ProgressDialog mProgressDialog;
     private Boolean IsForceUnzipFile = false;
@@ -102,11 +101,19 @@ public class MainActivity extends ActionBarActivity {
             nowList = new NowList();
             favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
             digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
-            tvProgram = new TVProgram();
+        setContentView(R.layout.activity_main);
+            myApplication= (Z81TVGuide) getApplication();
+            if (myApplication.tvProgram == null) {
+                myApplication.tvProgram = new TVProgram();;
+                tvProgram =  myApplication.tvProgram;
+                showContentInBackground(null);
+            }
+        else {
+                tvProgram =  myApplication.tvProgram;
+                UpdateContentInBackground(this);
+            }
 
 
-            setContentView(R.layout.activity_main);
-            showContentInBackground(null);
        //}
 
     }
@@ -127,7 +134,8 @@ public class MainActivity extends ActionBarActivity {
             */
         if (NeedRefreshList) {
             NeedRefreshList = false;
-            showContentInBackground(null);
+            UpdateContentInBackground(this);
+            //todo: needrefreshlis parameter for why? showContentInBackground(null);
         }
         //Log.i(TAG, "Setting screen name: " + name);
         mTracker.setScreenName("Image~MainActivity");
@@ -160,8 +168,10 @@ public class MainActivity extends ActionBarActivity {
                         .setCategory("RowClick")
                         .setAction("onItemLongClick")
                         .build());
+
                 NowItem ni = (NowItem) nowList.GetItem(position);
-                Toast.makeText(getBaseContext(), ni.ChannelName, Toast.LENGTH_LONG).show();
+                openChannelListActivity(ni.ChannelId);
+
 
                 return true;
             }
@@ -215,8 +225,7 @@ public class MainActivity extends ActionBarActivity {
                         .setCategory("Action")
                         .setAction("Refresh")
                         .build());
-                downloadList(false);
-                showContentInBackground(null);
+                UpdateContentInBackground(this);
                 return true;
          /*   case R.id.action_settings:
                 sendMessage(null);
@@ -242,7 +251,7 @@ public class MainActivity extends ActionBarActivity {
                         .setCategory("Action")
                         .setAction("OpenChannelList")
                         .build());
-                openChannelListActivity();
+                openChannelListActivity(null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -254,11 +263,13 @@ public class MainActivity extends ActionBarActivity {
         if (ShowOnlyFavorites) {
             item.setIcon(R.drawable.ic_layout_star_selected);
         } else item.setIcon(R.drawable.ic_layout_star);
-        showContentInBackground(null);
+        UpdateContentInBackground(this);
+        //showContentInBackground(null);
     }
 
-    private void openChannelListActivity() {
+    private void openChannelListActivity(String ChannelName) {
         Intent intent = new Intent(this, ChannelListActivity.class);
+        intent.putExtra(MainActivity.const_programListIndex, ChannelName);
         NeedRefreshList = true;
         startActivity(intent);
     }
@@ -301,22 +312,24 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    private void UpdateContentInBackground(Object object){
+        final UpdateProgramTask updateProgramTask = new UpdateProgramTask(this);
+        updateProgramTask.execute(this.getFilesDir().getPath());
 
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                updateProgramTask.cancel(true);
+            }
+        });
+    }
     private void showContentInBackground(Object object) {
         // execute this when the downloader must be fired
 
         String DownloadFileName = GetDownloadedFileName();
         File myF = new File(DownloadFileName);
         if ((tvProgram.ChannelCount() > 0) & !NeedRebuildList) {
-            final UpdateProgramTask updateProgramTask = new UpdateProgramTask(this);
-            updateProgramTask.execute(this.getFilesDir().getPath());
-
-            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    updateProgramTask.cancel(true);
-                }
-            });
+            UpdateContentInBackground(this);
         } else if (myF.exists()) {
 
             final ParseFileTask parseFileTask = new ParseFileTask(this);
@@ -352,6 +365,7 @@ public class MainActivity extends ActionBarActivity {
 
         // execute this when the downloader must be fired
         final DownloadTask downloadTask = new DownloadTask(this);
+        NeedRebuildList = true;
         downloadTask.execute(URL);
 
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {

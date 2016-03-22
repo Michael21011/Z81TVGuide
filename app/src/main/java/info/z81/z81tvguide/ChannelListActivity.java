@@ -35,6 +35,7 @@ public class ChannelListActivity extends ActionBarActivity {
     ChannelAdapter adapter;
     SharedPreferences  favoriteChannelListPreference;
     private Tracker mTracker;
+    private Integer InitialChannelPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,16 @@ public class ChannelListActivity extends ActionBarActivity {
         tvProgram = MainActivity.tvProgram;
         setContentView(R.layout.activity_channel_list);
         favoriteChannelListPreference = MainActivity.favoriteChannelListPreference;
+
+        String currentChannelId = getIntent().getStringExtra(MainActivity.const_programListIndex);
+        if (currentChannelId==null)
+        {
+            InitialChannelPosition = 0;
+        }
+        else
+        {
+            InitialChannelPosition = tvProgram.GetProgramListIndex(currentChannelId);
+        }
 
 
         updateListView();
@@ -203,6 +214,10 @@ public class ChannelListActivity extends ActionBarActivity {
         adapter = new ChannelAdapter(this, tvProgram, filterString);
         lv1.setAdapter(adapter);
         SetListViewListeners();
+        if (InitialChannelPosition!=null) {
+            lv1.setSelection(InitialChannelPosition);
+        }
+        InitialChannelPosition = null;
     }
     protected void SetListViewListeners()    {
         ListView list = (ListView)findViewById(R.id.listView1);
@@ -238,6 +253,8 @@ public class ChannelListActivity extends ActionBarActivity {
     {
         Intent intent = new Intent(ChannelListActivity.this, OneChannelProgramActivity.class);
         intent.putExtra(MainActivity.const_programListIndex, ItemIndex);
+        intent.putExtra(MainActivity.const_filterString, filterString);
+
         startActivity(intent);
     }
 

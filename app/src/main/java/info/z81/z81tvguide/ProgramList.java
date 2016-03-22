@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by michael on 08.10.15.
+ * Object contains TV Guide for ONE channel
  */
 
 public class ProgramList  {
@@ -225,7 +226,7 @@ public class ProgramList  {
     public boolean Match(String FilterString)
     {
         boolean result = this.ChannelName.toLowerCase().contains(FilterString.toLowerCase());
-      /*  if (!result) {
+        if (!result) {
             for (int j = 0; j < list.size(); j++)
             {
                 if (GetListItem(j).Match(FilterString))
@@ -236,7 +237,7 @@ public class ProgramList  {
 
             }
         }
-        */
+
         return result;
     }
 

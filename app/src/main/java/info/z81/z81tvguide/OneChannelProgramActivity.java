@@ -39,7 +39,8 @@ public class OneChannelProgramActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
-        programList = MainActivity.tvProgram.GetItem(programListIndex);
+        programList =    ((Z81TVGuide) getApplication()).tvProgram.GetFilteredItem(programListIndex);
+        filterString =getIntent().getStringExtra(MainActivity.const_filterString);
         setContentView(R.layout.one_channel_program);
         setTitle(programList.ChannelName);
         updateListView();
@@ -139,7 +140,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
             searchView.setQueryHint(getString(R.string.SearchQueryHint));
-
+searchView.setQuery(filterString, false);
             searchView.setOnQueryTextListener(
                     new SearchView.OnQueryTextListener() {
                         @Override
@@ -161,12 +162,20 @@ public class OneChannelProgramActivity extends ActionBarActivity {
                         }
 
                     });
+            searchView.setOnSystemUiVisibilityChangeListener(
+                    new SearchView.OnSystemUiVisibilityChangeListener() {
+                        @Override
+                    public void onSystemUiVisibilityChange(int i){
+                            doMySearch("");
+                        }
+                    }
+            );
             searchView.setOnQueryTextFocusChangeListener(
                     new SearchView.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View v, boolean hasFocus) {
 
-                            if (!hasFocus) {
+                            if (!hasFocus && !v.isFocusable()) {
                                 doMySearch("");
                                 v.clearFocus();
                             }

@@ -10,8 +10,9 @@ import java.util.Date;
 
 /**
  * Created by michael on 08.10.15.
+ * Object contains TV Guide entirely
  */
-public class TVProgram  {
+public class  TVProgram  {
 
     private ArrayList<ProgramList> list;
     private ArrayList<ProgramList> filteredList;
@@ -149,8 +150,8 @@ public class TVProgram  {
             filteredList = new ArrayList<>();
             for (int j = 0; j < list.size(); j++)
             {
-                if (GetFilteredItem(j).Match(FilterString))
-                    filteredList.add(this.GetFilteredItem(j));
+                if (GetItem(j).Match(FilterString))
+                    filteredList.add(this.GetItem(j));
 
             }
 
