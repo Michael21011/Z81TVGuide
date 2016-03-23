@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
     public NowList nowList;
     ProgressDialog mProgressDialog;
     private Boolean IsForceUnzipFile = false;
-    private Document d;
+
     private int XMLLoadProgress = 20;
     private Boolean ShowOnlyFavorites = true;
     private Boolean NeedRefreshList = false;
@@ -626,10 +626,10 @@ public class MainActivity extends ActionBarActivity {
             //  PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             //  PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,  getClass().getName());
             //  wl.acquire();
-
+            Document document = null;
             try {
 
-                if ((IsForceUnzipFile) || (d == null)) {
+                if ((IsForceUnzipFile) || (document == null)) {
                     NeedRebuildList = true;
                     publishProgress((int) (1));
                     String ResultFile = "";
@@ -648,9 +648,9 @@ public class MainActivity extends ActionBarActivity {
                         DocumentBuilder db = dbf.newDocumentBuilder();
                         InputStream inputStream = new FileInputStream(ResultFile);
 
-                        d = db.parse(inputStream);
+                        document = db.parse(inputStream);
 
-                        NodeList checkChannelNodeList = d.getElementsByTagName("channel");
+                        NodeList checkChannelNodeList = document.getElementsByTagName("channel");
                         boolean wrongEncoding = true;
                         for (int j = 0; j < checkChannelNodeList.getLength(); j++) {
                             Node checkChannelNode = checkChannelNodeList.item(j);
@@ -667,7 +667,7 @@ public class MainActivity extends ActionBarActivity {
                             DocumentBuilder db2 = dbf.newDocumentBuilder();
                             InputStream inputStream2 = new FileInputStream(ResultFile);
 
-                            d = db2.parse(new InputSource(new InputStreamReader(inputStream2, "windows-1251")));
+                            document = db2.parse(new InputSource(new InputStreamReader(inputStream2, "windows-1251")));
                         }
 
                     } catch (Exception e) {
@@ -688,7 +688,7 @@ public class MainActivity extends ActionBarActivity {
                 today.setTime(c.getTimeInMillis() + (1000 * 5 * 60));
                 String TimeForProgramCompare = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(today.getTime());
                 String currentText = "";
-                NodeList programlist = d.getElementsByTagName("programme");
+                NodeList programlist = document.getElementsByTagName("programme");
                 currentText = "";
                 maxDate = "";
                 String channelid = "";
@@ -703,7 +703,7 @@ public class MainActivity extends ActionBarActivity {
 				/* new algoritm for list */
                 tvProgram.Clear();
                 /* look throw all channel list*/
-                NodeList channelNodeList = d.getElementsByTagName("channel");
+                NodeList channelNodeList = document.getElementsByTagName("channel");
                 for (int j = 0; j < channelNodeList.getLength(); j++) {
                     Node channelNode = channelNodeList.item(j);
                     Element channelElement = (Element) channelNode;
@@ -814,21 +814,8 @@ public class MainActivity extends ActionBarActivity {
                 String maxDate = "";
                 nowList.Clear();
                 Calendar c = Calendar.getInstance();
-                String CurrentTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
                 Date today = new Date();
                 today.setTime(c.getTimeInMillis() + (1000 * 5 * 60));
-                String TimeForProgramCompare = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(today.getTime());
-                String currentText = "";
-                NodeList programlist = d.getElementsByTagName("programme");
-                currentText = "";
-                maxDate = "";
-                String channelid = "";
-                String channelName = "";
-                Properties pro = new Properties();
-                Properties cha = new Properties();
-
-                DateFormat df = new DateFormat();
-                String currentTitleDate = (String) df.format("yyyy-MM-dd hh:mm:ss", new Date());
 
                 for (int i = 0; i < tvProgram.ChannelCount(); i++) {
                     ProgramList pl = tvProgram.GetItem(i);
@@ -839,16 +826,6 @@ public class MainActivity extends ActionBarActivity {
                             pi = pl.GetItem(CurrentItemIndex);
                         }
 
-                        /*    for (int j = 0; j < pl.Count(); j++) {
-                            Date programDate = pl.GetItem(j).DateStart;
-                            if (pi != null) {
-
-                                if (((programDate.compareTo(pi.DateStart) > 0) & (programDate.compareTo(today) <= 0))) {
-                                    pi = pl.GetItem(j);
-
-                                }
-                            } else pi = pl.GetItem(j);
-                        } */
                         if (pi != null) {
                             nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.DigitalNumber);
                         }
