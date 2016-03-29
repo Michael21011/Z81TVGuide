@@ -53,6 +53,11 @@ public class NowList  implements  Comparable {
 
 	public Object GetItem(int arg0) {
 		// TODO Auto-generated method stub
+		if (arg0>=list.size())
+		{
+			return null;
+		}
+		else
 		return list.get(arg0);
 	}
 

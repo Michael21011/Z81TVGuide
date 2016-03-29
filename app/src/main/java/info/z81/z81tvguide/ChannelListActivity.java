@@ -43,7 +43,7 @@ public class ChannelListActivity extends ActionBarActivity {
         Z81TVGuide application = (Z81TVGuide) getApplication();
         mTracker = application.getDefaultTracker();
 
-        tvProgram = MainActivity.tvProgram;
+        tvProgram =  ((Z81TVGuide) getApplication()).tvProgram;
         setContentView(R.layout.activity_channel_list);
         favoriteChannelListPreference = MainActivity.favoriteChannelListPreference;
 

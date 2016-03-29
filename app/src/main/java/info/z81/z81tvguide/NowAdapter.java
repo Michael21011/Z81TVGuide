@@ -50,6 +50,10 @@ public class NowAdapter extends BaseAdapter{
             holder = (ViewHolder) rowView.getTag();
         }
         NowItem currentItem = (NowItem)list.GetItem(position);
+        if (currentItem != null)
+        {
+
+
         holder.textView.setText(currentItem.ChannelName);
         holder.diffView.setText(currentItem.getAgoTime());
         holder.programmView.setText(currentItem.Title);
@@ -69,6 +73,11 @@ public class NowAdapter extends BaseAdapter{
         } else {
             holder.imageView.setImageResource(R.drawable.ok);
         } */
+        }
+        else
+        {
+            rowView.setVisibility(View.INVISIBLE);
+        }
 
         return rowView;
     }

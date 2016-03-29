@@ -175,9 +175,13 @@ public  class  Utils {
         else if (ChannelName.equalsIgnoreCase("Русский иллюзион")) {
             id =R.drawable.russkijilluzion;
         }
-        else if (ChannelName.equalsIgnoreCase("Сетанта спорт")) {
+        else if (ChannelName.equalsIgnoreCase("Сетанта спорт") ) {
             id =R.drawable.setantasport;
         }
+        else if (ChannelName.equalsIgnoreCase("Сетанта спорт+") ) {
+            id =R.drawable.setantasportplus;
+        }
+
         else if (ChannelName.equalsIgnoreCase("Союз")) {
             id =R.drawable.souz;
         }
@@ -250,6 +254,10 @@ public  class  Utils {
         else if (ChannelName.equalsIgnoreCase("Домашний I"))
         {
             id = R.drawable.domashniy;
+        }
+        else if (ChannelName.equalsIgnoreCase("+TV"))
+        {
+            id = R.drawable.plustv;
         }
 
         else
