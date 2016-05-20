@@ -1,6 +1,7 @@
 package info.z81.z81tvguide;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -26,6 +28,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -62,8 +65,12 @@ public class MainActivity extends ActionBarActivity {
     public static SharedPreferences favoriteChannelListPreference;
     public static Resources MyResources;
     private static String FileURL = "http://mtis.by/program_xml.zip";
+  //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
+ //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
+
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
     private static String WWWFileName = "program_xml.zip";
+    //private static String WWWFileName = "xmltv.xml.gz";
     private static String internalFilePath="z81_program.txt";
     public final static String const_programListIndex="ProgramListIndex";
     public final static String const_filterString="FilterString";
@@ -380,6 +387,38 @@ public class MainActivity extends ActionBarActivity {
         return true;
 
     }
+    private String unpackGZIP(String path, String zipname, String ResultFile){
+        InputStream is;
+        GZIPInputStream zis;
+        try {
+            String filename;
+            is = new FileInputStream(path + "/" + zipname);
+            zis = new GZIPInputStream(new BufferedInputStream(is));
+            ZipEntry ze;
+            byte[] buffer = new byte[8196];
+            int count;
+            filename = "output.xml";
+
+            // Need to create directories if not exists, or
+            // it will generate an Exception...
+            File fmd = new File(path + filename);
+            File outputfile = new File(path, filename);
+            FileOutputStream fout = new FileOutputStream(outputfile);
+
+            while ((count = zis.read(buffer)) != -1) {
+                fout.write(buffer, 0, count);
+            }
+            fout.close();
+            ResultFile = outputfile.getAbsolutePath();
+
+            zis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+        return ResultFile;
+    }
 
     private String unpackZip(String path, String zipname, String ResultFile) {
         InputStream is;
@@ -572,7 +611,7 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
             //Commented because empty screen with it
             // mProgressDialog.dismiss();
-
+            Boolean halt = false;
             if (result != null)
                 Toast.makeText(context, "Parse file error: " + result, Toast.LENGTH_LONG).show();
 
@@ -594,19 +633,21 @@ public class MainActivity extends ActionBarActivity {
                 } else if (val == 1) {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();
-                        Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
-                        System.exit(0);
+                        ShowAlert(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        halt = true;
+                      //  System.exit(0);
                     }
                     NeedDownloadPast = true;
                     downloadList(true);
                 } else if (val == -1) {
                     if (NeedDownloadFuture) {
                         mProgressDialog.dismiss();
-                        Utils.ShowMessage(MainActivity.this, getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
-                        System.exit(0);
+                        ShowAlert(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        halt = true;
+                        //System.exit(0);
                     }
                     NeedDownloadFuture = true;
-                    downloadList(false);
+                    if (!halt) {downloadList(false);}
                 }
 
 
@@ -633,7 +674,9 @@ public class MainActivity extends ActionBarActivity {
                     NeedRebuildList = true;
                     publishProgress((int) (1));
                     String ResultFile = "";
-                    ResultFile = unpackZip(Params[0], WWWFileName, ResultFile);
+                    if (WWWFileName.contains("gz")) {ResultFile = unpackGZIP(Params[0], WWWFileName, ResultFile);}
+                    else
+                    {ResultFile = unpackZip(Params[0], WWWFileName, ResultFile);}
                     if (ResultFile.equals("")) {
                         // refreshList(null);
                         return null;
@@ -647,7 +690,8 @@ public class MainActivity extends ActionBarActivity {
 
                         DocumentBuilder db = dbf.newDocumentBuilder();
                         InputStream inputStream = new FileInputStream(ResultFile);
-
+                       // String fresult = getStringFromInputStream(inputStream);
+                       // Toast.makeText(context, fresult, Toast.LENGTH_SHORT).show();
                         document = db.parse(inputStream);
 
                         NodeList checkChannelNodeList = document.getElementsByTagName("channel");
@@ -656,7 +700,8 @@ public class MainActivity extends ActionBarActivity {
                             Node checkChannelNode = checkChannelNodeList.item(j);
                             Element checkElement = (Element) checkChannelNode;
                             String checkName = checkElement.getElementsByTagName("display-name").item(0).getTextContent();
-                            if (checkName.equals("8 канал") || checkName.equals("Беларусь 1") || checkName.equals("ОНТ"))
+
+                            if (checkName.contains("а") || checkName.contains("о") || checkName.contains("и"))
                             {
                                 wrongEncoding = false;
                                 break;
@@ -672,6 +717,9 @@ public class MainActivity extends ActionBarActivity {
 
                     } catch (Exception e) {
                         Log.e("tag", e.getMessage());
+                        ShowAlert(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
+                        File f = new File(Params[0]+ "/" + WWWFileName);
+                        f.delete();
                     } finally {
 
                     }
@@ -845,6 +893,53 @@ public class MainActivity extends ActionBarActivity {
             }
             return null;
         }
+    }
+
+    public void ShowAlert(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(title)
+                .setMessage(message)
+                //.setIcon(R.drawable.ic_android_cat)
+                .setCancelable(false)
+                .setNegativeButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                System.exit(0);
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    // convert InputStream to String
+    private static String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString();
+
     }
 
 

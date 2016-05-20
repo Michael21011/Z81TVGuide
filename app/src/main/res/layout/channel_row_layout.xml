@@ -7,18 +7,18 @@
 
     <ImageView
         android:id="@+id/channellogo"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginLeft="4px"
-        android:layout_marginRight="10px"
-        android:layout_marginTop="4px"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="4dp"
         android:onClick="onChannelLogoClick"
         android:clickable="true"
          >
     </ImageView>
     <TextView
         android:id="@+id/channelId"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
          android:visibility="invisible"
         android:gravity="center_vertical"
@@ -27,7 +27,7 @@
     </TextView>
     <TextView
         android:id="@+id/channel"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:text="@+id/label"
         android:textColor="@color/ChannelNameNow"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         
         android:text=" "
-        android:textSize="2sp"
+        android:textSize="2dp"
         android:visibility="visible" >
     </TextView>
     <TextView
@@ -63,17 +63,17 @@
         android:layout_height="wrap_content"
 
         android:text=" "
-        android:textSize="2sp"
+        android:textSize="2dp"
         android:visibility="visible" >
     </TextView>
 
     <ImageView
         android:id="@+id/star"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginLeft="4px"
-        android:layout_marginRight="10px"
-        android:layout_marginTop="4px"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="4dp"
         android:onClick="onStarClick"
         android:clickable="true"
        >

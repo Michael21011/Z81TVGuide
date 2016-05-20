@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:sabd="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sabd="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu_share" android:title="@string/menu_share" />
     <item android:id="@+id/menu_createevent" android:title="@string/menu_createevent" >
         <!-- "file" submenu -->
@@ -10,10 +11,21 @@
                 android:title="@string/sub_menu_item2" />
         </menu>
         -->
-        <item android:id="@+id/search"
-            android:title="Search"
-            android:icon="@drawable/ic_menu_search"
-            sabd:showAsAction="always"
-            android:actionViewClass="android.widget.SearchView" />
+        <item android:id="@+id/menu_program_reminder"
+            android:title="@string/menu_remind"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            />
+        <item android:id="@+id/menu_program_share"
+            android:title="@string/menu_share"
+            android:icon="@android:drawable/ic_menu_share"
+            />
+        <item android:id="@+id/menu_program_copy"
+            android:title="@string/menu_copy"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            />
+        <item android:id="@+id/menu_program_searchInInternet"
+            android:title="@string/menu_searchInInternet"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            />
     </item>
 </menu>

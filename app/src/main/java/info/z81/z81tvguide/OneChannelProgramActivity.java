@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -212,34 +213,48 @@ searchView.setQuery(filterString, false);
         startSearch(null, false, appData, false);
         return true;
     }
-
-/*    @Override
+/*
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         //Do the initial here
-        menu = popupMenu;
+        //menu = popupMenu;
         super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.one_channel_program_popupmenu, menu);
     }
+    */
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        // Do the action by id here
+        AdapterViewCompat.AdapterContextMenuInfo info = (AdapterViewCompat.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.menu_share:
+            case R.id.menu_program_copy:
                 ShareItem();
                 return true;
-            case R.id.menu_createevent:
-                //act for sub_menu_item1
+            case R.id.menu_program_reminder:
+                ShareItem();
+                return true;
+            case R.id.menu_program_searchInInternet:
+                ShareItem();
+                return true;
+            case R.id.menu_program_share:
+                ShareItem();
                 return true;
             default:
                 return super.onContextItemSelected(item);
+
         }
     }
 
     private void ShareItem(){
-     String t = programList.ChannelName+' '+ programList.GetItem(programListIndex).Title+ ' '+ programList.GetItem(programListIndex).GetDateStartTimeOnly();
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+        int position=lv1.getSelectedItemPosition();
+        ProgramItem pi = programList.GetItem(position);
+     String t = pi.Title;
         Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
     }
-    */
+
 
 }

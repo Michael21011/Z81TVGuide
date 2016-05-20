@@ -31,4 +31,10 @@
     <string name="empty_channel_number">n/d</string>
     <string name="search_title">Search</string>
     <string name="SearchQueryHint">Enter text to find</string>
+    <string name="menu_remind">Reminde</string>
+    <string name="menu_copy">Copy</string>
+    <string name="menu_searchInInternet">Search in Internet</string>
+    <string name="needclosebecausewronhgxml">Downloaded file contains an error, it is impossible to read program. Please, try again later.</string>
+
+
 </resources>
