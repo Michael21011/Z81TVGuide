@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sabd="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_share" android:title="@string/menu_share" />
-    <item android:id="@+id/menu_createevent" android:title="@string/menu_createevent" >
+
         <!-- "file" submenu -->
       <!--  <menu>
             <item android:id="@+id/sub_menu_item1"
@@ -27,5 +26,5 @@
             android:title="@string/menu_searchInInternet"
             android:icon="@android:drawable/ic_menu_my_calendar"
             />
-    </item>
+
 </menu>

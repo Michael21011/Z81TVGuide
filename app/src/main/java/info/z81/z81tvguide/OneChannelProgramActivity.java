@@ -1,6 +1,8 @@
 package info.z81.z81tvguide;
 
 import android.app.SearchManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +23,9 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class OneChannelProgramActivity extends ActionBarActivity {
     
     private ProgramList programList;
@@ -29,6 +34,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     private ContextMenu popupMenu;
     private Tracker mTracker;
     private String filterString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,8 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         setTitle(programList.ChannelName);
         updateListView();
         handleIntent(getIntent());
-
+        registerForContextMenu(findViewById(R.id.oneChannelProgramListView));
+        //programItemIndex=-1;
 
    /*     MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.one_channel_program_popupmenu, popupMenu);
@@ -82,15 +89,15 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     }
 
     protected void SetListViewListeners()    {
-        ListView list = (ListView)findViewById(R.id.listView1);
+        ListView list = (ListView)findViewById(R.id.oneChannelProgramListView);
 
 
-  /*      list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                OpenOneChannelProgramActivity(position);
 
-                return true;
+                programItemIndex = position;
+                return false;
             }
         });
 
@@ -103,7 +110,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
             }
 
 
-    });*/
+    });
     }
 
     protected void updateListView() {
@@ -213,7 +220,7 @@ searchView.setQuery(filterString, false);
         startSearch(null, false, appData, false);
         return true;
     }
-/*
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
@@ -223,20 +230,20 @@ searchView.setQuery(filterString, false);
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.one_channel_program_popupmenu, menu);
     }
-    */
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterViewCompat.AdapterContextMenuInfo info = (AdapterViewCompat.AdapterContextMenuInfo) item.getMenuInfo();
+       // AdapterViewCompat.AdapterContextMenuInfo info = (AdapterViewCompat.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.menu_program_copy:
-                ShareItem();
+                CopyItem();
                 return true;
             case R.id.menu_program_reminder:
-                ShareItem();
+                ReminderItem();
                 return true;
             case R.id.menu_program_searchInInternet:
-                ShareItem();
+                SearchInInternetItem();
                 return true;
             case R.id.menu_program_share:
                 ShareItem();
@@ -250,11 +257,75 @@ searchView.setQuery(filterString, false);
     private void ShareItem(){
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
-        int position=lv1.getSelectedItemPosition();
+
+        int position=programItemIndex;
         ProgramItem pi = programList.GetItem(position);
-     String t = pi.Title;
-        Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+     String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
+       // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+        Intent sharingIntent = new Intent(android.content.Intent. ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Телепередача  ");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, t);
+        startActivity(Intent.createChooser(sharingIntent, "Отправить через"));
     }
+
+    private void SearchInInternetItem(){
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+
+        int position=programItemIndex;
+        ProgramItem pi = programList.GetItem(position);
+        String t = String.format("%1$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
+        // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+
+
+        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH );
+        intent.putExtra(SearchManager.QUERY, t);
+        startActivity(intent);
+
+    }
+
+    private void CopyItem(){
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+
+        int position=programItemIndex;
+        ProgramItem pi = programList.GetItem(position);
+        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
+        // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+        ClipboardManager myClipboard;
+        myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        ClipData myClip;
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            myClip = ClipData.newPlainText("text", t);
+            myClipboard.setPrimaryClip(myClip);
+        }
+    }
+
+    private void ReminderItem(){
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+
+        int position=programItemIndex;
+        ProgramItem pi = programList.GetItem(position);
+        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
+        // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(pi.DateStart);
+
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        intent.putExtra("beginTime", cal.getTimeInMillis());
+        intent.putExtra("allDay", true);
+        intent.putExtra("rrule", "FREQ=YEARLY");
+        intent.putExtra("endTime", cal.getTimeInMillis()+60*60*1000);
+        intent.putExtra("title", pi.Title);
+        startActivity(intent);
+
+    }
+
+
+
 
 
 }
