@@ -119,6 +119,7 @@ public class MainActivity extends ActionBarActivity {
                 tvProgram =  myApplication.tvProgram;
                 UpdateContentInBackground(this);
             }
+        AppRater.app_launched(this);
 
 
        //}
@@ -259,6 +260,9 @@ public class MainActivity extends ActionBarActivity {
                         .setAction("OpenChannelList")
                         .build());
                 openChannelListActivity(null);
+                return true;
+            case R.id.action_rate:
+                AppRater.showRateDialog(this, null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

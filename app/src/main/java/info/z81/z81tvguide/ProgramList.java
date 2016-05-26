@@ -92,9 +92,33 @@ public class ProgramList  {
         list.add(programItem);
 
     }
+    public Date GetDateEnd(int itemIndex){
+        if (itemIndex<this.TotalCount()-1)
+        {
+            Date nd= GetItem(itemIndex+1).DateStart;
+            long diff = nd.getTime() - GetItem(itemIndex).DateStart.getTime();
+            long diffMinutes = diff / (60 * 1000) % 60;
+            if (diffMinutes>600)
+            {
+                return Utils.DateAdd(GetItem(itemIndex).DateStart, Calendar.HOUR, 1);
+            }
+            else
+                return nd;
 
+        }
+        else
+        {//last program
+            return Utils.DateAdd(GetItem(itemIndex).DateStart, Calendar.HOUR, 1);
+        }
+
+    }
     public int Count() {
         return filteredList.size();
+    }
+
+    public int TotalCount()
+    {
+        return list.size();
     }
 
     public ProgramItem GetItem(int arg0) {

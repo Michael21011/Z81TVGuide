@@ -308,18 +308,21 @@ searchView.setQuery(filterString, false);
 
         int position=programItemIndex;
         ProgramItem pi = programList.GetItem(position);
-        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
+        String t = String.format("%1$s(%3$s)",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
+        String desc = String.format("Посмотреть %1$s(Канал %3$s, начало %2$s)",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
         // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
         Calendar cal = Calendar.getInstance();
         cal.setTime(pi.DateStart);
-
+        Calendar calEnd = Calendar.getInstance();
+        calEnd.setTime(programList.GetDateEnd(position));
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra("beginTime", cal.getTimeInMillis());
-        intent.putExtra("allDay", true);
-        intent.putExtra("rrule", "FREQ=YEARLY");
-        intent.putExtra("endTime", cal.getTimeInMillis()+60*60*1000);
-        intent.putExtra("title", pi.Title);
+        intent.putExtra("allDay", false);
+        //intent.putExtra("rrule", "FREQ=YEARLY");
+        intent.putExtra("endTime", calEnd.getTimeInMillis());
+        intent.putExtra("title", t);
+        intent.putExtra("description", desc);
         startActivity(intent);
 
     }

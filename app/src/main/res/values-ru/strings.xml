@@ -43,4 +43,8 @@
     <string name="menu_copy">Копировать</string>
     <string name="menu_searchInInternet">Искать в Интернет</string>
     <string name="needclosebecausewronhgxml">Скачаный файл содержит ошибку, чтение программы передач не возможно. Попробуйте позже еще раз, пожалуйста.</string>
+    <string name="remind_me_later">Напомнить позже</string>
+    <string name="no_thanks">Нет, спасибо</string>
+    <string name="rate">Оценить</string>
+    <string name="rate_prompt">Если Вам нравится приложение %s, оцените его, пожалуйста.\n Все замечания рассматриваются и, по-возможности, исправляются.\n Спасибо за поддержку!</string>
 </resources>

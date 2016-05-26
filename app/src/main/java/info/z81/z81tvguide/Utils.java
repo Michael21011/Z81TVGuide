@@ -280,4 +280,10 @@ public  class  Utils {
         return StartDate.getTime();
     }
 
+    public static Date DateAdd(Date inputDate, int timePeriodType, int timePeriodValue){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(inputDate);
+        cal.add(timePeriodType,timePeriodValue);
+        return cal.getTime();
+    }
 }

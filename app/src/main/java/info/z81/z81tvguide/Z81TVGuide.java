@@ -19,6 +19,7 @@ public class Z81TVGuide extends Application {
     public void onCreate() {
         super.onCreate();
         Z81TVGuide.context = getApplicationContext();
+
     }
 
     public static Context getAppContext() {
