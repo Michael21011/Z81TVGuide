@@ -83,6 +83,11 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     }
 
     private void doMySearch(String query) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("OneChannelDoMySearch")
+                .build());
+
         filterString = query;
         updateListView();
 
@@ -255,7 +260,10 @@ searchView.setQuery(filterString, false);
     }
 
     private void ShareItem(){
-
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("ShareItem")
+                .build());
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         int position=programItemIndex;
@@ -270,7 +278,10 @@ searchView.setQuery(filterString, false);
     }
 
     private void SearchInInternetItem(){
-
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("SearchInInternetItem")
+                .build());
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         int position=programItemIndex;
@@ -286,7 +297,10 @@ searchView.setQuery(filterString, false);
     }
 
     private void CopyItem(){
-
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("CopyItem")
+                .build());
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         int position=programItemIndex;
@@ -303,6 +317,10 @@ searchView.setQuery(filterString, false);
     }
 
     private void ReminderItem(){
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("ReminderItem")
+                .build());
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 

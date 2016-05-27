@@ -338,6 +338,10 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     private void doMySearch(String query) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("ChannelListDoMySearch")
+                .build());
         filterString = query;
         updateListView();
 

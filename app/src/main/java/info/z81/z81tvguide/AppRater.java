@@ -55,6 +55,11 @@ public class AppRater {
     public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
         final Dialog dialog = new Dialog(mContext);
         dialog.setTitle(mContext.getString(R.string.rate));
+        int AdditionButtonVisibility = View.VISIBLE;
+        if (editor == null)
+        {
+            AdditionButtonVisibility = View.INVISIBLE;
+        }
 
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -73,6 +78,7 @@ public class AppRater {
                 dialog.dismiss();
             }
         });
+
         ll.addView(b1);
 
         Button b2 = new Button(mContext);
@@ -82,6 +88,7 @@ public class AppRater {
                 dialog.dismiss();
             }
         });
+        b2.setVisibility(AdditionButtonVisibility);
         ll.addView(b2);
 
         Button b3 = new Button(mContext);
@@ -95,6 +102,7 @@ public class AppRater {
                 dialog.dismiss();
             }
         });
+        b3.setVisibility(AdditionButtonVisibility);
         ll.addView(b3);
 
         dialog.setContentView(ll);
