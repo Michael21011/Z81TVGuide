@@ -87,7 +87,7 @@ public class ProgramList  {
     public void Add(String Title, Date DateFrom, String Description) {
         ProgramItem programItem = new ProgramItem(Title,DateFrom,Description);
         list.add(programItem);
-        programItem.Position = this.Count();
+        programItem.Position = this.Count()-1;
 
     }
     public Date GetDateEnd(int itemIndex){
