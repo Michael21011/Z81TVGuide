@@ -34,14 +34,14 @@ public class NowList  implements  Comparable {
 		return 0;
 	}
 
-	public void Add(String channelid, String channelName, String programTitle, Date startTime, String description, Integer digitalNumber) {
+	public void Add(String channelid, String channelName, String programTitle, Date startTime, String description, Integer digitalNumber, Integer positionInChannel) {
 		NowItem nowItem = new NowItem();
 		nowItem.ChannelId=channelid;
 		nowItem.ChannelName = channelName;
 		nowItem.Title = programTitle;
 		nowItem.Description = description;
 		nowItem.DigitalNumber = digitalNumber;
-
+		nowItem.PositionInChannel = positionInChannel;
     	nowItem.DateStart = startTime;
 		list.add(nowItem);
         

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -31,6 +32,9 @@ import org.xml.sax.InputSource;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,6 +47,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -88,6 +93,7 @@ public class MainActivity extends ActionBarActivity {
     private Boolean NeedDownloadPast = false;
     public static TVProgram tvProgram;
     private Tracker mTracker;
+    private int currentPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +125,7 @@ public class MainActivity extends ActionBarActivity {
                 tvProgram =  myApplication.tvProgram;
                 UpdateContentInBackground(this);
             }
-        AppRater.app_launched(this);
+        registerForContextMenu(findViewById(R.id.listView1));
 
 
        //}
@@ -145,6 +151,7 @@ public class MainActivity extends ActionBarActivity {
             UpdateContentInBackground(this);
             //todo: needrefreshlis parameter for why? showContentInBackground(null);
         }
+        AppRater.app_launched(this, mTracker);
         //Log.i(TAG, "Setting screen name: " + name);
         mTracker.setScreenName("Image~MainActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -165,6 +172,132 @@ public class MainActivity extends ActionBarActivity {
         updateListView();
     }
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        //Do the initial here
+        //menu = popupMenu;
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.main_activity_popupmenu, menu);
+        MenuItem mi = menu.findItem(R.id.menu_main_channel);
+;
+        String ChanellNumber="";
+        if (GetCurrentNowItem().DigitalNumber != -1)
+            ChanellNumber = String.format(" Ц:%s", GetCurrentNowItem().DigitalNumber);
+        mi.setTitle(String.format("%1$s%2$s",GetCurrentProgramList().ChannelName,ChanellNumber ));
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        // AdapterViewCompat.AdapterContextMenuInfo info = (AdapterViewCompat.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.menu_main_copy:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("ContextItem")
+                        .setAction("CopyItem")
+                        .build());
+                CopyItem();
+                return true;
+            case R.id.menu_main_channel:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("ContextItem")
+                        .setAction("ChannelItem")
+                        .build());
+                ChannelItem();
+                return true;
+            case R.id.menu_main_searchInInternet:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("ContextItem")
+                        .setAction("SearchInInternetItem")
+                        .build());
+                SearchInInternetItem();
+                return true;
+            case R.id.menu_main_share:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("ContextItem")
+                        .setAction("ShareItem")
+                        .build());
+                ShareItem();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+
+        }
+    }
+
+    private void ChannelItem()
+    {
+
+        int index =   tvProgram.GetProgramListIndex(GetCurrentNowItem().ChannelId);
+
+        openOneChannelProgram(index);
+    }
+
+    private void ShareItem(){
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+
+        ProgramItem pi = GetCurrentProgramItem();
+        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
+        // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+        Intent sharingIntent = new Intent(android.content.Intent. ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Телепередача  ");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, t);
+        startActivity(Intent.createChooser(sharingIntent, "Отправить через"));
+    }
+    private ProgramItem GetCurrentProgramItem()
+    {
+        NowItem ni = GetCurrentNowItem();
+        ProgramList pl= tvProgram.GetProgramList(ni.ChannelId);
+        ProgramItem pi = pl.GetItem(ni.PositionInChannel);
+        return pi;
+    }
+    private NowItem GetCurrentNowItem()
+    {
+        return (NowItem) nowList.GetItem(currentPosition);
+    }
+    private ProgramList GetCurrentProgramList()
+    {
+        ProgramList pl= tvProgram.GetProgramList(GetCurrentNowItem().ChannelId);
+        return pl;
+    }
+
+    private void SearchInInternetItem(){
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+
+
+        ProgramItem pi = GetCurrentProgramItem();
+        String t = String.format("%1$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
+        // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+
+
+        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH );
+        intent.putExtra(SearchManager.QUERY, t);
+        startActivity(intent);
+
+    }
+
+    private void CopyItem(){
+
+        final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
+
+
+        ProgramItem pi = GetCurrentProgramItem();
+        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
+        // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
+        ClipboardManager myClipboard;
+        myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        ClipData myClip;
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            myClip = ClipData.newPlainText("text", t);
+            myClipboard.setPrimaryClip(myClip);
+        }
+    }
+
     protected void SetListViewListeners() {
         ListView list = (ListView) findViewById(R.id.listView1);
 
@@ -176,18 +309,20 @@ public class MainActivity extends ActionBarActivity {
                         .setCategory("RowClick")
                         .setAction("onItemLongClick")
                         .build());
-
-                NowItem ni = (NowItem) nowList.GetItem(position);
+                currentPosition = position;
+            /*    NowItem ni = (NowItem) nowList.GetItem(position);
                 openChannelListActivity(ni.ChannelId);
+                */
 
 
-                return true;
+                return false;
             }
         });
 
         list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                currentPosition = position;
                 String ChanellNumber = "";
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("RowClick")
@@ -197,6 +332,7 @@ public class MainActivity extends ActionBarActivity {
                 if (ni.DigitalNumber != -1)
                     ChanellNumber = String.format(" Ц:%s", ni.DigitalNumber);
                 Toast.makeText(getBaseContext(), String.format("%s%s", ni.ChannelName, ChanellNumber), Toast.LENGTH_LONG).show();
+
             }
         });
     }
@@ -246,14 +382,6 @@ public class MainActivity extends ActionBarActivity {
                         .build());
                 downloadList(false);
                 return true;
-          /*  case R.id.action_download_previous:
-                downloadList(true);
-                return true;
-
-            case R.id.action_test:
-                sortListViewByTime();
-                return true;
-                */
             case R.id.action_channellist:
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Action")
@@ -262,7 +390,11 @@ public class MainActivity extends ActionBarActivity {
                 openChannelListActivity(null);
                 return true;
             case R.id.action_rate:
-                AppRater.showRateDialog(this, null);
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Rate")
+                        .build());
+                AppRater.showRateDialog(this, null, mTracker);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -295,12 +427,16 @@ public class MainActivity extends ActionBarActivity {
         String tag =  tag1.toString();
         int index =  tvProgram.GetProgramListIndex(tag);
 
+        openOneChannelProgram(index);
+    }
 
-
+    public void openOneChannelProgram(int index)
+    {
         Intent intent = new Intent(this, OneChannelProgramActivity.class);
         intent.putExtra(MainActivity.const_programListIndex, index);
         startActivity(intent);
     }
+
 
     private void doTest(Object object) {
 
@@ -879,7 +1015,7 @@ public class MainActivity extends ActionBarActivity {
                         }
 
                         if (pi != null) {
-                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.DigitalNumber);
+                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.DigitalNumber, pi.Position);
                         }
                     }
                 }

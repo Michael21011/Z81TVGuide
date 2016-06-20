@@ -12,7 +12,14 @@ public class ProgramItem  {
     public Date DateStart;
     public Date DateEnd;
     public String Description;
+    public int Position;
 
+    public ProgramItem(String title, Date dateStart, String description)
+    {
+        Title = title;
+        DateStart = dateStart;
+        Description = description;
+    }
 
     public String GetDateStartTimeOnly()
     {

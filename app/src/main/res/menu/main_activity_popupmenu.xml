@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sabd="http://schemas.android.com/apk/res-auto">
+
+    <!-- "file" submenu -->
+    <!--  <menu>
+          <item android:id="@+id/sub_menu_item1"
+              android:title="@string/sub_menu_item1" />
+          <item android:id="@+id/sub_menu_item2"
+              android:title="@string/sub_menu_item2" />
+      </menu>
+      -->
+    <item android:id="@+id/menu_main_channel"
+        android:title="@string/menu_channel"
+        android:icon="@android:drawable/ic_menu_edit"
+        />
+    <item android:id="@+id/menu_main_share"
+        android:title="@string/menu_share"
+        android:icon="@android:drawable/ic_menu_share"
+        />
+    <item android:id="@+id/menu_main_copy"
+        android:title="@string/menu_copy"
+        android:icon="@android:drawable/ic_menu_edit"
+        />
+    <item android:id="@+id/menu_main_searchInInternet"
+        android:title="@string/menu_searchInInternet"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        />
+
+</menu>

@@ -14,6 +14,7 @@ public class NowItem {
 	public String AgoTime;
 	public String Description;
 	public Integer DigitalNumber;
+	public Integer PositionInChannel;
 	public String getAgoTime()
 
 	{
@@ -48,5 +49,7 @@ public class NowItem {
 	public void setChannelLogo(int newFoo) {
 		channelLogo = newFoo;
 	}
+
+
 
 }

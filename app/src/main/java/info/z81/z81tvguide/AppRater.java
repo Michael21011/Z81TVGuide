@@ -1,5 +1,6 @@
 package info.z81.z81tvguide;
 
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,20 +12,24 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 /**
  * Created on 26.05.2016.
  * To test it and to tweak the dialog appearence, you can call AppRater.showRateDialog(this, null) from your Activity.
  * Normal use is to invoke AppRater.app_launched(this) each time your activity is invoked (eg. from within the onCreate method).
  * If all conditions are met, the dialog appears.
+ * hekko
  */
 public class AppRater {
     private final static String APP_TITLE = "Телепрограмма в Минске";
     private final static String APP_PNAME = "info.z81.z81tvguide";
 
     private final static int DAYS_UNTIL_PROMPT = 14;
-    private final static int LAUNCHES_UNTIL_PROMPT = 14;
+    private final static int LAUNCHES_UNTIL_PROMPT = 56;
 
-    public static void app_launched(Context mContext) {
+    public static void app_launched(Context mContext, Tracker tracker) {
         SharedPreferences prefs = mContext.getSharedPreferences("z81tvgudeapprater", 0);
         if (prefs.getBoolean("dontshowagain", false)) { return ; }
 
@@ -45,21 +50,26 @@ public class AppRater {
         if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
             if (System.currentTimeMillis() >= date_firstLaunch +
                     (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-                showRateDialog(mContext, editor);
+                showRateDialog(mContext, editor, tracker);
             }
         }
 
         editor.commit();
     }
 
-    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor, final Tracker tracker) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("AppRater")
+                .setAction("ShowDialog")
+                .build());
         final Dialog dialog = new Dialog(mContext);
         dialog.setTitle(mContext.getString(R.string.rate));
         int AdditionButtonVisibility = View.VISIBLE;
         if (editor == null)
         {
-            AdditionButtonVisibility = View.INVISIBLE;
+            AdditionButtonVisibility = View.GONE;
         }
+        final boolean CallFromMenu=(editor == null);
 
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -74,7 +84,24 @@ public class AppRater {
         b1.setText(mContext.getString(R.string.rate) +" "+ APP_TITLE);
         b1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
+                if (CallFromMenu) {
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("AppRater")
+                            .setAction("RateFromAction")
+                            .build());
+                }
+                else
+                {
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("AppRater")
+                            .setAction("Rate")
+                            .build());
+                }
+                if (editor != null) {
+                    editor.putBoolean("dontshowagain", true);
+                    editor.commit();
+                }
+                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME+"#details-reviews")));
                 dialog.dismiss();
             }
         });
@@ -85,6 +112,14 @@ public class AppRater {
         b2.setText(mContext.getString(R.string.remind_me_later));
         b2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("AppRater")
+                        .setAction("RemindLater")
+                        .build());
+                if (editor != null) {
+                    editor.putLong("launch_count", 0);
+                    editor.commit();
+                }
                 dialog.dismiss();
             }
         });
@@ -95,6 +130,10 @@ public class AppRater {
         b3.setText(mContext.getString(R.string.no_thanks));
         b3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("AppRater")
+                        .setAction("DontShowAgain")
+                        .build());
                 if (editor != null) {
                     editor.putBoolean("dontshowagain", true);
                     editor.commit();

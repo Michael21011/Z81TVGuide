@@ -9,6 +9,7 @@ public class ChannelItem {
 	public String ChannelName;
     private Boolean stared;
 
+
 	public int getChannelLogo() {
         return Utils.getChannelLogoByName(ChannelName);
 	}
