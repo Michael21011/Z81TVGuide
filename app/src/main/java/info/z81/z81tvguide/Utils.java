@@ -1,9 +1,22 @@
 package info.z81.z81tvguide;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.StrictMode;
+import android.widget.ImageView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,7 +52,8 @@ public  class  Utils {
     {
 
         int id;
-        if (ChannelName.equalsIgnoreCase("Техно 24")){
+
+      if (ChannelName.equalsIgnoreCase("Техно 24")){
             id = R.drawable.a24tehno;
         }
         else if (ChannelName.equalsIgnoreCase("8 канал")) {
@@ -83,12 +97,6 @@ public  class  Utils {
         }
         else if (ChannelName.equalsIgnoreCase("ТВ 1000-Экшн")) {
             id =R.drawable.tv1000action;
-        }
-        else if (ChannelName.equalsIgnoreCase("TV 1000 Comedy")) {
-            id =R.drawable.tv1000comedy;
-        }
-        else if (ChannelName.equalsIgnoreCase("Zee Russia")) {
-            id =R.drawable.zeetv;
         }
         else if (ChannelName.equalsIgnoreCase("Виасат Эксплорер")) {
             id =R.drawable.viasatexplorer;
@@ -285,5 +293,80 @@ public  class  Utils {
         cal.setTime(inputDate);
         cal.add(timePeriodType,timePeriodValue);
         return cal.getTime();
+    }
+
+    public static void LoadBitmapFromInternet(ImageView imageView, String channelName) {
+   // String urlAddress = String.format( "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png", channelName);
+        final int CacheTimeInHours = 1;
+        final int CacheTimeInMinutes = 5;
+        final int CacheTimeOnDisk=7*24*60*60*1000;
+        final int CacheTimeOnNet=1*60*60*1000;
+        final String urlMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s";
+        final String FileName =  String.format( "%s.png", channelName);
+        final String FullFileName=Z81TVGuide.getAppContext().getFilesDir() + "/" + FileName;
+        File file = new File(FullFileName);
+        SharedPreferences prefs = Z81TVGuide.getAppContext().getSharedPreferences("z81tvgudeIcons", 0);
+        Long date_load = prefs.getLong(channelName, 0);
+        if(file.exists())
+        {
+            Boolean needDelete = false;
+            if (System.currentTimeMillis() >= date_load +
+                    (CacheTimeOnDisk)) {
+                needDelete = true;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove(channelName);
+                editor.commit();
+
+            }
+            /*   BitmapFactory.Options options = new BitmapFactory.Options();
+               options.inJustDecodeBounds = true;*/
+            Bitmap myBitmap = BitmapFactory.decodeFile(FullFileName);
+            if (myBitmap==null || needDelete) {
+                file.delete();
+                imageView.setImageResource(R.drawable.empty);
+            }
+            else
+            {
+                imageView.setImageBitmap(myBitmap);
+            }
+        }
+//Do something
+        else
+        {
+
+
+
+            Boolean needDownload = false;
+            if (date_load == 0) {
+
+                needDownload = true;
+            }
+
+            // Wait at least n days before opening
+
+                if (System.currentTimeMillis() >= date_load +
+                        (CacheTimeOnNet)) {
+                    needDownload = true;
+
+                }
+            imageView.setImageResource(R.drawable.empty);
+            if (needDownload)
+            {
+                date_load = System.currentTimeMillis();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putLong(channelName, date_load);
+                editor.commit();
+                new AsyncTaskLoadImage(imageView).execute(urlMask, FileName);}
+
+
+
+
+
+
+
+        }
+
+
+
     }
 }

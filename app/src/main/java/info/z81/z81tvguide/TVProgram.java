@@ -17,11 +17,14 @@ public class  TVProgram  {
     private ArrayList<ProgramList> list;
     private ArrayList<ProgramList> filteredList;
     private DefaultChannelNumbers defaultChannelNumbers;
+    public boolean IsFirstRun;
 
     public TVProgram() {
         list = new ArrayList<>();
         defaultChannelNumbers = new DefaultChannelNumbers();
         filteredList = list;
+        int s=MainActivity.knownChannelListPreference.getAll().size();
+        IsFirstRun = (s==0);
 
     }
 
@@ -31,9 +34,7 @@ public class  TVProgram  {
 
     public void AddChannel(String ChannelId, String ChannelName) {
         if (!IsChannelExists(ChannelId)) {
-            ProgramList pl = new ProgramList();
-            pl.ChannelId = ChannelId;
-            pl.ChannelName = ChannelName;
+            ProgramList pl = new ProgramList(ChannelId, ChannelName);
             pl.DigitalNumber = GetChannelDigitalNumber(ChannelName);
             pl.tvProgram = this;
             list.add(pl);

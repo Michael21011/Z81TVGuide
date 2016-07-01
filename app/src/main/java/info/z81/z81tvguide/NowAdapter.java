@@ -57,7 +57,16 @@ public class NowAdapter extends BaseAdapter{
         holder.textView.setText(currentItem.ChannelName);
         holder.diffView.setText(currentItem.getAgoTime());
         holder.programmView.setText(currentItem.Title);
-        holder.imageView.setImageResource(currentItem.getChannelLogo());
+            if (currentItem.getChannelLogo()==R.drawable.empty)
+            {
+                Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName);
+            }
+            else
+            {
+                holder.imageView.setImageResource(currentItem.getChannelLogo());}
+
+
+
         holder.imageView.setTag(Integer.valueOf(currentItem.ChannelId));
         holder.descView.setText(currentItem.Description);
         if (currentItem.Description.isEmpty())

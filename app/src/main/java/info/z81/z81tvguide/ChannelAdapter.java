@@ -2,6 +2,7 @@ package info.z81.z81tvguide;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,15 @@ public class ChannelAdapter extends BaseAdapter{
         ProgramList currentItem = list.GetFilteredItem(position);
         holder.textView.setText(currentItem.ChannelName);
 
-        holder.imageView.setImageResource(currentItem.getChannelLogo());
+        if (currentItem.getChannelLogo()==R.drawable.empty)
+        {
+            Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName);
+        }
+            else
+        {
+        holder.imageView.setImageResource(currentItem.getChannelLogo());}
+
+
         holder.imageView.setTag(position);
 
         holder.NumberDigitalView.setText(currentItem.getDigitalNumberLabel(true));
@@ -70,6 +79,10 @@ public class ChannelAdapter extends BaseAdapter{
         holder.starView.setImageResource(android.R.drawable.star_off);}
 
         holder.starView.setTag(Integer.valueOf(currentItem.ChannelId));
+        if (currentItem.ShouldHighligt())
+        {
+            rowView.setBackgroundColor(android.support.v7.appcompat.R.color.highlighted_text_material_light);
+        }
 
         return rowView;
     }

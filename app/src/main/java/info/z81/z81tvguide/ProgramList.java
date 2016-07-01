@@ -25,17 +25,28 @@ public class ProgramList  {
     public Integer DigitalNumber;
     public Integer AnalogNumber;
     public TVProgram tvProgram;
+    private boolean isNew;
     private ArrayList<ProgramItem> list;
     private ArrayList<ProgramItem> filteredList;
     
     private Boolean stared;
 
-    public ProgramList() {
+    public ProgramList(String channelId, String channelName) {
         list = new ArrayList<>();
         filteredList = list;
+        this.ChannelId = channelId;
+        this.ChannelName = channelName;
+        CheckIsNew();
+
 
     }
-
+    public boolean IsNew()
+    {
+       if (tvProgram==null)
+           return isNew;
+        else
+        return !tvProgram.IsFirstRun && isNew;
+    }
     public String getDigitalNumberLabel(boolean ShowEmpty) {
         if (DigitalNumber.equals(-1))
         {
@@ -73,6 +84,14 @@ public class ProgramList  {
         }
         ed.commit();
     }
+
+    public boolean CheckIsNew() {
+
+        isNew =  !MainActivity.knownChannelListPreference.contains(ChannelName);
+        return IsNew();
+    }
+
+
 
     public void setDigitalNumber(Integer dn) {
         if (!this.DigitalNumber.equals(dn)) {
@@ -263,4 +282,24 @@ public class ProgramList  {
         return result;
     }
 
+    public void SetKnown() {
+
+            SharedPreferences.Editor ed = MainActivity.knownChannelListPreference.edit();
+            ed.putLong(ChannelName, System.currentTimeMillis());
+            ed.commit();
+    }
+
+    public boolean ShouldHighligt() {
+       boolean result;
+        if (tvProgram.IsFirstRun)
+        {return false;}
+        else {
+            long started = MainActivity.knownChannelListPreference.getLong(ChannelName, 0);
+            if (System.currentTimeMillis() >= started +
+                    (1 * 60 * 60 * 1000)) {
+                return false;
+
+            } else return true;
+        }
+    }
 }

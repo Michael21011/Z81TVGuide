@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -68,10 +69,13 @@ public class MainActivity extends ActionBarActivity {
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     public static SharedPreferences digitalNumberPreference;
     public static SharedPreferences favoriteChannelListPreference;
+    public static SharedPreferences knownChannelListPreference;
     public static Resources MyResources;
     private static String FileURL = "http://mtis.by/program_xml.zip";
   //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
  //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
+
+    public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
     private static String WWWFileName = "program_xml.zip";
@@ -114,7 +118,9 @@ public class MainActivity extends ActionBarActivity {
             nowList = new NowList();
             favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
             digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
-        setContentView(R.layout.activity_main);
+            knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
+
+            setContentView(R.layout.activity_main);
             myApplication= (Z81TVGuide) getApplication();
             if (myApplication.tvProgram == null) {
                 myApplication.tvProgram = new TVProgram();;
@@ -725,7 +731,7 @@ public class MainActivity extends ActionBarActivity {
 
     private class ParseFileTask extends AsyncTask<String, Integer, String> {
         private Context context;
-        private String[] catnames = new String[1000];
+        private ArrayList<String> newChannelList = new ArrayList<String>();
 
         public ParseFileTask(Context context) {
             this.context = context;
@@ -769,11 +775,27 @@ public class MainActivity extends ActionBarActivity {
                         public void onCancel(DialogInterface dialog) {
                             updateProgramTask.cancel(true);
                         }
-                    });
+                    }
+
+                    );
+                    if (!newChannelList.isEmpty())
+                    {
+                        String message = "";
+
+                        for (int j = 0; j < newChannelList.size()& j<10; j++)
+                        {
+                            message = message+"\t"+newChannelList.get(j)+"\n";
+                            if (newChannelList.size()>10 && j==9)
+                                message = message+"\t...\n";
+                        }
+
+                        message = String.format(getResources().getString(R.string.newchannelinfo),message);
+                        ShowInfo(getResources().getString(R.string.app_name), message);
+                    }
                 } else if (val == 1) {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();
-                        ShowAlert(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
                         halt = true;
                       //  System.exit(0);
                     }
@@ -782,7 +804,7 @@ public class MainActivity extends ActionBarActivity {
                 } else if (val == -1) {
                     if (NeedDownloadFuture) {
                         mProgressDialog.dismiss();
-                        ShowAlert(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
                         halt = true;
                         //System.exit(0);
                     }
@@ -857,45 +879,52 @@ public class MainActivity extends ActionBarActivity {
 
                     } catch (Exception e) {
                         Log.e("tag", e.getMessage());
-                        ShowAlert(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
+
                         File f = new File(Params[0]+ "/" + WWWFileName);
-                        f.delete();
+                        try {
+                            f.delete();
+                        }
+                        catch( Exception ex){
+                            System.err.println( e.getMessage() );
+                        }
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
+
                     } finally {
 
                     }
                 }
 
                 publishProgress(XMLLoadProgress);
-                boolean FavoritesSelected = getFavoritesSelected();
                 String currentDate = "";
-                String maxDate = "";
                 nowList.Clear();
                 Calendar c = Calendar.getInstance();
-                String CurrentTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(c.getTime());
                 Date today = new Date();
                 today.setTime(c.getTimeInMillis() + (1000 * 5 * 60));
-                String TimeForProgramCompare = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(today.getTime());
-                String currentText = "";
                 NodeList programlist = document.getElementsByTagName("programme");
-                currentText = "";
-                maxDate = "";
                 String channelid = "";
-                String channelName = "";
                 String description = "";
                 Properties pro = new Properties();
-                Properties cha = new Properties();
+
 
                 DateFormat df = new DateFormat();
-                String currentTitleDate = (String) df.format("yyyy-MM-dd hh:mm:ss", new Date());
+
 
 				/* new algoritm for list */
                 tvProgram.Clear();
                 /* look throw all channel list*/
                 NodeList channelNodeList = document.getElementsByTagName("channel");
+                String ChannelName = "";
+                newChannelList.clear();
                 for (int j = 0; j < channelNodeList.getLength(); j++) {
                     Node channelNode = channelNodeList.item(j);
                     Element channelElement = (Element) channelNode;
-                    tvProgram.AddChannel(channelElement.getAttributes().getNamedItem("id").getNodeValue(), channelElement.getElementsByTagName("display-name").item(0).getTextContent());
+                    ChannelName = channelElement.getElementsByTagName("display-name").item(0).getTextContent();
+                    tvProgram.AddChannel(channelElement.getAttributes().getNamedItem("id").getNodeValue(), ChannelName);
+                    if (tvProgram.GetItem(j).IsNew())
+                    {
+                        newChannelList.add(ChannelName);
+                        tvProgram.GetItem(j).SetKnown();
+                    }
                 }
                 for (int j = 0; j < programlist.getLength(); j++) {
                     publishProgress((int) (XMLLoadProgress + j * (100 - XMLLoadProgress) / programlist.getLength()));
@@ -913,18 +942,6 @@ public class MainActivity extends ActionBarActivity {
                     tvProgram.AddProgram(channelid, program.getElementsByTagName("title").item(0).getTextContent(), Utils.StringToDate(currentDate), description);
                 }
 
-            /*    File yourFile = new File(context.getFilesDir()+ "/" +internalFilePath);
-                if(!yourFile.exists()) {
-                    yourFile.createNewFile();
-                }
-                FileOutputStream oFile = new FileOutputStream(yourFile, false);
-
-                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(yourFile, false));
-                out.writeObject(tvProgram);
-                out.flush();
-                out.close();
-                */
-
                 NeedRebuildList = false;
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Event")
@@ -934,6 +951,15 @@ public class MainActivity extends ActionBarActivity {
             }
             catch( Exception e ){
                 System.err.println( e.getMessage() );
+
+                File f = new File(Params[0]+ "/" + WWWFileName);
+                try {
+                    f.delete();
+                }
+                catch( Exception ex){
+                    System.err.println( e.getMessage() );
+                }
+                ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
             }
             finally {
                 //    wl.release();
@@ -1035,8 +1061,8 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void ShowAlert(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+    public void ShowAlertAndClose(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Z81TVGuide.getAppContext());
         builder.setTitle(title)
                 .setMessage(message)
                 //.setIcon(R.drawable.ic_android_cat)
@@ -1047,6 +1073,22 @@ public class MainActivity extends ActionBarActivity {
                                 dialog.cancel();
                                 System.exit(0);
                             }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void ShowInfo(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(title)
+                .setMessage(message)
+                //.setIcon(R.drawable.ic_android_cat)
+                .setCancelable(false)
+                .setNegativeButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                  }
                         });
         AlertDialog alert = builder.create();
         alert.show();

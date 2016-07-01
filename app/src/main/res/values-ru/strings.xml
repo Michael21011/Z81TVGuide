@@ -48,4 +48,5 @@
     <string name="rate">Оценить</string>
     <string name="rate_prompt">\tЕсли Вам нравится бесплатное и без рекламы приложение %s, оцените его, пожалуйста.\n\tВсе замечания рассматриваются и, по-возможности, исправляются.\n\tСпасибо за поддержку!</string>
     <string name="menu_channel">Канал</string>
+    <string name="newchannelinfo">Появились новые каналы: \n%1s</string>
 </resources>
