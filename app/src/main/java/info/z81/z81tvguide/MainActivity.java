@@ -792,6 +792,7 @@ public class MainActivity extends ActionBarActivity {
                         message = String.format(getResources().getString(R.string.newchannelinfo),message);
                         ShowInfo(getResources().getString(R.string.app_name), message);
                     }
+                    else {ShowInfo(getResources().getString(R.string.app_name), "No new channel");}
                 } else if (val == 1) {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();

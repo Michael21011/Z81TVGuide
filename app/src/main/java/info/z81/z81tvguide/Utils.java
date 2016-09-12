@@ -267,7 +267,18 @@ public  class  Utils {
         {
             id = R.drawable.plustv;
         }
-
+      else if (ChannelName.equalsIgnoreCase("Кинокомедия"))
+      {
+          id = R.drawable.kinokomedia;
+      }
+      else if (ChannelName.equalsIgnoreCase("Киномикс"))
+      {
+          id = R.drawable.kinomiks;
+      }
+      else if (ChannelName.equalsIgnoreCase("History Russia"))
+      {
+          id = R.drawable.historyrussia;
+      }
         else
             id = R.drawable.empty;
 
