@@ -41,6 +41,13 @@
     <string name="rate_prompt">If you enjoy using %s, please take a moment to rate it. Thanks for your support!</string>
      <string name="menu_channel">Channel</string>
     <string name="newchannelinfo">New channels have found: \n%1s</string>
+    <string name="error">Error</string>
+    <string name="searchInInternetItemErrorDescription">It is impossibly to run search due configuration of your device. PLease use COPY menu and make a search manually. Sorry for inconvenience.</string>
+    <string name="menu_viewTutorialVideo">Open tutorial video on YouTube</string>
+    <string name="tutorialErrorDescription">It is impossibly to open YouTube.</string>
+
+
+
 
 
 </resources>

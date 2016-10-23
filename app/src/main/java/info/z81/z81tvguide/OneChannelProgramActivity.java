@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -289,10 +290,19 @@ searchView.setQuery(filterString, false);
         String t = String.format("%1$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), programList.ChannelName);
         // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
 
-
-        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH );
-        intent.putExtra(SearchManager.QUERY, t);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+            intent.putExtra(SearchManager.QUERY, t);
+            startActivity(intent);
+        } catch (Exception e) {
+            try {
+                Uri uri = Uri.parse("https://www.google.com/search?q=" + t);
+                Intent gSearchIntent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(gSearchIntent);
+            } catch (Exception e2) {
+                Toast.makeText(getBaseContext(), String.format("%s", getResources().getString(R.string.searchInInternetItemErrorDescription)), Toast.LENGTH_LONG).show();
+            }
+        }
 
     }
 

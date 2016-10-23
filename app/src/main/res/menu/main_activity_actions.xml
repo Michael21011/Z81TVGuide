@@ -24,6 +24,11 @@
         android:title="@string/action_download"
         android:icon="@drawable/ic_menu_download"
         sabd:showAsAction="never" />
+
+    <item android:id="@+id/action_tutorialVideo"
+        android:title="@string/menu_viewTutorialVideo"
+        sabd:showAsAction="never" />
+
     <item android:id="@+id/action_rate"
         android:title="@string/rate"
         sabd:showAsAction="never" />

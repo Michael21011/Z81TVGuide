@@ -49,4 +49,8 @@
     <string name="rate_prompt">\tЕсли Вам нравится бесплатное и без рекламы приложение %s, оцените его, пожалуйста.\n\tВсе замечания рассматриваются и, по-возможности, исправляются.\n\tСпасибо за поддержку!</string>
     <string name="menu_channel">Канал</string>
     <string name="newchannelinfo">Появились новые каналы: \n%1s</string>
+    <string name="error">Ошибка</string>
+    <string name="searchInInternetItemErrorDescription">Невозможно выполнить поиск из-за настроек Вашего устройства. Пожалуйста, используйте меню СКОПИРОВАТЬ и выполните поиск через браузер самостоятельно. Извините за неудобство.</string>
+    <string name="menu_viewTutorialVideo">Смотреть обучающее видео на YouTube</string>
+    <string name="tutorialErrorDescription">Невозможно открыть YouTube. Пожалуйста, выполните поиск самостоятельно по ключевой фразе "Возможности приложения мтис" </string>
 </resources>

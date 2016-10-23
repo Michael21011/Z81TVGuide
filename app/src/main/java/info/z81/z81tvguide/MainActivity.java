@@ -42,6 +42,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -71,18 +72,19 @@ public class MainActivity extends ActionBarActivity {
     public static SharedPreferences favoriteChannelListPreference;
     public static SharedPreferences knownChannelListPreference;
     public static Resources MyResources;
+    private static String TutorialVideoURL="https://www.youtube.com/watch?v=kk3UyIk6sPM";
     private static String FileURL = "http://mtis.by/program_xml.zip";
-  //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
- //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
+    //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
+    //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
     private static String WWWFileName = "program_xml.zip";
     //private static String WWWFileName = "xmltv.xml.gz";
-    private static String internalFilePath="z81_program.txt";
-    public final static String const_programListIndex="ProgramListIndex";
-    public final static String const_filterString="FilterString";
+    private static String internalFilePath = "z81_program.txt";
+    public final static String const_programListIndex = "ProgramListIndex";
+    public final static String const_filterString = "FilterString";
     private Z81TVGuide myApplication;
 
     public NowList nowList;
@@ -103,38 +105,38 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-      //  if (NeedRefreshList) {
-            // instantiate it within the onCreate method
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getResources().getString(R.string.task_download_file));
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            mProgressDialog.setCancelable(false);
+        //  if (NeedRefreshList) {
+        // instantiate it within the onCreate method
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getResources().getString(R.string.task_download_file));
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setCancelable(false);
 
-            Z81TVGuide application = (Z81TVGuide) getApplication();
-            mTracker = application.getDefaultTracker();
+        Z81TVGuide application = (Z81TVGuide) getApplication();
+        mTracker = application.getDefaultTracker();
 
-            MyResources = getResources();
-            nowList = new NowList();
-            favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
-            digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
-            knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
+        MyResources = getResources();
+        nowList = new NowList();
+        favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
+        digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
+        knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
 
-            setContentView(R.layout.activity_main);
-            myApplication= (Z81TVGuide) getApplication();
-            if (myApplication.tvProgram == null) {
-                myApplication.tvProgram = new TVProgram();;
-                tvProgram =  myApplication.tvProgram;
-                showContentInBackground(null);
-            }
-        else {
-                tvProgram =  myApplication.tvProgram;
-                UpdateContentInBackground(this);
-            }
+        setContentView(R.layout.activity_main);
+        myApplication = (Z81TVGuide) getApplication();
+        if (myApplication.tvProgram == null) {
+            myApplication.tvProgram = new TVProgram();
+            ;
+            tvProgram = myApplication.tvProgram;
+            showContentInBackground(null);
+        } else {
+            tvProgram = myApplication.tvProgram;
+            UpdateContentInBackground(this);
+        }
         registerForContextMenu(findViewById(R.id.listView1));
 
 
-       //}
+        //}
 
     }
 
@@ -185,14 +187,14 @@ public class MainActivity extends ActionBarActivity {
         //Do the initial here
         //menu = popupMenu;
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater=getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_popupmenu, menu);
         MenuItem mi = menu.findItem(R.id.menu_main_channel);
-;
-        String ChanellNumber="";
+        ;
+        String ChanellNumber = "";
         if (GetCurrentNowItem().DigitalNumber != -1)
             ChanellNumber = String.format(" Ц:%s", GetCurrentNowItem().DigitalNumber);
-        mi.setTitle(String.format("%1$s%2$s",GetCurrentProgramList().ChannelName,ChanellNumber ));
+        mi.setTitle(String.format("%1$s%2$s", GetCurrentProgramList().ChannelName, ChanellNumber));
     }
 
     @Override
@@ -233,70 +235,79 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void ChannelItem()
-    {
+    private void ChannelItem() {
 
-        int index =   tvProgram.GetProgramListIndex(GetCurrentNowItem().ChannelId);
+        int index = tvProgram.GetProgramListIndex(GetCurrentNowItem().ChannelId);
 
         openOneChannelProgram(index);
     }
 
-    private void ShareItem(){
+    private void ShareItem() {
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         ProgramItem pi = GetCurrentProgramItem();
-        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
+        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s", pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
         // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
-        Intent sharingIntent = new Intent(android.content.Intent. ACTION_SEND);
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Телепередача  ");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, t);
         startActivity(Intent.createChooser(sharingIntent, "Отправить через"));
     }
-    private ProgramItem GetCurrentProgramItem()
-    {
+
+    private ProgramItem GetCurrentProgramItem() {
         NowItem ni = GetCurrentNowItem();
-        ProgramList pl= tvProgram.GetProgramList(ni.ChannelId);
+        ProgramList pl = tvProgram.GetProgramList(ni.ChannelId);
         ProgramItem pi = pl.GetItem(ni.PositionInChannel);
         return pi;
     }
-    private NowItem GetCurrentNowItem()
-    {
+
+    private NowItem GetCurrentNowItem() {
         return (NowItem) nowList.GetItem(currentPosition);
     }
-    private ProgramList GetCurrentProgramList()
-    {
-        ProgramList pl= tvProgram.GetProgramList(GetCurrentNowItem().ChannelId);
+
+    private ProgramList GetCurrentProgramList() {
+        ProgramList pl = tvProgram.GetProgramList(GetCurrentNowItem().ChannelId);
         return pl;
     }
 
-    private void SearchInInternetItem(){
+    private void SearchInInternetItem() {
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
 
         ProgramItem pi = GetCurrentProgramItem();
-        String t = String.format("%1$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
+        String t = String.format("%1$s", pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
         // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
 
+        try {
+            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+            intent.putExtra(SearchManager.QUERY, t);
+            startActivity(intent);
+        } catch (Exception e) {
+            try {
+                Uri uri = Uri.parse("https://www.google.com/search?q=" + t);
+                Intent gSearchIntent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(gSearchIntent);
+            } catch (Exception e2) {
+                ShowInfo(getResources().getString(R.string.error), getResources().getString(R.string.searchInInternetItemErrorDescription));
+            }
+        }
 
-        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH );
-        intent.putExtra(SearchManager.QUERY, t);
-        startActivity(intent);
 
     }
 
-    private void CopyItem(){
+    private void CopyItem() {
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
 
         ProgramItem pi = GetCurrentProgramItem();
-        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s",pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
+        String t = String.format("Программа %1$s на канале %3$s. Начало %2$s", pi.Title, new SimpleDateFormat("dd.MM.yyyy в HH:mm").format(pi.DateStart), GetCurrentProgramList().ChannelName);
         // Toast.makeText(getBaseContext(), String.format("%s", t), Toast.LENGTH_LONG).show();
         ClipboardManager myClipboard;
-        myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         ClipData myClip;
         if (android.os.Build.VERSION.SDK_INT >= 11) {
             myClip = ClipData.newPlainText("text", t);
@@ -402,8 +413,25 @@ public class MainActivity extends ActionBarActivity {
                         .build());
                 AppRater.showRateDialog(this, null, mTracker);
                 return true;
+            case R.id.action_tutorialVideo:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Tutorial")
+                        .build());
+                openTutorialVideo();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void openTutorialVideo() {
+        try {
+            Uri uri = Uri.parse(TutorialVideoURL);
+            Intent tutorialVideIntent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(tutorialVideIntent);
+        } catch (Exception e2) {
+            ShowInfo(getResources().getString(R.string.error), getResources().getString(R.string.tutorialErrorDescription));
         }
     }
 
@@ -423,21 +451,20 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
-    public void onChannelLogoClick(View view){
+    public void onChannelLogoClick(View view) {
 
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory("RowClick")
                 .setAction("ChannelLogoClick")
                 .build());
-        Integer  tag1  =  (Integer)view.getTag();
-        String tag =  tag1.toString();
-        int index =  tvProgram.GetProgramListIndex(tag);
+        Integer tag1 = (Integer) view.getTag();
+        String tag = tag1.toString();
+        int index = tvProgram.GetProgramListIndex(tag);
 
         openOneChannelProgram(index);
     }
 
-    public void openOneChannelProgram(int index)
-    {
+    public void openOneChannelProgram(int index) {
         Intent intent = new Intent(this, OneChannelProgramActivity.class);
         intent.putExtra(MainActivity.const_programListIndex, index);
         startActivity(intent);
@@ -465,7 +492,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    private void UpdateContentInBackground(Object object){
+    private void UpdateContentInBackground(Object object) {
         final UpdateProgramTask updateProgramTask = new UpdateProgramTask(this);
         updateProgramTask.execute(this.getFilesDir().getPath());
 
@@ -476,6 +503,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
+
     private void showContentInBackground(Object object) {
         // execute this when the downloader must be fired
 
@@ -533,7 +561,8 @@ public class MainActivity extends ActionBarActivity {
         return true;
 
     }
-    private String unpackGZIP(String path, String zipname, String ResultFile){
+
+    private String unpackGZIP(String path, String zipname, String ResultFile) {
         InputStream is;
         GZIPInputStream zis;
         try {
@@ -718,11 +747,9 @@ public class MainActivity extends ActionBarActivity {
                         .setCategory("Event")
                         .setAction("DownloadTask")
                         .build());
-            }
-            catch( Exception e ){
-                System.err.println( e.getMessage() );
-            }
-            finally {
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            } finally {
                 //  wl.release();
             }
             return null;
@@ -771,34 +798,35 @@ public class MainActivity extends ActionBarActivity {
                     updateProgramTask.execute();
 
                     mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            updateProgramTask.cancel(true);
-                        }
-                    }
+                                                            @Override
+                                                            public void onCancel(DialogInterface dialog) {
+                                                                updateProgramTask.cancel(true);
+                                                            }
+                                                        }
 
                     );
-                    if (!newChannelList.isEmpty())
-                    {
+                    if (!newChannelList.isEmpty()) {
                         String message = "";
 
-                        for (int j = 0; j < newChannelList.size()& j<10; j++)
-                        {
-                            message = message+"\t"+newChannelList.get(j)+"\n";
-                            if (newChannelList.size()>10 && j==9)
-                                message = message+"\t...\n";
+                        for (int j = 0; j < newChannelList.size() & j < 10; j++) {
+                            message = message + "\t" + newChannelList.get(j) + "\n";
+                            if (newChannelList.size() > 10 && j == 9)
+                                message = message + "\t...\n";
                         }
 
-                        message = String.format(getResources().getString(R.string.newchannelinfo),message);
+                        message = String.format(getResources().getString(R.string.newchannelinfo), message);
                         ShowInfo(getResources().getString(R.string.app_name), message);
                     }
-                    else {ShowInfo(getResources().getString(R.string.app_name), "No new channel");}
+                    /* Show empty notification
+                    else {ShowInfo(getResources().getString(R.string.app_name), "No new channel");
+                    }
+                    */
                 } else if (val == 1) {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();
                         ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
                         halt = true;
-                      //  System.exit(0);
+                        //  System.exit(0);
                     }
                     NeedDownloadPast = true;
                     downloadList(true);
@@ -810,7 +838,9 @@ public class MainActivity extends ActionBarActivity {
                         //System.exit(0);
                     }
                     NeedDownloadFuture = true;
-                    if (!halt) {downloadList(false);}
+                    if (!halt) {
+                        downloadList(false);
+                    }
                 }
 
 
@@ -825,6 +855,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... Params) {
+            // ParseFileTask
             // take CPU lock to prevent CPU from going off if the user
             // presses the power button during download
             //  PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -837,9 +868,11 @@ public class MainActivity extends ActionBarActivity {
                     NeedRebuildList = true;
                     publishProgress((int) (1));
                     String ResultFile = "";
-                    if (WWWFileName.contains("gz")) {ResultFile = unpackGZIP(Params[0], WWWFileName, ResultFile);}
-                    else
-                    {ResultFile = unpackZip(Params[0], WWWFileName, ResultFile);}
+                    if (WWWFileName.contains("gz")) {
+                        ResultFile = unpackGZIP(Params[0], WWWFileName, ResultFile);
+                    } else {
+                        ResultFile = unpackZip(Params[0], WWWFileName, ResultFile);
+                    }
                     if (ResultFile.equals("")) {
                         // refreshList(null);
                         return null;
@@ -853,8 +886,8 @@ public class MainActivity extends ActionBarActivity {
 
                         DocumentBuilder db = dbf.newDocumentBuilder();
                         InputStream inputStream = new FileInputStream(ResultFile);
-                       // String fresult = getStringFromInputStream(inputStream);
-                       // Toast.makeText(context, fresult, Toast.LENGTH_SHORT).show();
+                        // String fresult = getStringFromInputStream(inputStream);
+                        // Toast.makeText(context, fresult, Toast.LENGTH_SHORT).show();
                         document = db.parse(inputStream);
 
                         NodeList checkChannelNodeList = document.getElementsByTagName("channel");
@@ -864,14 +897,12 @@ public class MainActivity extends ActionBarActivity {
                             Element checkElement = (Element) checkChannelNode;
                             String checkName = checkElement.getElementsByTagName("display-name").item(0).getTextContent();
 
-                            if (checkName.contains("а") || checkName.contains("о") || checkName.contains("и"))
-                            {
+                            if (checkName.contains("а") || checkName.contains("о") || checkName.contains("и")) {
                                 wrongEncoding = false;
                                 break;
                             }
                         }
-                        if (wrongEncoding)
-                        {
+                        if (wrongEncoding) {
                             DocumentBuilder db2 = dbf.newDocumentBuilder();
                             InputStream inputStream2 = new FileInputStream(ResultFile);
 
@@ -881,12 +912,11 @@ public class MainActivity extends ActionBarActivity {
                     } catch (Exception e) {
                         Log.e("tag", e.getMessage());
 
-                        File f = new File(Params[0]+ "/" + WWWFileName);
+                        File f = new File(Params[0] + "/" + WWWFileName);
                         try {
                             f.delete();
-                        }
-                        catch( Exception ex){
-                            System.err.println( e.getMessage() );
+                        } catch (Exception ex) {
+                            System.err.println(e.getMessage());
                         }
                         ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
 
@@ -921,8 +951,7 @@ public class MainActivity extends ActionBarActivity {
                     Element channelElement = (Element) channelNode;
                     ChannelName = channelElement.getElementsByTagName("display-name").item(0).getTextContent();
                     tvProgram.AddChannel(channelElement.getAttributes().getNamedItem("id").getNodeValue(), ChannelName);
-                    if (tvProgram.GetItem(j).IsNew())
-                    {
+                    if (tvProgram.GetItem(j).IsNew()) {
                         newChannelList.add(ChannelName);
                         tvProgram.GetItem(j).SetKnown();
                     }
@@ -949,20 +978,17 @@ public class MainActivity extends ActionBarActivity {
                         .setAction("ParseFileTask")
                         .build());
 
-            }
-            catch( Exception e ){
-                System.err.println( e.getMessage() );
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
 
-                File f = new File(Params[0]+ "/" + WWWFileName);
+                File f = new File(Params[0] + "/" + WWWFileName);
                 try {
                     f.delete();
-                }
-                catch( Exception ex){
-                    System.err.println( e.getMessage() );
+                } catch (Exception ex) {
+                    System.err.println(e.getMessage());
                 }
                 ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
-            }
-            finally {
+            } finally {
                 //    wl.release();
             }
             return null;
@@ -1016,6 +1042,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... Params) {
+            // UpdateProgramTask
             // take CPU lock to prevent CPU from going off if the user
             // presses the power button during download
             //  PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -1037,7 +1064,7 @@ public class MainActivity extends ActionBarActivity {
                     if (!FavoritesSelected || !ShowOnlyFavorites || (favoriteChannelListPreference.getBoolean(pl.ChannelName, false))) {
                         ProgramItem pi = null;
                         int CurrentItemIndex = pl.GetCurrentItemIndex(5);
-                        if (CurrentItemIndex!=-1) {
+                        if (CurrentItemIndex != -1) {
                             pi = pl.GetItem(CurrentItemIndex);
                         }
 
@@ -1051,19 +1078,17 @@ public class MainActivity extends ActionBarActivity {
                         .setCategory("Event")
                         .setAction("UpdateProgramTask")
                         .build());
-            }
-            catch( Exception e ){
-                System.err.println( e.getMessage() );
-            }
-            finally {
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            } finally {
                 //    wl.release();
             }
             return null;
         }
     }
 
-    public void ShowAlertAndClose(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(Z81TVGuide.getAppContext());
+    public void ShowAlertAndClose(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(title)
                 .setMessage(message)
                 //.setIcon(R.drawable.ic_android_cat)
@@ -1079,7 +1104,7 @@ public class MainActivity extends ActionBarActivity {
         alert.show();
     }
 
-    public void ShowInfo(String title, String message){
+    public void ShowInfo(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(title)
                 .setMessage(message)
@@ -1089,7 +1114,7 @@ public class MainActivity extends ActionBarActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
-                                  }
+                            }
                         });
         AlertDialog alert = builder.create();
         alert.show();

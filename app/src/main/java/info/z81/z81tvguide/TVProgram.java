@@ -111,16 +111,32 @@ public class  TVProgram  {
         Calendar c = Calendar.getInstance();
         Date today = new Date();
         today.setTime(c.getTimeInMillis());
-        if ((GetItem(0).FirstDate().compareTo(today) < 0) & (GetItem(0).LastDate().compareTo(today) > 0)) {
-            // It is current
-            return 0;
-        } else if (GetItem(0).FirstDate().compareTo(today) > 0) {
-            // It is in future
-            return 1;
-        } else {
-            //It is in past
-            return -1;
+        int result;
+        int lastresult=-2;
+        for (int j = 0; j < list.size(); j++)
+         {
+            if  (GetItem(j).Count()>0) {
+                if ((GetItem(j).FirstDate().compareTo(today) < 0) & (GetItem(j).LastDate().compareTo(today) > 0)) {
+                    // It is current
+                    result = 0;
+                } else if (GetItem(j).FirstDate().compareTo(today) > 0) {
+                    // It is in future
+                    result = 1;
+                } else {
+                    //It is in past
+                    result = -1;
+                }
+                if (lastresult == -2) {
+                    lastresult = result;
+                } else {
+                    if (result == 0) {
+                        lastresult = result;
+                    }
+                }
+            }
+
         }
+        return lastresult;
     }
 
     public long GetItemId(int arg0) {
