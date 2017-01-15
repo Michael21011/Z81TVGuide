@@ -103,21 +103,34 @@ public class ProgramList  {
 
     }
 
+    private int ConvertFilteredItemIndexToItemIndex(int filteredItemIndex)
+    {
+      ProgramItem filteredPI=  GetItem(filteredItemIndex);
+      return  list.indexOf(filteredPI);
+    }
+
+    private ProgramItem GetListItemByFilteredItemIndex(int filteredItemIndex)
+    {
+        return GetListItem(ConvertFilteredItemIndexToItemIndex(filteredItemIndex));
+    }
+
     public void Add(String Title, Date DateFrom, String Description) {
         ProgramItem programItem = new ProgramItem(Title,DateFrom,Description);
         list.add(programItem);
         programItem.Position = this.Count()-1;
 
     }
-    public Date GetDateEnd(int itemIndex){
+    public Date GetDateEnd(int filteredItemIndex){
+        int itemIndex=ConvertFilteredItemIndexToItemIndex(filteredItemIndex);
+        Date StartDate=GetItem(itemIndex).DateStart;
         if (itemIndex<this.TotalCount()-1)
         {
-            Date nd= GetItem(itemIndex+1).DateStart;
-            long diff = nd.getTime() - GetItem(itemIndex).DateStart.getTime();
+            Date nd= GetListItem(itemIndex+1).DateStart;
+            long diff = nd.getTime() - StartDate.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes>600)
             {
-                return Utils.DateAdd(GetItem(itemIndex).DateStart, Calendar.HOUR, 1);
+                return Utils.DateAdd(StartDate, Calendar.HOUR, 1);
             }
             else
                 return nd;
@@ -125,7 +138,7 @@ public class ProgramList  {
         }
         else
         {//last program
-            return Utils.DateAdd(GetItem(itemIndex).DateStart, Calendar.HOUR, 1);
+            return Utils.DateAdd(StartDate, Calendar.HOUR, 1);
         }
 
     }
@@ -139,17 +152,14 @@ public class ProgramList  {
     }
 
     public ProgramItem GetItem(int arg0) {
-        // TODO Auto-generated method stub
         return filteredList.get(arg0);
     }
 
     private ProgramItem  GetListItem(int arg0) {
-        // TODO Auto-generated method stub
         return list.get(arg0);
     }
 
     public long GetItemId(int arg0) {
-        // TODO Auto-generated method stub
         return filteredList.get(arg0).hashCode();
     }
 
