@@ -121,13 +121,20 @@ public class ProgramList  {
 
     }
     public Date GetDateEnd(int filteredItemIndex){
+        Date StartDate=GetItem(filteredItemIndex).DateStart;
         int itemIndex=ConvertFilteredItemIndexToItemIndex(filteredItemIndex);
-        Date StartDate=GetItem(itemIndex).DateStart;
+
         if (itemIndex<this.TotalCount()-1)
         {
             Date nd= GetListItem(itemIndex+1).DateStart;
+            long StartDateTick=StartDate.getTime();
+            long NextDateTick=nd.getTime();
+            if (NextDateTick<StartDateTick)
+            {
+                nd = Utils.DateAdd(nd, Calendar.HOUR, 24);
+            }
             long diff = nd.getTime() - StartDate.getTime();
-            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffMinutes = diff / (1000) % 60;
             if (diffMinutes>600)
             {
                 return Utils.DateAdd(StartDate, Calendar.HOUR, 1);

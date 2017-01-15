@@ -275,9 +275,13 @@ public  class  Utils {
       {
           id = R.drawable.kinomiks;
       }
-      else if (ChannelName.equalsIgnoreCase("History Russia"))
+      else if (ChannelName.equalsIgnoreCase("Телеканал Деда Мороза"))
       {
-          id = R.drawable.historyrussia;
+          id = R.drawable.dedmoroz;
+      }
+      else if (ChannelName.equalsIgnoreCase("Paramount Comedy"))
+      {
+          id = R.drawable.paramountcomedy;
       }
         else
             id = R.drawable.empty;
