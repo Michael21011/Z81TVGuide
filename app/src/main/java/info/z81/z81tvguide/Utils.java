@@ -283,6 +283,18 @@ public  class  Utils {
       {
           id = R.drawable.paramountcomedy;
       }
+      else if (ChannelName.equalsIgnoreCase("Сарафан"))
+      {
+          id = R.drawable.sarafan;
+      }
+      else if (ChannelName.equalsIgnoreCase("Мульт"))
+      {
+          id = R.drawable.mult;
+      }
+      else if (ChannelName.equalsIgnoreCase("SONY Sci-Fi"))
+      {
+          id = R.drawable.sonyscifi;
+      }
         else
             id = R.drawable.empty;
 

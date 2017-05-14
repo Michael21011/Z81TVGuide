@@ -3,14 +3,14 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "info.z81.z81tvguide"
         minSdkVersion 8
         targetSdkVersion 21
-        versionCode 40
-        versionName "1.21"
+        versionCode 41
+        versionName "1.22"
 
     }
     dexOptions {

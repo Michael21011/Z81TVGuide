@@ -71,11 +71,14 @@ public class MainActivity extends ActionBarActivity {
     public static SharedPreferences digitalNumberPreference;
     public static SharedPreferences favoriteChannelListPreference;
     public static SharedPreferences knownChannelListPreference;
+    public static SharedPreferences settingPreference;
     public static Resources MyResources;
     private static String TutorialVideoURL="https://www.youtube.com/watch?v=kk3UyIk6sPM";
     private static String FileURL = "http://mtis.by/program_xml.zip";
     //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
     //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
+    public static final String APP_PREFERENCES_VIDEOTUTORIALVERSION = "videotutorialversion";
+    public static final int videotutorialversion=1;
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
@@ -121,6 +124,7 @@ public class MainActivity extends ActionBarActivity {
         favoriteChannelListPreference = getPreferences(MODE_PRIVATE);
         digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
         knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
+        settingPreference = getSharedPreferences("settings", MODE_PRIVATE);
 
         setContentView(R.layout.activity_main);
         myApplication = (Z81TVGuide) getApplication();
@@ -136,7 +140,39 @@ public class MainActivity extends ActionBarActivity {
         registerForContextMenu(findViewById(R.id.listView1));
 
 
-        //}
+        int videoversion = 0;
+        if (settingPreference.contains(APP_PREFERENCES_VIDEOTUTORIALVERSION)) {
+            // Получаем число из настроек
+            videoversion = settingPreference.getInt(APP_PREFERENCES_VIDEOTUTORIALVERSION, 0);
+        }
+        if (videotutorialversion>videoversion)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Видео-инструкция")
+                    .setMessage("Уважаемый пользователь! Хотите посмотреть видео-обозрение этого приложения на Youtube, чтобы освоить все функции?")
+                    //.setIcon(R.drawable.ic_android_cat)
+                    .setCancelable(false)
+                    .setPositiveButton("Перейти",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    openTutorialVideo();
+                                    dialog.cancel();
+                                }
+                            }
+                            )
+                    .setNegativeButton("Нет",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+
+        }
+        SharedPreferences.Editor editor = settingPreference.edit();
+        editor.putInt(APP_PREFERENCES_VIDEOTUTORIALVERSION, videotutorialversion);
+        editor.commit();
 
     }
 
