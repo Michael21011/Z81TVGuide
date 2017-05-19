@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
     public static SharedPreferences settingPreference;
     public static Resources MyResources;
     private static String TutorialVideoURL="https://www.youtube.com/watch?v=kk3UyIk6sPM";
-    private static String FileURL = "http://mtis.by/program_xml.zip";
+    //multi private static String FileURL = "http://mtis.by/program_xml.zip";
     //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
     //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
     public static final String APP_PREFERENCES_VIDEOTUTORIALVERSION = "videotutorialversion";
@@ -83,12 +83,13 @@ public class MainActivity extends ActionBarActivity {
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
-    private static String WWWFileName = "program_xml.zip";
+    private  String WWWFileName = "program_xml.zip";
     //private static String WWWFileName = "xmltv.xml.gz";
     private static String internalFilePath = "z81_program.txt";
     public final static String const_programListIndex = "ProgramListIndex";
     public final static String const_filterString = "FilterString";
     private Z81TVGuide myApplication;
+    private CustomProvider Provider;
 
     public NowList nowList;
     ProgressDialog mProgressDialog;
@@ -125,6 +126,8 @@ public class MainActivity extends ActionBarActivity {
         digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
         knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
         settingPreference = getSharedPreferences("settings", MODE_PRIVATE);
+
+        Provider = new PROGRAMTVProvider();
 
         setContentView(R.layout.activity_main);
         myApplication = (Z81TVGuide) getApplication();
@@ -560,7 +563,7 @@ public class MainActivity extends ActionBarActivity {
                                                 }
             );
         } else
-            downloadFile(FileURL);
+            downloadFile(Provider.DownloadUrl());
 
     }
 
@@ -573,7 +576,7 @@ public class MainActivity extends ActionBarActivity {
         if (old)
             downloadFile(FilePreviousURL);
         else
-            downloadFile(FileURL);
+            downloadFile(Provider.DownloadUrl());
 
     }
 
@@ -747,6 +750,13 @@ public class MainActivity extends ActionBarActivity {
                     // this will be useful to display download percentage
                     // might be -1: server did not report the length
                     int fileLength = connection.getContentLength();
+                    String raw = connection.getHeaderField("Content-Disposition");
+                   // raw = "attachment; filename=abc.jpg"
+                    if(raw != null && raw.indexOf("=") != -1) {
+                         WWWFileName = raw.split("=")[1]; //getting value after '='
+                    } else {
+                        // fall back to random generated file name?
+                    }
 
                     // download the file
                     input = connection.getInputStream();
