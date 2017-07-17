@@ -427,11 +427,10 @@ public class MainActivity extends ActionBarActivity {
                         .build());
                 UpdateContentInBackground(this);
                 return true;
-         /*   case R.id.action_settings:
-                sendMessage(null);
+            case R.id.action_settings:
+                openSettingsActivity();
                 return true;
-          */
-            case R.id.action_download:
+                      case R.id.action_download:
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Action")
                         .setAction("Download")
@@ -487,6 +486,12 @@ public class MainActivity extends ActionBarActivity {
         Intent intent = new Intent(this, ChannelListActivity.class);
         intent.putExtra(MainActivity.const_programListIndex, ChannelName);
         NeedRefreshList = true;
+        startActivity(intent);
+    }
+    private void openSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        //intent.putExtra(MainActivity.const_programListIndex, ChannelName);
+        //NeedRefreshList = true;
         startActivity(intent);
     }
 
@@ -726,7 +731,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... sUrl) {
-            // take CPU lock to prevent CPU from going off if the user
+            // take CPU lock to prevent CыуееPU from going off if the user
             // presses the power button during download
             // PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             // PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
