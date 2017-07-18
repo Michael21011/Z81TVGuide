@@ -25,17 +25,19 @@ public class ProgramList  {
     public Integer DigitalNumber;
     public Integer AnalogNumber;
     public TVProgram tvProgram;
+    public String IconUrl;
     private boolean isNew;
     private ArrayList<ProgramItem> list;
     private ArrayList<ProgramItem> filteredList;
     
     private Boolean stared;
 
-    public ProgramList(String channelId, String channelName) {
+    public ProgramList(String channelId, String channelName, String iconUrl) {
         list = new ArrayList<>();
         filteredList = list;
         this.ChannelId = channelId;
         this.ChannelName = channelName;
+        this.IconUrl = iconUrl;
         CheckIsNew();
 
 

@@ -59,7 +59,7 @@ public class NowAdapter extends BaseAdapter{
         holder.programmView.setText(currentItem.Title);
             if (currentItem.getChannelLogo()==R.drawable.empty)
             {
-                Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName);
+                Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName, MainActivity.tvProgram.GetProgramList(currentItem.ChannelId).IconUrl);
             }
             else
             {

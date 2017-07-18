@@ -9,4 +9,9 @@ public final class MTISProvider extends CustomProvider {
     public String DownloadUrl() {
         return "http://mtis.by/program_xml.zip";
     }
+
+    @Override
+    public String LocalFileName() {
+        return "program_xml.zip";
+    }
 }

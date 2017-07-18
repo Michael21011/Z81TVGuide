@@ -49,7 +49,9 @@
 
     <!-- Strings related to login -->
     <string name="settings_source">Source</string>
-
+    <string name="setting_source_mtis">MTIS</string>
+    <string name="setting_source_full">Full</string>
+    <string name="action_reload">Load</string>
 
 
 </resources>

@@ -24,6 +24,9 @@
         android:title="@string/action_download"
         android:icon="@drawable/ic_menu_download"
         sabd:showAsAction="never" />
+    <item android:id="@+id/action_reload"
+        android:title="@string/action_reload"
+        android:visible="true"/>
 
     <item android:id="@+id/action_tutorialVideo"
         android:title="@string/menu_viewTutorialVideo"

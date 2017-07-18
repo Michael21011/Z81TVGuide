@@ -66,6 +66,7 @@ public class ChannelListActivity extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
+        tvProgram =  ((Z81TVGuide) getApplication()).tvProgram;
         //Log.i(TAG, "Setting screen name: " + name);
         mTracker.setScreenName("Image~ChannelListActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());

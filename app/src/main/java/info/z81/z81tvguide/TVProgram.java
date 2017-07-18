@@ -32,9 +32,9 @@ public class  TVProgram  {
         list.clear();
     }
 
-    public void AddChannel(String ChannelId, String ChannelName) {
+    public void AddChannel(String ChannelId, String ChannelName, String IconUrl) {
         if (!IsChannelExists(ChannelId)) {
-            ProgramList pl = new ProgramList(ChannelId, ChannelName);
+            ProgramList pl = new ProgramList(ChannelId, ChannelName, IconUrl);
             pl.DigitalNumber = GetChannelDigitalNumber(ChannelName);
             pl.tvProgram = this;
             list.add(pl);

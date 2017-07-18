@@ -9,4 +9,9 @@ public final class PROGRAMTVProvider extends CustomProvider {
     public String DownloadUrl() {
         return "http://programtv.ru/xmltv.xml.gz";
     }
+
+    @Override
+    public String LocalFileName() {
+        return "xmltv.xml.gz";
+    }
 }

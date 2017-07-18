@@ -55,12 +55,18 @@ import android.widget.AdapterView;
         // заголовок
         spinner.setPrompt("Title");
         // выделяем элемент
-        spinner.setSelection(2);
+        int savedposition= Utils.ReadSharedPreference(Utils.ProgramProviderParamName,0);
+        if (savedposition>data.length-1)
+        {
+            savedposition = 0;
+        }
+        spinner.setSelection(savedposition);
         // устанавливаем обработчик нажатия
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
+                Utils.WriteSharedPreference(Utils.ProgramProviderParamName,position);
                 // показываем позиция нажатого элемента
              //   Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
             }

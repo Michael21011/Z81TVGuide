@@ -55,4 +55,7 @@
     <string name="tutorialErrorDescription">Невозможно открыть YouTube. Пожалуйста, выполните поиск самостоятельно по ключевой фразе "Возможности приложения мтис" </string>
     <string name="settings_source">Источник программы</string>
     <string name="title_activity_settings">Настройки</string>
+    <string name="setting_source_mtis">МТИС</string>
+    <string name="setting_source_full">Полный список</string>
+    <string name="action_reload">Открыть заново</string>
 </resources>

@@ -47,7 +47,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
-        programList =    ((Z81TVGuide) getApplication()).tvProgram.GetFilteredItem(programListIndex);
+        programList =    MainActivity.tvProgram.GetFilteredItem(programListIndex);
         filterString =getIntent().getStringExtra(MainActivity.const_filterString);
         setContentView(R.layout.one_channel_program);
         setTitle(programList.ChannelName);

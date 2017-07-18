@@ -59,7 +59,7 @@ public class ChannelAdapter extends BaseAdapter{
 
         if (currentItem.getChannelLogo()==R.drawable.empty)
         {
-            Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName);
+            Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName, currentItem.IconUrl);
         }
             else
         {

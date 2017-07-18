@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Provider;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,17 +74,17 @@ public class MainActivity extends ActionBarActivity {
     public static SharedPreferences knownChannelListPreference;
     public static SharedPreferences settingPreference;
     public static Resources MyResources;
-    private static String TutorialVideoURL="https://www.youtube.com/watch?v=kk3UyIk6sPM";
+    private static String TutorialVideoURL = "https://www.youtube.com/watch?v=kk3UyIk6sPM";
     //multi private static String FileURL = "http://mtis.by/program_xml.zip";
     //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
     //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
     public static final String APP_PREFERENCES_VIDEOTUTORIALVERSION = "videotutorialversion";
-    public static final int videotutorialversion=1;
+    public static final int videotutorialversion = 1;
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
     private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
-    private  String WWWFileName = "program_xml.zip";
+    //private  String WWWFileName = "program_xml.zip";
     //private static String WWWFileName = "xmltv.xml.gz";
     private static String internalFilePath = "z81_program.txt";
     public final static String const_programListIndex = "ProgramListIndex";
@@ -101,6 +102,7 @@ public class MainActivity extends ActionBarActivity {
     private Boolean NeedRebuildList = true;
     private Boolean NeedDownloadFuture = false;
     private Boolean NeedDownloadPast = false;
+    private Boolean UpdateInProgress = false;
     public static TVProgram tvProgram;
     private Tracker mTracker;
     private int currentPosition = 0;
@@ -127,7 +129,8 @@ public class MainActivity extends ActionBarActivity {
         knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
         settingPreference = getSharedPreferences("settings", MODE_PRIVATE);
 
-        Provider = new PROGRAMTVProvider();
+        LoadProvider();
+
 
         setContentView(R.layout.activity_main);
         myApplication = (Z81TVGuide) getApplication();
@@ -148,8 +151,7 @@ public class MainActivity extends ActionBarActivity {
             // Получаем число из настроек
             videoversion = settingPreference.getInt(APP_PREFERENCES_VIDEOTUTORIALVERSION, 0);
         }
-        if (videotutorialversion>videoversion)
-        {
+        if (videotutorialversion > videoversion) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Видео-инструкция")
                     .setMessage("Уважаемый пользователь! Хотите посмотреть видео-обозрение этого приложения на Youtube, чтобы освоить все функции?")
@@ -162,7 +164,7 @@ public class MainActivity extends ActionBarActivity {
                                     dialog.cancel();
                                 }
                             }
-                            )
+                    )
                     .setNegativeButton("Нет",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -193,16 +195,24 @@ public class MainActivity extends ActionBarActivity {
         /* if (mProgressDialog != null)
             mProgressDialog.dismiss();
             */
-        if (NeedRefreshList) {
-            NeedRefreshList = false;
-            UpdateContentInBackground(this);
-            //todo: needrefreshlis parameter for why? showContentInBackground(null);
+        if (!updateInProgress()) {
+            if (NeedRebuildList) {
+                showContentInBackground(null);
+            } else if (NeedRefreshList) {
+                NeedRefreshList = false;
+                UpdateContentInBackground(this);
+                //todo: needrefreshlis parameter for why? showContentInBackground(null);
+            }
+            AppRater.app_launched(this, mTracker);
+            //Log.i(TAG, "Setting screen name: " + name);
+            mTracker.setScreenName("Image~MainActivity");
+            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         }
-        AppRater.app_launched(this, mTracker);
-        //Log.i(TAG, "Setting screen name: " + name);
-        mTracker.setScreenName("Image~MainActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
+    }
+
+    private Boolean updateInProgress() {
+        return UpdateInProgress;
     }
 
     protected void updateListView() {
@@ -279,6 +289,18 @@ public class MainActivity extends ActionBarActivity {
         int index = tvProgram.GetProgramListIndex(GetCurrentNowItem().ChannelId);
 
         openOneChannelProgram(index);
+    }
+
+    private void LoadProvider() {
+        int ProviderIndex = Utils.ReadSharedPreference(Utils.ProgramProviderParamName, 0);
+        switch (ProviderIndex) {
+            case 1:
+                Provider = new PROGRAMTVProvider();
+                break;
+            default:
+                Provider = new MTISProvider();
+
+        }
     }
 
     private void ShareItem() {
@@ -428,14 +450,25 @@ public class MainActivity extends ActionBarActivity {
                 UpdateContentInBackground(this);
                 return true;
             case R.id.action_settings:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Settings")
+                        .build());
                 openSettingsActivity();
                 return true;
-                      case R.id.action_download:
+            case R.id.action_download:
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Action")
                         .setAction("Download")
                         .build());
                 downloadList(false);
+                return true;
+            case R.id.action_reload:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Reload")
+                        .build());
+                reloadList(false);
                 return true;
             case R.id.action_channellist:
                 mTracker.send(new HitBuilders.EventBuilder()
@@ -463,6 +496,12 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private void reloadList(boolean b) {
+        LoadProvider();
+        NeedRebuildList = true;
+        showContentInBackground(null);
+    }
+
     private void openTutorialVideo() {
         try {
             Uri uri = Uri.parse(TutorialVideoURL);
@@ -488,10 +527,11 @@ public class MainActivity extends ActionBarActivity {
         NeedRefreshList = true;
         startActivity(intent);
     }
+
     private void openSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         //intent.putExtra(MainActivity.const_programListIndex, ChannelName);
-        //NeedRefreshList = true;
+        NeedRebuildList = true;
         startActivity(intent);
     }
 
@@ -515,27 +555,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private void doTest(Object object) {
-
-        DateFormat df = new DateFormat();
-        String d = (String) df.format("yyyy-MM-dd hh:mm:ss", new Date());
-        String ss = String.format("Time: %1s", d);
-        Toast.makeText(getBaseContext(), ss, Toast.LENGTH_LONG).show();
-        String dd = "20140510124500";
-        int year = Integer.parseInt(dd.subSequence(0, 4).toString());
-        int month = Integer.parseInt(dd.subSequence(4, 6).toString());
-        int day = Integer.parseInt(dd.subSequence(6, 8).toString());
-        int hour = Integer.parseInt(dd.subSequence(8, 10).toString());
-        int min = Integer.parseInt(dd.subSequence(10, 12).toString());
-        Calendar StartDate = Calendar.getInstance();
-
-        StartDate.set(year, month - 1, day, hour, min);
-
-        Calendar c = Calendar.getInstance();
-
-
-    }
-
     private void UpdateContentInBackground(Object object) {
         final UpdateProgramTask updateProgramTask = new UpdateProgramTask(this);
         updateProgramTask.execute(this.getFilesDir().getPath());
@@ -550,7 +569,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void showContentInBackground(Object object) {
         // execute this when the downloader must be fired
-
+        LoadProvider();
         String DownloadFileName = GetDownloadedFileName();
         File myF = new File(DownloadFileName);
         if ((tvProgram.ChannelCount() > 0) & !NeedRebuildList) {
@@ -573,7 +592,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private String GetDownloadedFileName() {
-        return this.getFilesDir().getPath() + "/" + WWWFileName;
+        return this.getFilesDir().getPath() + "/" + Provider.LocalFileName();
     }
 
 
@@ -703,6 +722,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            UpdateInProgress = true;
             mProgressDialog.show();
         }
 
@@ -718,6 +738,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            UpdateInProgress = false;
             // Commented because empty string with it
             //   mProgressDialog.dismiss();
             if (result != null)
@@ -756,16 +777,19 @@ public class MainActivity extends ActionBarActivity {
                     // might be -1: server did not report the length
                     int fileLength = connection.getContentLength();
                     String raw = connection.getHeaderField("Content-Disposition");
-                   // raw = "attachment; filename=abc.jpg"
+                    // raw = "attachment; filename=abc.jpg"
+                    /* we will set local file name as constant in Provider
                     if(raw != null && raw.indexOf("=") != -1) {
                          WWWFileName = raw.split("=")[1]; //getting value after '='
+                        WWWFileName = WWWFileName.replace("\"","");
                     } else {
                         // fall back to random generated file name?
                     }
+                    */
 
                     // download the file
                     input = connection.getInputStream();
-                    output = new FileOutputStream(context.getFilesDir() + "/" + WWWFileName);
+                    output = new FileOutputStream(context.getFilesDir() + "/" + Provider.LocalFileName());
 
                     byte data[] = new byte[4096];
                     long total = 0;
@@ -819,6 +843,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
+            UpdateInProgress = true;
             mProgressDialog.show();
         }
 
@@ -835,6 +860,7 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
             //Commented because empty screen with it
             // mProgressDialog.dismiss();
+            UpdateInProgress = false;
             Boolean halt = false;
             if (result != null)
                 Toast.makeText(context, "Parse file error: " + result, Toast.LENGTH_LONG).show();
@@ -919,10 +945,10 @@ public class MainActivity extends ActionBarActivity {
                     NeedRebuildList = true;
                     publishProgress((int) (1));
                     String ResultFile = "";
-                    if (WWWFileName.contains("gz")) {
-                        ResultFile = unpackGZIP(Params[0], WWWFileName, ResultFile);
+                    if (Provider.LocalFileName().contains("gz")) {
+                        ResultFile = unpackGZIP(Params[0], Provider.LocalFileName(), ResultFile);
                     } else {
-                        ResultFile = unpackZip(Params[0], WWWFileName, ResultFile);
+                        ResultFile = unpackZip(Params[0], Provider.LocalFileName(), ResultFile);
                     }
                     if (ResultFile.equals("")) {
                         // refreshList(null);
@@ -963,7 +989,7 @@ public class MainActivity extends ActionBarActivity {
                     } catch (Exception e) {
                         Log.e("tag", e.getMessage());
 
-                        File f = new File(Params[0] + "/" + WWWFileName);
+                        File f = new File(Params[0] + "/" + Provider.LocalFileName());
                         try {
                             f.delete();
                         } catch (Exception ex) {
@@ -996,12 +1022,20 @@ public class MainActivity extends ActionBarActivity {
                 /* look throw all channel list*/
                 NodeList channelNodeList = document.getElementsByTagName("channel");
                 String ChannelName = "";
+                String IconUrl="";
                 newChannelList.clear();
                 for (int j = 0; j < channelNodeList.getLength(); j++) {
                     Node channelNode = channelNodeList.item(j);
                     Element channelElement = (Element) channelNode;
                     ChannelName = channelElement.getElementsByTagName("display-name").item(0).getTextContent();
-                    tvProgram.AddChannel(channelElement.getAttributes().getNamedItem("id").getNodeValue(), ChannelName);
+                    try {
+                        IconUrl = channelElement.getElementsByTagName("icon").item(0).getAttributes().getNamedItem("src").getTextContent();
+                    }
+                    catch(Exception ex)
+                    {
+                        IconUrl="";
+                    }
+                    tvProgram.AddChannel(channelElement.getAttributes().getNamedItem("id").getNodeValue(), ChannelName, IconUrl);
                     if (tvProgram.GetItem(j).IsNew()) {
                         newChannelList.add(ChannelName);
                         tvProgram.GetItem(j).SetKnown();
@@ -1032,7 +1066,7 @@ public class MainActivity extends ActionBarActivity {
             } catch (Exception e) {
                 System.err.println(e.getMessage());
 
-                File f = new File(Params[0] + "/" + WWWFileName);
+                File f = new File(Params[0] + "/" + Provider.LocalFileName());
                 try {
                     f.delete();
                 } catch (Exception ex) {
@@ -1059,6 +1093,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
+            UpdateInProgress = true;
             mProgressDialog.show();
         }
 
@@ -1073,7 +1108,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
+            UpdateInProgress = false;
             mProgressDialog.dismiss();
 
             if (result != null)
