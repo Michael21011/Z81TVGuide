@@ -27,6 +27,8 @@ import java.util.Date;
 
 public class Utils {
     public final static String ProgramProviderParamName = "program_source_index";
+    public final static String FavoritSetParamName = "favorit_set_index";
+
     public static void ShowMessage(Context context, String title, String text) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(title);

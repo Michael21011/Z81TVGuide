@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
-    private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
+    //private static String FilePreviousURL = "http://mtis.by/program_xml_old.zip";
     //private  String WWWFileName = "program_xml.zip";
     //private static String WWWFileName = "xmltv.xml.gz";
     private static String internalFilePath = "z81_program.txt";
@@ -598,7 +598,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void downloadList(boolean old) {
         if (old)
-            downloadFile(FilePreviousURL);
+            downloadFile(Provider.FilePreviousURL());
         else
             downloadFile(Provider.DownloadUrl());
 

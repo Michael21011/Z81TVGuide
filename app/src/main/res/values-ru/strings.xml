@@ -58,4 +58,5 @@
     <string name="setting_source_mtis">МТИС</string>
     <string name="setting_source_full">Полный список</string>
     <string name="action_reload">Открыть заново</string>
+    <string name="settings_favoriteSet">ТВ провайдер</string>
 </resources>

@@ -80,6 +80,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         //Log.i(TAG, "Setting screen name: " + name);
         mTracker.setScreenName("Image~OneChannelProgramActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        programList =    MainActivity.tvProgram.GetFilteredItem(programListIndex);
 
     }
 

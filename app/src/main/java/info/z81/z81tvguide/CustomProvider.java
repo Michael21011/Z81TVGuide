@@ -7,5 +7,6 @@ package info.z81.z81tvguide;
 public abstract class CustomProvider {
     public  abstract String DownloadUrl();
     public abstract String LocalFileName();
+    public abstract String FilePreviousURL();
 }
 
