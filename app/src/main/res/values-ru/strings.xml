@@ -59,4 +59,5 @@
     <string name="setting_source_full">Полный список</string>
     <string name="action_reload">Открыть заново</string>
     <string name="settings_favoriteSet">ТВ провайдер</string>
+    <string name="settings_big_description">Приложение может скачать огромный список телепередач из альтернативного источника. Рекомендую выбрать провайдера, чтобы автоматически создать список избранных каналов (это очистит ваш текущий список избранного).</string>
 </resources>

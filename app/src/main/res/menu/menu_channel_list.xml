@@ -1,7 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="info.z81.z81tvguide.ChannelListActivity">
+    tools:context="info.z81.z81tvguide.ChannelListActivity"
+    xmlns:sabd="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_ShowOnlyFavorites"
+        android:icon="@drawable/ic_layout_star_selected"
+        android:title="@string/action_ShowOnlyFavorites"
+        sabd:showAsAction="always"
+        android:visible="true"/>
     <item android:id="@+id/action_mark_favorite_all" android:title="@string/mark_all_as_favorite"
         android:icon="@android:drawable/star_on"
         android:orderInCategory="100" app:showAsAction="ifRoom" />

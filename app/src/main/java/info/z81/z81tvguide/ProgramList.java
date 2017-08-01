@@ -27,17 +27,19 @@ public class ProgramList  {
     public TVProgram tvProgram;
     public String IconUrl;
     private boolean isNew;
+
     private ArrayList<ProgramItem> list;
     private ArrayList<ProgramItem> filteredList;
     
     private Boolean stared;
 
-    public ProgramList(String channelId, String channelName, String iconUrl) {
+    public ProgramList(String channelId, String channelName, String iconUrl, Boolean IsFavorit) {
         list = new ArrayList<>();
         filteredList = list;
         this.ChannelId = channelId;
         this.ChannelName = channelName;
         this.IconUrl = iconUrl;
+        this.stared=IsFavorit;
         CheckIsNew();
 
 
@@ -73,16 +75,16 @@ public class ProgramList  {
 
     public boolean isStared() {
         if (stared == null)
-            stared = MainActivity.favoriteChannelListPreference.getBoolean(ChannelName, false);
+            stared = MainActivity.favoriteChannelListPreference.getBoolean(ChannelName.toUpperCase(), false);
         return stared;
     }
 
     public void setStared(boolean stared) {
         this.stared = stared;
         SharedPreferences.Editor ed = MainActivity.favoriteChannelListPreference.edit();
-        ed.remove(ChannelName);
+        ed.remove(ChannelName.toUpperCase());
         if (stared) {
-            ed.putBoolean(ChannelName, true);
+            ed.putBoolean(ChannelName.toUpperCase(), true);
         }
         ed.commit();
     }
@@ -321,4 +323,6 @@ public class ProgramList  {
             } else return true;
         }
     }
+
+
 }

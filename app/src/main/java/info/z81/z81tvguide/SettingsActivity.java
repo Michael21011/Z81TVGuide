@@ -39,16 +39,30 @@ import android.widget.AdapterView;
  */
 
     public class SettingsActivity extends Activity {
-    String[] data = {"МТИС", "Programtv.ru"};
-    String[] favoriteSet = {"МТИС",  "Аксиома-сервис", "Атлант Телеком","Космос ТВ","НТВ-Плюс","Триколор","Zala"};
+    String[] data = {"МТИС", "teleguide.info"};
+    String[] favoriteSet = {"МТИС",  "Аксиома-сервис", "Атлант Телеком","Космос ТВ","НТВ-Плюс","Триколор","Zala Базовый"};
     String[][] favoritProgram={
             /* 0 МТИС */ {"Охота и рыбалка"},
-            /* 1 Аксиома-сервис */ {"Беларусь-1","ТВ-3","EuroNews","Усадьба","Культура","TV1000 Action","Охота и рыбалка","МИР","Шансон-TB","Mezzo","Nickelodeon"},
-            /* 1 Атлант Телеком */ {},
-            /* 1 Космос ТВ */ {},
-            /* 1 НТВ-Плюс */ {},
-            /* 1 Триколор */ {},
-            /* 1 Zala */ {},
+            /* 1 Аксиома-сервис */ {"+TV Belviasat","365 Дней","8 канал (Беларусь)","CNN International","Discovery Channel","Euronews","Eurosport","Eurosport 2","JimJam","Mezzo","National Geographic","Nickelodeon","RTVi","TV1000",
+            "TV1000 Action","TV1000 Русское кино","VH1 European","Viasat Explorer","Viasat History","VViasat Nature CEE","БелМузТВ (Беларусь)","Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 5","РБК","ВТВ (Первый музыкальный)",
+            "Детский канал","Детский мир","Иллюзион +","Киномикс","МИР","НТВ Беларусь","Наука 2.0","РТВ - Любимое кино","Ностальгия","ОНТ (Беларусь)","Охота и рыбалка","РТР Беларусь","Россия Культура","СТВ","Сетанта спорт","Союз",
+            "ТВ-3","ТВ-3 Беларусь","TV XXI (TV21)","ТНТ","Телемагазин","Усадьба","Шансон ТВ"},
+
+            /* 2 Атлант Телеком */ {"24 Техно","Канал 2x2","8 канал (Беларусь)","Amedia Hit","Amedia Premium HD","English Club TV","Euronews","Europa Plus TV","Fox HD","Fox Life HD","HD Life","History","History HD","MCM Top","MTV Россия",
+            "MTV Dance","MTV Live HD","MTV Rocks","Mezzo","Mezzo Live HD","Nat Geo Wild HD","National Geographic","National Geographic HD","Nick Jr","Nickelodeon","Nickelodeon HD","Paramount Comedy","RTVi","TV1000","TV1000 Action",
+            "TV1000 Русское кино","Tiji","Travel","Travel Channel HD","Travel+Adventure HD","VH1 European","VH1 Classic","Viasat Explorer","Viasat History","Viasat Nature CEE","Viasat Nature/History HD","Авто Плюс","РБК",
+            "Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 5","БелМузТВ (Беларусь)","Русский бестселлер (международный)","ВТВ (Первый музыкальный)","Детский канал","Домашний","Драйв ТВ","Еврокино","Здоровое Телевидение","Зоопарк",
+            "Иллюзион +","Индийское кино","КХЛ-ТВ","Карусель International","Кинозал 1","Кинозал 2","Кинозал HD","Киномикс","Кинопремьера","Киносемья","Кинохит","Россия Культура","Кухня ТВ","Мать и дитя","МИР","Моя Планета",
+            "Мужское кино","Мульт","Мультимания","НТВ Беларусь","НТВ-ПЛЮС Наш Футбол","Настоящее Страшное ТВ","Наука 2.0","Ностальгия","ОНТ (Беларусь)","Оружие","Охота и рыбалка","Охотник и Рыболов HD","Первый Музыкальный HD","ПерецI",
+            "РТР Беларусь","Ретро ТВ","Родное кино","Русский Экстрим","СТВ","Сарафан ТВ","Сетанта спорт","Сетанта Спорт+ HD","Совершенно Секретно","Союз","ТВ-3","ТНТ","Усадьба","Феникс+Кино","Шансон ТВ"},
+            /* 3 Космос ТВ */ {"Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 5"},
+            /* 4 НТВ-Плюс */ {"Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 5"},
+            /* 5 Триколор */ {"Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 5"},
+            /* 6 Zala */ {"8 канал (Беларусь)","А2","Драйв ТВ","EuroNews","Europa Plus TV","History","MIНСК TV","Nick Jr","RTVi","RU.TV","SONY Sci-Fi","STV","Viasat Explorer","Viasat History","Viasat Nature CEE","TV1000","TV1000 Русское кино",
+            "Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 4","Беларусь 5","БелБизнесЧенел","РБК","БелМузТВ (Беларусь)","БУГ-ТВ","Варяг","ВТВ (Первый музыкальный)",
+            "Гомель ТВ","Гродно Плюс","Детский мир","Домашний","Еврокино","Киномикс","Лида ТВ","РТВ - Любимое кино","МИР","Моя Планета","Мужское кино","Наука 2.0","НТВ Беларусь","ОНТ (Беларусь)","Охота и рыбалка",
+            "Первый музыкальный канал","ПерецI","Пинск","Россия Культура",
+            "РТР Беларусь","Русский Иллюзион","Сарафан ТВ","СТВ","TV XXI (TV21)","ТВ 3 Россия","ТВ-3","Телеканал «+TV»","Телеканал «СИТИ»","Телеканал «ТВТ»","Канал 2x2","Телемагазин","ТНТ","Усадьба","Шансон ТВ"},
     };
 
     /** Called when the activity is first created. */
@@ -78,6 +92,7 @@ import android.widget.AdapterView;
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 Utils.WriteSharedPreference(Utils.ProgramProviderParamName,position);
+                findViewById(R.id.faforitSpinner).setEnabled(position>0);
                 // показываем позиция нажатого элемента
              //   Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
             }
@@ -90,6 +105,7 @@ import android.widget.AdapterView;
         // Favorite Set
         Spinner faforitSpinner = (Spinner) findViewById(R.id.faforitSpinner);
         faforitSpinner.setAdapter(favoritAdapter);
+        faforitSpinner.setEnabled(sourceSavedposition>0);
 
         faforitSpinner.setPrompt("Набор каналов");
 
@@ -111,7 +127,7 @@ import android.widget.AdapterView;
                 ed.clear();
 
                 for (int i=0;i<favoritProgram[position].length; i=i+1){
-                    ed.putBoolean(favoritProgram[position][i], true);
+                    ed.putBoolean(favoritProgram[position][i].toUpperCase(), true);
                 }
                 ed.commit();
             }

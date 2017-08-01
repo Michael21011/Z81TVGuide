@@ -5,19 +5,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.security.Provider;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -43,12 +50,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.content.res.Resources;
+import android.graphics.Path;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -295,7 +305,7 @@ public class MainActivity extends ActionBarActivity {
         int ProviderIndex = Utils.ReadSharedPreference(Utils.ProgramProviderParamName, 0);
         switch (ProviderIndex) {
             case 1:
-                Provider = new PROGRAMTVProvider();
+                Provider = new TeleGuideInfoProvider();
                 break;
             default:
                 Provider = new MTISProvider();
@@ -704,8 +714,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private boolean getFavoritesSelected() {
+        return tvProgram.FavoritChannelsSelected();
+        /*
         Map<String, ?> favorites = favoriteChannelListPreference.getAll();
         return favorites.size() > 0;
+        */
     }
 
 
@@ -956,106 +969,117 @@ public class MainActivity extends ActionBarActivity {
                     }
                     IsForceUnzipFile = false;
 
-                    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                    try {
-                        dbf.setNamespaceAware(false);
-                        dbf.setValidating(false);
 
-                        DocumentBuilder db = dbf.newDocumentBuilder();
-                        InputStream inputStream = new FileInputStream(ResultFile);
-                        // String fresult = getStringFromInputStream(inputStream);
-                        // Toast.makeText(context, fresult, Toast.LENGTH_SHORT).show();
-                        document = db.parse(inputStream);
+                    BufferedReader br = null;
+                    FileReader fr = null;
+                    fr = new FileReader(ResultFile);
+                    br = new BufferedReader(fr);
+                    Boolean breakLoop = false;
+                    Boolean channelStarted = false;
+                    Boolean channelFinished = false;
+                    tvProgram.Clear();
+                    Date startD = new Date();
+                    String CurrentString;
 
-                        NodeList checkChannelNodeList = document.getElementsByTagName("channel");
-                        boolean wrongEncoding = true;
-                        for (int j = 0; j < checkChannelNodeList.getLength(); j++) {
-                            Node checkChannelNode = checkChannelNodeList.item(j);
-                            Element checkElement = (Element) checkChannelNode;
-                            String checkName = checkElement.getElementsByTagName("display-name").item(0).getTextContent();
+//loop for channel
+                    StringBuilder builder = new StringBuilder();
+                    while (!breakLoop){
+                        CurrentString = br.readLine();
 
-                            if (checkName.contains("а") || checkName.contains("о") || checkName.contains("и")) {
-                                wrongEncoding = false;
-                                break;
+                        if (CurrentString.contains("<channel")) {
+                            channelStarted = true;
+                        }
+                        if (channelStarted) {
+                            builder.append(CurrentString);
+                        }
+                        if (CurrentString.contains("</channel")) {
+                            channelFinished = true;
+                            channelStarted = false;
+
+                        } else {
+                            channelFinished = false;
+                        }
+                        if (channelFinished) {
+                            String s=builder.toString();
+                            String channelName=Utils.XMLGetElementValue(s, "display-name");
+                            tvProgram.AddChannel(Utils.XMLGetAttributeValue(s, "channel", "id"), channelName, Utils.XMLGetAttributeValue(s, "icon", "src"), ChannelIsFavorite(channelName));
+                            builder.setLength(0);
+                        }
+
+                        if (CurrentString.contains("<programme")) {
+                            builder.setLength(0);
+                            builder.append(CurrentString);
+
+                            breakLoop = true;
+                        }
+
+
+                    }
+                    publishProgress(XMLLoadProgress);
+                    int ChannelCount = tvProgram.ChannelCount();
+//continue for programme
+                    int CurentLineNo = 0;
+                    String LatestChannel = "";
+                    breakLoop = false;
+                    Boolean ProgramStarted = true;
+                    Boolean ProgramFinished = false;
+
+                    while (!breakLoop){
+                        // process the line.
+
+                        CurrentString = br.readLine();
+                        // process the line.
+                        if (CurrentString.contains("<programme")) {
+                            ProgramStarted = true;
+                            ProgramFinished = false;
+                        }
+                        if (ProgramStarted) {
+                            builder.append(CurrentString);
+                        }
+                        if (CurrentString.contains("</programme")) {
+                            ProgramFinished = true;
+                            ProgramStarted = false;
+
+                        } else {
+                            ProgramFinished = false;
+                        }
+                        if (ProgramFinished) {
+                            String s=builder.toString();
+                            String ChannelId = Utils.XMLGetAttributeValue(s, "programme", "channel");
+                            if (!LatestChannel.equals(ChannelId)) {
+                                CurentLineNo++;
+                                LatestChannel = ChannelId;
+                                publishProgress((int) (XMLLoadProgress + CurentLineNo * (100 - XMLLoadProgress) / ChannelCount));
+                             /*   if (( (XMLLoadProgress+ CurentLineNo * (100-XMLLoadProgress ) / ChannelCount)>60))
+                                {breakLoop = true;}
+                                */
                             }
+
+                            tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")), Utils.XMLGetElementValue(s, "desc"));
+                            builder.setLength(0);
+
+
                         }
-                        if (wrongEncoding) {
-                            DocumentBuilder db2 = dbf.newDocumentBuilder();
-                            InputStream inputStream2 = new FileInputStream(ResultFile);
 
-                            document = db2.parse(new InputSource(new InputStreamReader(inputStream2, "windows-1251")));
+                        if (CurrentString.contains("/tv")) {
+                            breakLoop = true;
                         }
 
-                    } catch (Exception e) {
-                        Log.e("tag", e.getMessage());
 
-                        File f = new File(Params[0] + "/" + Provider.LocalFileName());
-                        try {
-                            f.delete();
-                        } catch (Exception ex) {
-                            System.err.println(e.getMessage());
-                        }
-                        ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
-
-                    } finally {
 
                     }
+                    Date endD = new Date();
+                    long diffInMillies = endD.getTime() - startD.getTime();
+
+                    String timediff = Long.toString(TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS));
+
+                    br.close();
+                    fr.close();
+
                 }
 
-                publishProgress(XMLLoadProgress);
-                String currentDate = "";
-                nowList.Clear();
-                Calendar c = Calendar.getInstance();
-                Date today = new Date();
-                today.setTime(c.getTimeInMillis() + (1000 * 5 * 60));
-                NodeList programlist = document.getElementsByTagName("programme");
-                String channelid = "";
-                String description = "";
-                Properties pro = new Properties();
 
-
-                DateFormat df = new DateFormat();
-
-
-				/* new algoritm for list */
-                tvProgram.Clear();
-                /* look throw all channel list*/
-                NodeList channelNodeList = document.getElementsByTagName("channel");
-                String ChannelName = "";
-                String IconUrl="";
-                newChannelList.clear();
-                for (int j = 0; j < channelNodeList.getLength(); j++) {
-                    Node channelNode = channelNodeList.item(j);
-                    Element channelElement = (Element) channelNode;
-                    ChannelName = channelElement.getElementsByTagName("display-name").item(0).getTextContent();
-                    try {
-                        IconUrl = channelElement.getElementsByTagName("icon").item(0).getAttributes().getNamedItem("src").getTextContent();
-                    }
-                    catch(Exception ex)
-                    {
-                        IconUrl="";
-                    }
-                    tvProgram.AddChannel(channelElement.getAttributes().getNamedItem("id").getNodeValue(), ChannelName, IconUrl);
-                    if (tvProgram.GetItem(j).IsNew()) {
-                        newChannelList.add(ChannelName);
-                        tvProgram.GetItem(j).SetKnown();
-                    }
-                }
-                for (int j = 0; j < programlist.getLength(); j++) {
-                    publishProgress((int) (XMLLoadProgress + j * (100 - XMLLoadProgress) / programlist.getLength()));
-                    Node programNode = programlist.item(j);
-                    Element program = (Element) programNode;
-                    channelid = program.getAttributes().getNamedItem("channel").getNodeValue();
-
-                    currentDate = program.getAttributes().getNamedItem("start").getNodeValue();
-                    NodeList dlist = program.getElementsByTagName("desc");
-                    if (dlist.getLength() == 0)
-                        description = "";
-                    else
-                        description = dlist.item(0).getTextContent();
-
-                    tvProgram.AddProgram(channelid, program.getElementsByTagName("title").item(0).getTextContent(), Utils.StringToDate(currentDate), description);
-                }
+                tvProgram.sort();
 
                 NeedRebuildList = false;
                 mTracker.send(new HitBuilders.EventBuilder()
@@ -1064,6 +1088,8 @@ public class MainActivity extends ActionBarActivity {
                         .build());
 
             } catch (Exception e) {
+
+
                 System.err.println(e.getMessage());
 
                 File f = new File(Params[0] + "/" + Provider.LocalFileName());
@@ -1072,7 +1098,9 @@ public class MainActivity extends ActionBarActivity {
                 } catch (Exception ex) {
                     System.err.println(e.getMessage());
                 }
-                ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
+                return e.getMessage();
+                //ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
+
             } finally {
                 //    wl.release();
             }
@@ -1147,7 +1175,7 @@ public class MainActivity extends ActionBarActivity {
 
                 for (int i = 0; i < tvProgram.ChannelCount(); i++) {
                     ProgramList pl = tvProgram.GetItem(i);
-                    if (!FavoritesSelected || !ShowOnlyFavorites || (favoriteChannelListPreference.getBoolean(pl.ChannelName, false))) {
+                    if (!FavoritesSelected || !ShowOnlyFavorites || (ChannelIsFavorite(pl.ChannelName))) {
                         ProgramItem pi = null;
                         int CurrentItemIndex = pl.GetCurrentItemIndex(5);
                         if (CurrentItemIndex != -1) {
@@ -1234,6 +1262,11 @@ public class MainActivity extends ActionBarActivity {
 
         return sb.toString();
 
+    }
+
+    public boolean ChannelIsFavorite(String ChannelName)
+    {
+        return favoriteChannelListPreference.getBoolean(ChannelName.toUpperCase(), false);
     }
 
 

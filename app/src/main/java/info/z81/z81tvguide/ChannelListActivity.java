@@ -36,6 +36,7 @@ public class ChannelListActivity extends ActionBarActivity {
     SharedPreferences  favoriteChannelListPreference;
     private Tracker mTracker;
     private Integer InitialChannelPosition;
+    private Boolean ShowOnlyFavorites=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,7 @@ public class ChannelListActivity extends ActionBarActivity {
         {
             InitialChannelPosition = tvProgram.GetProgramListIndex(currentChannelId);
         }
-
-
+        invalidateOptionsMenu();
         updateListView();
         handleIntent(getIntent());
 
@@ -93,6 +93,12 @@ public class ChannelListActivity extends ActionBarActivity {
         inflater.inflate(R.menu.menu_channel_list, menu);
 
         inflater.inflate(R.menu.onechannel_option, menu);
+        MenuItem showFavoriteItem = menu.findItem(R.id.action_ShowOnlyFavorites);
+        ShowOnlyFavorites = tvProgram.FavoritChannelsSelected();
+        if (ShowOnlyFavorites) {
+            showFavoriteItem.setIcon(R.drawable.ic_layout_star_selected);
+        } else showFavoriteItem.setIcon(R.drawable.ic_layout_star);
+
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -167,6 +173,13 @@ public class ChannelListActivity extends ActionBarActivity {
 
 
         switch (item.getItemId()) {
+            case R.id.action_ShowOnlyFavorites:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("SwithShowOnlyFavorites")
+                        .build());
+                SwithShowOnlyFavorites(item);
+                return true;
             case R.id.action_search:
                // showContentInBackground(null);
                 return true;
@@ -197,7 +210,14 @@ public class ChannelListActivity extends ActionBarActivity {
         }
 
     }
-
+    private void SwithShowOnlyFavorites(MenuItem item) {
+        ShowOnlyFavorites = !ShowOnlyFavorites;
+        if (ShowOnlyFavorites) {
+            item.setIcon(R.drawable.ic_layout_star_selected);
+        } else item.setIcon(R.drawable.ic_layout_star);
+        updateListView();
+        //showContentInBackground(null);
+    }
     private void MarkAllFavorites(boolean Stared) {
         for (int i=0;i<tvProgram.ChannelCount();i++){
             ProgramList pl = tvProgram.GetItem(i);
@@ -212,7 +232,7 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void updateListView()    {
 
         final ListView lv1 = (ListView)findViewById(R.id.listView1);
-        adapter = new ChannelAdapter(this, tvProgram, filterString);
+        adapter = new ChannelAdapter(this, tvProgram, filterString, ShowOnlyFavorites);
         lv1.setAdapter(adapter);
         SetListViewListeners();
         if (InitialChannelPosition!=null) {

@@ -6,13 +6,14 @@ import android.hardware.camera2.params.BlackLevelPattern;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 /**
  * Created by michael on 08.10.15.
  * Object contains TV Guide entirely
  */
-public class  TVProgram  {
+public class TVProgram {
 
     private ArrayList<ProgramList> list;
     private ArrayList<ProgramList> filteredList;
@@ -23,8 +24,8 @@ public class  TVProgram  {
         list = new ArrayList<>();
         defaultChannelNumbers = new DefaultChannelNumbers();
         filteredList = list;
-        int s=MainActivity.knownChannelListPreference.getAll().size();
-        IsFirstRun = (s==0);
+        int s = MainActivity.knownChannelListPreference.getAll().size();
+        IsFirstRun = (s == 0);
 
     }
 
@@ -32,11 +33,12 @@ public class  TVProgram  {
         list.clear();
     }
 
-    public void AddChannel(String ChannelId, String ChannelName, String IconUrl) {
+    public void AddChannel(String ChannelId, String ChannelName, String IconUrl, Boolean IsFavorit) {
         if (!IsChannelExists(ChannelId)) {
-            ProgramList pl = new ProgramList(ChannelId, ChannelName, IconUrl);
+            ProgramList pl = new ProgramList(ChannelId, ChannelName, IconUrl, IsFavorit);
             pl.DigitalNumber = GetChannelDigitalNumber(ChannelName);
             pl.tvProgram = this;
+
             list.add(pl);
         }
     }
@@ -48,7 +50,16 @@ public class  TVProgram  {
         pl.Add(ProgramTitle, DateStart, Description);
 
     }
+    public boolean FavoritChannelsSelected(){
+        for (int j = 0; j < ChannelCount(); j++) {
+            if (this.GetItem(j).isStared()) {
+                return true;
+            }
 
+
+        }
+        return false;
+    }
     private boolean IsChannelExists(String ChannelId) {
         for (ProgramList item : list) {
             if (item.ChannelId.equals(ChannelId)) {
@@ -60,16 +71,15 @@ public class  TVProgram  {
     }
 
     public ProgramList GetProgramList(String ChannelId) {
-        int Index=-1;
+        int Index = -1;
         Index = GetProgramListIndex(ChannelId);
-        if (Index==-1)
+        if (Index == -1)
             return null;
-                else return this.GetItem(Index);
+        else return this.GetItem(Index);
     }
 
-    public int GetProgramListIndex(String ChannelId)
-    {
-        for (int j=0;j<ChannelCount();j++) {
+    public int GetProgramListIndex(String ChannelId) {
+        for (int j = 0; j < ChannelCount(); j++) {
             if (this.GetItem(j).ChannelId.equals(ChannelId)) {
                 return j;
             }
@@ -80,7 +90,6 @@ public class  TVProgram  {
     }
 
 
-
     public boolean IsEmpty() {
         return ChannelCount() == 0;
     }
@@ -88,6 +97,7 @@ public class  TVProgram  {
     public int ChannelCount() {
         return list.size();
     }
+
     public int FilteredChannelCount() {
         return filteredList.size();
     }
@@ -112,10 +122,9 @@ public class  TVProgram  {
         Date today = new Date();
         today.setTime(c.getTimeInMillis());
         int result;
-        int lastresult=-2;
-        for (int j = 0; j < list.size(); j++)
-         {
-            if  (GetItem(j).Count()>0) {
+        int lastresult = -2;
+        for (int j = 0; j < list.size(); j++) {
+            if (GetItem(j).Count() > 0) {
                 if ((GetItem(j).FirstDate().compareTo(today) < 0) & (GetItem(j).LastDate().compareTo(today) > 0)) {
                     // It is current
                     result = 0;
@@ -143,13 +152,13 @@ public class  TVProgram  {
         // TODO Auto-generated method stub
         return list.get(arg0).hashCode();
     }
+
     public long GetFilteredItemId(int arg0) {
         // TODO Auto-generated method stub
         return filteredList.get(arg0).hashCode();
     }
 
-    public Integer GetChannelDigitalNumber(String ChannelName)
-    {
+    public Integer GetChannelDigitalNumber(String ChannelName) {
         Integer n = MainActivity.digitalNumberPreference.getInt(ChannelName, -1);
         if (n.equals(-1)) {
             n = defaultChannelNumbers.GetByName(ChannelName);
@@ -157,22 +166,26 @@ public class  TVProgram  {
         return n;
     }
 
-    public void ApplyFilter(String FilterString){
-        if (FilterString==null || FilterString.equals("")) {
+    public void ApplyFilter(String FilterString, boolean ShowOnlyFavorites) {
+
+        if ((FilterString == null || FilterString.equals("")) && !ShowOnlyFavorites) {
             filteredList = new ArrayList<>();
             filteredList.addAll(list);
-        }
-        else
-        {
+        } else {
             filteredList = new ArrayList<>();
-            for (int j = 0; j < list.size(); j++)
-            {
-                if (GetItem(j).Match(FilterString))
-                    filteredList.add(this.GetItem(j));
+            for (int j = 0; j < list.size(); j++) {
+                ProgramList pl = GetItem(j);
+                if ((FilterString == null || FilterString.equals("") || pl.Match(FilterString)) && (pl.isStared() || !ShowOnlyFavorites)) {
+                    filteredList.add(pl);
+                }
 
             }
 
         }
+    }
+
+    public void sort() {
+        Collections.sort(list, new ChannelCustomComparator());
     }
 
 

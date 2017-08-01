@@ -235,17 +235,14 @@ public class Utils {
         // String urlAddress = String.format( "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png", channelName);
         final int CacheTimeInHours = 1;
         final int CacheTimeInMinutes = 5;
-        final long CacheTimeOnDisk = (long)30 * 24 * 60 * 60 * 1000;
+        final long CacheTimeOnDisk = (long) 30 * 24 * 60 * 60 * 1000;
         final int CacheTimeOnNet = 1 * 60 * 60 * 1000;
         String urlMask;
-        if (iconURL.equals(""))
-        {
-             urlMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s";
+        if (iconURL.equals("")) {
+            urlMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s";
 
-        }
-        else
-        {
-            urlMask=iconURL;
+        } else {
+            urlMask = iconURL;
         }
         final String FileName = String.format("%s.png", channelName);
         final String FullFileName = Z81TVGuide.getAppContext().getFilesDir() + "/" + FileName;
@@ -329,26 +326,64 @@ public class Utils {
     public static long ReadSharedPreference(String refName, long defValue) {
         return GetSettingsSharedPreferences().getLong(refName, defValue);
     }
+
     public static int ReadSharedPreference(String refName, int defValue) {
         SharedPreferences prefs = GetSettingsSharedPreferences();
         int result;
         try {
-             result = prefs.getInt(refName, defValue);
-        }
-        catch ( Exception ex)
-        {
-          result=0;
+            result = prefs.getInt(refName, defValue);
+        } catch (Exception ex) {
+            result = 0;
         }
         return result;
     }
+
     public static String ReadSharedPreference(String refName, String defValue) {
 
         return GetSettingsSharedPreferences().getString(refName, defValue);
     }
 
-    public static SharedPreferences GetSettingsSharedPreferences()
-    {
+    public static SharedPreferences GetSettingsSharedPreferences() {
         return Z81TVGuide.getAppContext().getSharedPreferences("settings", 0);
     }
+
+    public static String XMLGetElementValue(String xml, String ElementName) {
+        String result="";
+        try {
+            int StartPosition = xml.indexOf("<" + ElementName);
+            int EndPosition = xml.indexOf(">", StartPosition);
+            if (xml.indexOf("/>", StartPosition) != EndPosition - 1) {
+                StartPosition = EndPosition + 1;
+                EndPosition = xml.indexOf("<", StartPosition);
+                result = xml.substring(StartPosition, EndPosition);
+
+            }
+            return result;
+        } catch(Exception e)
+        {
+            return "";
+        }
+    }
+
+    public static String XMLGetAttributeValue(String xml, String ElementName, String AttributeName) {
+        try {
+            String result = "";
+
+            int StartPosition = xml.indexOf("<" + ElementName);
+            int EndPosition = xml.indexOf(">", StartPosition);
+            String HeaderString = xml.substring(StartPosition + ElementName.length() + 1, EndPosition);
+
+            StartPosition = HeaderString.indexOf(AttributeName);
+            int AttrStartPosition = HeaderString.indexOf("\"", StartPosition);
+            int AttrEndPosition = HeaderString.indexOf("\"", AttrStartPosition + 1);
+            result = HeaderString.substring(AttrStartPosition + 1, AttrEndPosition);
+            return result;
+        } catch (Exception e)
+        {
+            return "";
+        }
+
+    }
+
 
 }

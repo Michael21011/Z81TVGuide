@@ -13,15 +13,18 @@ import android.widget.TextView;
 public class ChannelAdapter extends BaseAdapter{
     private final Context context;
     private final TVProgram list;
+    private final boolean showOnlyFavorites;
 
 
 
-    public ChannelAdapter(Context context, TVProgram values, String FilterString) {
+    public ChannelAdapter(Context context, TVProgram values, String FilterString, boolean ShowOnlyFavorites) {
         super();
     	this.list = values;
-        this.list.ApplyFilter(FilterString);
+        this.list.ApplyFilter(FilterString, ShowOnlyFavorites);
         this.context = context;
+        this.showOnlyFavorites = ShowOnlyFavorites;
     }
+
     
 
     static class ViewHolder {
