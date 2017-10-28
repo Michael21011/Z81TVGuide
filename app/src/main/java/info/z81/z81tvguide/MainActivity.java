@@ -288,10 +288,22 @@ public class MainActivity extends ActionBarActivity {
                         .build());
                 ShareItem();
                 return true;
+            case R.id.menu_main_tvpower:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("ContextItem")
+                        .setAction("TVPower")
+                        .build());
+                TVPower();
+                return true;
             default:
                 return super.onContextItemSelected(item);
 
         }
+    }
+
+    private void TVPower() {
+        InfraManager im=new InfraManager(getBaseContext());
+        im.PressPower();
     }
 
     private void ChannelItem() {

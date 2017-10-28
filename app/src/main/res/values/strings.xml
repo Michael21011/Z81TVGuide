@@ -54,6 +54,7 @@
     <string name="action_reload">Load</string>
     <string name="settings_favoriteSet">Your TV provider</string>
     <string name="settings_big_description">select your settings :)</string>
+    <string name="menu_tvpower">Включить</string>
 
 
 </resources>

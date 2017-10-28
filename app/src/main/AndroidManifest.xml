@@ -12,6 +12,9 @@
     <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.TRANSMIT_IR"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.consumerir" />
 
     <application
         android:name=".Z81TVGuide"
