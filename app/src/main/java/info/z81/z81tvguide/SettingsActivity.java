@@ -40,7 +40,7 @@ import android.widget.AdapterView;
 
     public class SettingsActivity extends Activity {
     String[] data = {"МТИС", "teleguide.info"};
-    String[] favoriteSet = {"МТИС",  "Аксиома-сервис", "Атлант Телеком","Космос ТВ","НТВ-Плюс","Триколор","Zala Базовый"};
+    String[] favoriteSet = {"МТИС",  "Аксиома-сервис", "Атлант Телеком","Космос ТВ *в планах*","НТВ-Плюс *в планах*","Триколор *в планах*","Zala Базовый"};
     String[][] favoritProgram={
             /* 0 МТИС */ {"Охота и рыбалка"},
             /* 1 Аксиома-сервис */ {"+TV Belviasat","365 Дней","8 канал (Беларусь)","CNN International","Discovery Channel","Euronews","Eurosport","Eurosport 2","JimJam","Mezzo","National Geographic","Nickelodeon","RTVi","TV1000",

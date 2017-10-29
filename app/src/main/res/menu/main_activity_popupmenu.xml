@@ -27,9 +27,11 @@
         android:icon="@android:drawable/ic_menu_my_calendar"
         />
 
-    <item android:id="@+id/menu_main_tvpower"
-        android:title="@string/menu_tvpower"
+    <item
+        android:id="@+id/menu_main_tvpower"
         android:icon="@android:drawable/ic_media_play"
-        />
+        android:title="@string/menu_tvpower"
+
+        android:visible="false" />
 
 </menu>
