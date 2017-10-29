@@ -57,8 +57,11 @@ public class Utils {
 
         if (ChannelName.equalsIgnoreCase("Техно 24")) {
             id = R.drawable.a24tehno;
-        } else if (ChannelName.equalsIgnoreCase("8 канал")) {
+        } else if (ChannelName.equalsIgnoreCase("8 канал") || ChannelName.equalsIgnoreCase("8 канал (Беларусь)")) {
             id = R.drawable.a8moj;
+
+        } else if (ChannelName.equalsIgnoreCase("А2")) {
+            id = R.drawable.a2;
         } else if (ChannelName.equalsIgnoreCase("Animal Planet")) {
             id = R.drawable.animalplanet;
         } else if (ChannelName.equalsIgnoreCase("Беларусь 1")) {
@@ -73,12 +76,20 @@ public class Utils {
             id = R.drawable.discoveryworld;
         } else if (ChannelName.equalsIgnoreCase("Gulli")) {
             id = R.drawable.gulli;
+        } else if (ChannelName.equalsIgnoreCase("Eureka HD")) {
+            id = R.drawable.eureka;
+        } else if (ChannelName.equalsIgnoreCase("Europa Plus TV")) {
+            id = R.drawable.europaplus;
+        } else if (ChannelName.equalsIgnoreCase("History")) {
+            id = R.drawable.history;
         } else if (ChannelName.equalsIgnoreCase("Nat Geo Wild")) {
             id = R.drawable.natgeowild;
         } else if (ChannelName.equalsIgnoreCase("National Geographic Channel")) {
             id = R.drawable.nationalgeographic;
         } else if (ChannelName.equalsIgnoreCase("Nautical Channel")) {
             id = R.drawable.nautical;
+        } else if (ChannelName.equalsIgnoreCase("Nick Jr")) {
+            id = R.drawable.nickjr;
         } else if (ChannelName.equalsIgnoreCase("RU.TV")) {
             id = R.drawable.rutv;
         } else if (ChannelName.equalsIgnoreCase("Travel and Adventure")) {
@@ -121,6 +132,8 @@ public class Utils {
             id = R.drawable.mir;
         } else if (ChannelName.equalsIgnoreCase("Моя Планета")) {
             id = R.drawable.myplanet;
+        } else if (ChannelName.equalsIgnoreCase("Мужское кино")) {
+            id = R.drawable.muzkino;
         } else if (ChannelName.equalsIgnoreCase("Наше кино")) {
             id = R.drawable.nashekino;
         } else if (ChannelName.equalsIgnoreCase("НТВ Беларусь")) {
