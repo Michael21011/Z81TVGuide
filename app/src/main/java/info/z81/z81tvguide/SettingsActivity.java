@@ -39,7 +39,7 @@ import android.widget.AdapterView;
  */
 
     public class SettingsActivity extends Activity {
-    String[] data = {"МТИС", "teleguide.info"};
+    String[] data = {"МТИС", "teleguide.info","epg.by"};
     String[] favoriteSet = {"МТИС Цифровой",  "Аксиома-сервис", "Атлант Телеком","Космос ТВ *в планах*","НТВ-Плюс *в планах*","Триколор *в планах*","Zala Базовый","Zala Все включено"};
     String[][] favoritProgram={
             /* 0 МТИС Цифровой*/ {"8 Канал","БелМузТВ (Беларусь)","Беларусь 1","Беларусь 2","Беларусь 3","Беларусь 5","ВТВ (Первый музыкальный)","Дом кино","Домашний","EuroNews","Europa Plus TV","Fox","Galaxy TV","Gulli","HD Life","History","IQ HD","Карусель International","МИР","МИР HD","MTV Hits","Мульт","Моя Планета","National Geographic","Наука 2.0","НТВ Беларусь","ОНТ (Беларусь)","Paramount Comedy","РТР Беларусь","Русский Иллюзион","RU.TV","Сарафан ТВ","SONY Sci-Fi","Sony Turbo","СТВ","ТВ-3","24 Техно","ТНТ","ТРО","TV1000 Comedy HD","TV1000 Русское кино","TV1000","TV1000 Action","Viasat Explorer","Viasat History","Viasat Nature CEE","Авто Плюс","РБК","Домашние животные","Киномикс","КХЛ HD","Ля-Минор","Мужское кино","Наш Футбол HD","Охота и рыбалка","Россия Культура","Союз","Усадьба"},

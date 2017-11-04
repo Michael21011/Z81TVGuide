@@ -319,6 +319,9 @@ public class MainActivity extends ActionBarActivity {
             case 1:
                 Provider = new TeleGuideInfoProvider();
                 break;
+            case 2:
+                Provider = new EPGProvider();
+                break;
             default:
                 Provider = new MTISProvider();
 
