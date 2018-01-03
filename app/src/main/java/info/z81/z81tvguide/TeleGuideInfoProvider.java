@@ -20,4 +20,9 @@ public final class TeleGuideInfoProvider extends CustomProvider {
         return "http://www.teleguide.info/download/old/xmltv.xml.gz";
     }
 
+    @Override
+    public String ProviderName() {
+        return "teleguide.info";
+    }
+
 }

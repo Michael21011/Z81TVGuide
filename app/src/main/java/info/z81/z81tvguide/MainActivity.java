@@ -769,8 +769,10 @@ public class MainActivity extends ActionBarActivity {
             UpdateInProgress = false;
             // Commented because empty string with it
             //   mProgressDialog.dismiss();
-            if (result != null)
+            if (result != null) {
                 Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
+                openSettingsActivity();
+            }
             else {
                 Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
                 IsForceUnzipFile = true;
@@ -890,8 +892,10 @@ public class MainActivity extends ActionBarActivity {
             // mProgressDialog.dismiss();
             UpdateInProgress = false;
             Boolean halt = false;
-            if (result != null)
+            if (result != null) {
                 Toast.makeText(context, "Parse file error: " + result, Toast.LENGTH_LONG).show();
+                openSettingsActivity();
+            }
 
 
             else {
@@ -929,7 +933,7 @@ public class MainActivity extends ActionBarActivity {
                 } else if (val == 1) {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();
-                        ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
                         halt = true;
                         //  System.exit(0);
                     }
@@ -938,7 +942,7 @@ public class MainActivity extends ActionBarActivity {
                 } else if (val == -1) {
                     if (NeedDownloadFuture) {
                         mProgressDialog.dismiss();
-                        ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausenocurrent));
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
                         halt = true;
                         //System.exit(0);
                     }
@@ -998,6 +1002,8 @@ public class MainActivity extends ActionBarActivity {
 
 //loop for channel
                     StringBuilder builder = new StringBuilder();
+                    Map<String,String> normalMap=Utils.GetNormalaizedList();
+
                     while (!breakLoop){
                         CurrentString = br.readLine();
 
@@ -1016,8 +1022,8 @@ public class MainActivity extends ActionBarActivity {
                         }
                         if (channelFinished) {
                             String s=builder.toString();
-                            String channelName=Utils.XMLGetElementValue(s, "display-name");
-                            tvProgram.AddChannel(Utils.XMLGetAttributeValue(s, "channel", "id"), channelName, Utils.XMLGetAttributeValue(s, "icon", "src"), ChannelIsFavorite(channelName));
+                            String channelName=Utils.NormalazeChannelName(Utils.XMLGetElementValue(s, "display-name"), normalMap);
+                            tvProgram.AddChannel(Utils.XMLGetAttributeValue(s, "channel", "id"),  channelName, Utils.XMLGetAttributeValue(s, "icon", "src"), ChannelIsFavorite(channelName));
                             builder.setLength(0);
                         }
 
@@ -1090,7 +1096,6 @@ public class MainActivity extends ActionBarActivity {
 
                     br.close();
                     fr.close();
-
                 }
 
 
@@ -1104,11 +1109,9 @@ public class MainActivity extends ActionBarActivity {
 
             } catch (Exception e) {
 
-
-                System.err.println(e.getMessage());
-
-                File f = new File(Params[0] + "/" + Provider.LocalFileName());
                 try {
+                File f = new File(Params[0] + "/" + Provider.LocalFileName());
+
                     f.delete();
                 } catch (Exception ex) {
                     System.err.println(e.getMessage());

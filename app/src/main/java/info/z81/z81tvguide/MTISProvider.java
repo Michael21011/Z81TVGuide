@@ -20,5 +20,10 @@ public final class MTISProvider extends CustomProvider {
         return "http://mtis.by/program_xml_old.zip";
     }
 
+    @Override
+    public String ProviderName() {
+        return "mtis.by";
+    }
+
 
 }

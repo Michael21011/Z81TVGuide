@@ -20,4 +20,9 @@ public class EPGProvider extends CustomProvider {
         return "https://epg.by/program?get=xml";
     }
 
+    @Override
+    public String ProviderName() {
+        return "epg.by";
+    }
+
 }

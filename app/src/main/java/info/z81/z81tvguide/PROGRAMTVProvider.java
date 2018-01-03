@@ -20,4 +20,9 @@ public final class PROGRAMTVProvider extends CustomProvider {
         return DownloadUrl();
     }
 
+    @Override
+    public String ProviderName() {
+        return "programtv.ru";
+    }
+
 }

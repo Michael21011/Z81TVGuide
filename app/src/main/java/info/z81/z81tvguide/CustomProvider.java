@@ -8,5 +8,8 @@ public abstract class CustomProvider {
     public  abstract String DownloadUrl();
     public abstract String LocalFileName();
     public abstract String FilePreviousURL();
+    public abstract String ProviderName();
+
+
 }
 

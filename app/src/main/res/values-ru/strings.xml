@@ -26,7 +26,7 @@
     <string name="mark_all_as_favorite">Отметить все как избранные</string>
     <string name="unmark_all_as_favorite">Убрать все отметки с избранных</string>
     <string name="action_ShowOnlyFavorites">Только избранное или все</string>
-    <string name="needclosebecausenocurrent">На сайте отсутствует свежая телепрограмма(в формате XML). Попробуйте позже, пожалуйста. Информационно-сервисная служба МТИС 8 (017) 218-09-09</string>
+    <string name="needclosebecausenocurrent">На сайте %s отсутствует свежая телепрограмма(в формате XML). Попробуйте позже, пожалуйста.</string>
     <string name="menu_share">Поделиться</string>
     <string name="menu_createevent">Добавить в Календарь</string>
     <string name="title_activity_one_channel_program">Программа телеканала</string>
