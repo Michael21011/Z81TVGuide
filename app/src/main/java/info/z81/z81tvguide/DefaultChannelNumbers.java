@@ -8,7 +8,7 @@ package info.z81.z81tvguide;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public  class DefaultChannelNumbers {
+public  class DefaultChannelNumbers implements Serializable {
     private HashMap<String, Integer> digitalMap;
 
     public DefaultChannelNumbers() {

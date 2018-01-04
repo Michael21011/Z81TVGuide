@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by michael on 08.10.15.
  * Object contains TV Guide entirely
  */
-public class TVProgram {
+public class  TVProgram implements Serializable{
 
     private ArrayList<ProgramList> list;
     private ArrayList<ProgramList> filteredList;

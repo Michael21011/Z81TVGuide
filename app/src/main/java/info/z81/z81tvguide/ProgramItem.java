@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by michael on 08.10.15.
  */
-public class ProgramItem  {
+public class ProgramItem implements Serializable  {
     public String Title;
     public Date DateStart;
     public Date DateEnd;

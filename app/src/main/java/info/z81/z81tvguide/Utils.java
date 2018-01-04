@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Created by Michael on 24.04.2015.
  */
@@ -57,6 +58,7 @@ public class Utils {
     public static int getChannelLogoByName(String ChannelName) {
 
         int id;
+
 
         if (ChannelName.equalsIgnoreCase("Техно 24")) {
             id = R.drawable.a24tehno;

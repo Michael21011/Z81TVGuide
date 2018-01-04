@@ -18,7 +18,7 @@ import java.util.GregorianCalendar;
  * Object contains TV Guide for ONE channel
  */
 
-public class ProgramList  {
+public class ProgramList implements Serializable  {
 
     public String ChannelId;
     public String ChannelName;

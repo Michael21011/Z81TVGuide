@@ -54,7 +54,8 @@
     <string name="action_reload">Load</string>
     <string name="settings_favoriteSet">Your TV provider</string>
     <string name="settings_big_description">select your settings :)</string>
-    <string name="menu_tvpower">Включить</string>
+    <string name="menu_tvpower">Turn on</string>
+    <string name="task_load_object">Read from cache</string>
 
 
 </resources>

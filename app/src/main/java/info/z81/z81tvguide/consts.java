@@ -4,7 +4,7 @@ package info.z81.z81tvguide;
  * Created  on 09.11.2017.
  */
 
- public  class  consts {
+public  class  consts {
     public static final String c_1HD = "1HD";
     public static final String c_2ChannelMogilev = "2 КАНАЛ Могилёв";
     public static final String c_2plus2 = "2+2";

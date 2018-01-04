@@ -9,7 +9,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -99,6 +102,7 @@ public class MainActivity extends ActionBarActivity {
     private static String internalFilePath = "z81_program.txt";
     public final static String const_programListIndex = "ProgramListIndex";
     public final static String const_filterString = "FilterString";
+    public final static String SerializedFilePath="stored.txt";
     private Z81TVGuide myApplication;
     private CustomProvider Provider;
 
@@ -109,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
     private int XMLLoadProgress = 20;
     private Boolean ShowOnlyFavorites = true;
     private Boolean NeedRefreshList = false;
-    private Boolean NeedRebuildList = true;
+    private Boolean NeedRebuildList = false;
     private Boolean NeedDownloadFuture = false;
     private Boolean NeedDownloadPast = false;
     private Boolean UpdateInProgress = false;
@@ -597,9 +601,24 @@ public class MainActivity extends ActionBarActivity {
         LoadProvider();
         String DownloadFileName = GetDownloadedFileName();
         File myF = new File(DownloadFileName);
+        File serialisedFile = new File(GetFullFilePath(SerializedFilePath));
         if ((tvProgram.ChannelCount() > 0) & !NeedRebuildList) {
             UpdateContentInBackground(this);
-        } else if (myF.exists()) {
+        }
+        else if (serialisedFile.exists() & !NeedRebuildList)
+        {
+            final LoadObjectTask loadObjectTask = new LoadObjectTask(this);
+            loadObjectTask.execute(this.getFilesDir().getPath());
+
+            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                    @Override
+                                                    public void onCancel(DialogInterface dialog) {
+                                                        loadObjectTask.cancel(true);
+                                                    }
+                                                }
+            );
+        }
+        else if (myF.exists()) {
 
             final ParseFileTask parseFileTask = new ParseFileTask(this);
             parseFileTask.execute(this.getFilesDir().getPath());
@@ -617,7 +636,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private String GetDownloadedFileName() {
-        return this.getFilesDir().getPath() + "/" + Provider.LocalFileName();
+        return GetFullFilePath(Provider.LocalFileName());
+
+    }
+
+    private String GetFullFilePath(String fileName)
+    {
+        return this.getFilesDir().getPath() + "/" + fileName;
     }
 
 
@@ -1101,6 +1126,12 @@ public class MainActivity extends ActionBarActivity {
 
                 tvProgram.sort();
 
+                FileOutputStream fos = new FileOutputStream(GetFullFilePath(SerializedFilePath));
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(tvProgram);
+                oos.flush();
+                oos.close();
+
                 NeedRebuildList = false;
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Event")
@@ -1127,7 +1158,133 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
+    private class LoadObjectTask extends AsyncTask<String, Integer, String> {
+        private Context context;
+        private ArrayList<String> newChannelList = new ArrayList<String>();
 
+        public LoadObjectTask(Context context) {
+            this.context = context;
+            tvProgram.Clear();
+            mProgressDialog.setMessage(getString(R.string.task_load_object));
+        }
+
+        @Override
+        protected void onPreExecute() {
+            UpdateInProgress = true;
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            // if we get here, length is known, now set indeterminate to false
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setMax(100);
+            mProgressDialog.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //Commented because empty screen with it
+            // mProgressDialog.dismiss();
+            UpdateInProgress = false;
+            Boolean halt = false;
+            if (result != null) {
+                Toast.makeText(context, "Cache load error: " + result, Toast.LENGTH_LONG).show();
+                openSettingsActivity();
+            }
+
+
+            else {
+                int val = tvProgram.IsCurrent();
+                if (val == 0) {
+                    NeedDownloadPast = false;
+                    NeedDownloadFuture = false;
+                    final UpdateProgramTask updateProgramTask = new UpdateProgramTask(context);
+                    updateProgramTask.execute();
+
+                    mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                            @Override
+                                                            public void onCancel(DialogInterface dialog) {
+                                                                updateProgramTask.cancel(true);
+                                                            }
+                                                        }
+
+                    );
+                } else if (val == 1) {
+                    if (NeedDownloadPast) {
+                        mProgressDialog.dismiss();
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
+                        halt = true;
+                        //  System.exit(0);
+                    }
+                    NeedDownloadPast = true;
+                    downloadList(true);
+                } else if (val == -1) {
+                    if (NeedDownloadFuture) {
+                        mProgressDialog.dismiss();
+                        ShowAlertAndClose(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
+                        halt = true;
+                        //System.exit(0);
+                    }
+                    NeedDownloadFuture = true;
+                    if (!halt) {
+                        downloadList(false);
+                    }
+                }
+
+
+              /*  runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateListView();
+                    }
+                });
+                */
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... Params) {
+            // ParseFileTask
+            // take CPU lock to prevent CPU from going off if the user
+            // presses the power button during download
+            //  PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            //  PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,  getClass().getName());
+            //  wl.acquire();
+            Document document = null;
+            try {
+
+
+                FileInputStream fis = new FileInputStream(GetFullFilePath(SerializedFilePath));
+                ObjectInputStream oin = new ObjectInputStream(fis);
+                tvProgram = (TVProgram) oin.readObject();
+
+                NeedRebuildList = false;
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Event")
+                        .setAction("ParseFileTask")
+                        .build());
+
+            } catch (Exception e) {
+
+                try {
+                    File f = new File(Params[0] + "/" + Provider.LocalFileName());
+
+                    f.delete();
+                } catch (Exception ex) {
+                    System.err.println(e.getMessage());
+                }
+                return e.getMessage();
+                //ShowAlertAndClose(getResources().getString(R.string.app_name), getResources().getString(R.string.needclosebecausewronhgxml));
+
+            } finally {
+                //    wl.release();
+            }
+            return null;
+        }
+
+
+    }
     private class UpdateProgramTask extends AsyncTask<String, Integer, String> {
         private Context context;
         private String[] catnames = new String[1000];
