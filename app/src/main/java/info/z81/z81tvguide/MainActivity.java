@@ -86,6 +86,8 @@ public class MainActivity extends ActionBarActivity {
     public static SharedPreferences favoriteChannelListPreference;
     public static SharedPreferences knownChannelListPreference;
     public static SharedPreferences settingPreference;
+    public static SharedPreferences myChannelsPreference;
+
     public static Resources MyResources;
     private static String TutorialVideoURL = "https://www.youtube.com/watch?v=kk3UyIk6sPM";
     //multi private static String FileURL = "http://mtis.by/program_xml.zip";
@@ -1268,7 +1270,7 @@ public class MainActivity extends ActionBarActivity {
             } catch (Exception e) {
 
                 try {
-                    File f = new File(Params[0] + "/" + Provider.LocalFileName());
+                    File f = new File(GetFullFilePath(SerializedFilePath));
 
                     f.delete();
                 } catch (Exception ex) {

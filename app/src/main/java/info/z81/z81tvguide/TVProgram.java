@@ -109,8 +109,11 @@ public class  TVProgram implements Serializable{
     }
 
     public ProgramList GetFilteredItem(int arg0) {
-
-        return filteredList.get(arg0);
+        if (arg0<filteredList.size()) {
+            return filteredList.get(arg0);
+        }
+        else
+            return null;
     }
 
     public int IsCurrent() {
