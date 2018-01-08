@@ -37,7 +37,7 @@ public class  TVProgram implements Serializable{
         if (!IsChannelExists(ChannelId)) {
             ProgramList pl = new ProgramList(ChannelId, ChannelName, IconUrl, IsFavorit);
             pl.DigitalNumber = GetChannelDigitalNumber(ChannelName);
-            pl.tvProgram = this;
+           // pl.tvProgram = this;
 
             list.add(pl);
         }
@@ -109,7 +109,11 @@ public class  TVProgram implements Serializable{
     }
 
     public ProgramList GetFilteredItem(int arg0) {
-        if (arg0<filteredList.size()) {
+        if (filteredList==null)
+        {
+            return null;
+        }
+        else if (arg0<filteredList.size()) {
             return filteredList.get(arg0);
         }
         else

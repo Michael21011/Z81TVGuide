@@ -12,11 +12,13 @@ import android.widget.TextView;
 public class NowAdapter extends BaseAdapter{
     private final Context context;
     private final NowList list;
+    private TVProgram tvProgram;
     
-    public NowAdapter(Context context, NowList values) {
+    public NowAdapter(Context context, NowList values, TVProgram tvProgram) {
         super();
     	this.list = values;
         this.context = context;
+        this.tvProgram = tvProgram;
 
     }
     
@@ -59,7 +61,7 @@ public class NowAdapter extends BaseAdapter{
         holder.programmView.setText(currentItem.Title);
             if (currentItem.getChannelLogo()==R.drawable.empty)
             {
-                Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName, MainActivity.tvProgram.GetProgramList(currentItem.ChannelId).IconUrl);
+                Utils.LoadBitmapFromInternet(holder.imageView, currentItem.ChannelName, tvProgram.GetProgramList(currentItem.ChannelId).IconUrl);
             }
             else
             {

@@ -119,7 +119,7 @@ public class MainActivity extends ActionBarActivity {
     private Boolean NeedDownloadFuture = false;
     private Boolean NeedDownloadPast = false;
     private Boolean UpdateInProgress = false;
-    public static TVProgram tvProgram;
+    public  TVProgram tvProgram;
     private Tracker mTracker;
     private int currentPosition = 0;
 
@@ -144,6 +144,7 @@ public class MainActivity extends ActionBarActivity {
         digitalNumberPreference = getSharedPreferences("digitalNumbers", MODE_PRIVATE);
         knownChannelListPreference = getSharedPreferences("knownChannel", MODE_PRIVATE);
         settingPreference = getSharedPreferences("settings", MODE_PRIVATE);
+        myChannelsPreference= getSharedPreferences("myChannels", MODE_PRIVATE);
 
         LoadProvider();
 
@@ -234,7 +235,7 @@ public class MainActivity extends ActionBarActivity {
     protected void updateListView() {
 
         final ListView lv1 = (ListView) findViewById(R.id.listView1);
-        NowAdapter adapter = new NowAdapter(this, nowList);
+        NowAdapter adapter = new NowAdapter(this, nowList, tvProgram);
         lv1.setAdapter(adapter);
         SetListViewListeners();
     }
@@ -960,8 +961,10 @@ public class MainActivity extends ActionBarActivity {
                 } else if (val == 1) {
                     if (NeedDownloadPast) {
                         mProgressDialog.dismiss();
-                        ShowAlertAndClose(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
+                        ShowInfo(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
                         halt = true;
+                        openSettingsActivity();
+
                         //  System.exit(0);
                     }
                     NeedDownloadPast = true;
@@ -969,7 +972,8 @@ public class MainActivity extends ActionBarActivity {
                 } else if (val == -1) {
                     if (NeedDownloadFuture) {
                         mProgressDialog.dismiss();
-                        ShowAlertAndClose(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
+                        ShowInfo(getResources().getString(R.string.app_name), String.format(getResources().getString(R.string.needclosebecausenocurrent),Provider.ProviderName()));
+                        openSettingsActivity();
                         halt = true;
                         //System.exit(0);
                     }
@@ -1050,7 +1054,10 @@ public class MainActivity extends ActionBarActivity {
                         if (channelFinished) {
                             String s=builder.toString();
                             String channelName=Utils.NormalazeChannelName(Utils.XMLGetElementValue(s, "display-name"), normalMap);
-                            tvProgram.AddChannel(Utils.XMLGetAttributeValue(s, "channel", "id"),  channelName, Utils.XMLGetAttributeValue(s, "icon", "src"), ChannelIsFavorite(channelName));
+                            // add only channels for MyChannel list
+                            if (ChannelIsMyChannel(channelName)) {
+                                tvProgram.AddChannel(Utils.XMLGetAttributeValue(s, "channel", "id"), channelName, Utils.XMLGetAttributeValue(s, "icon", "src"), ChannelIsFavorite(channelName));
+                            }
                             builder.setLength(0);
                         }
 
@@ -1072,7 +1079,7 @@ public class MainActivity extends ActionBarActivity {
                     Boolean ProgramStarted = true;
                     Boolean ProgramFinished = false;
 
-                    while (!breakLoop){
+                    while (!breakLoop && ChannelCount>0){
                         // process the line.
 
                         CurrentString = br.readLine();
@@ -1102,8 +1109,11 @@ public class MainActivity extends ActionBarActivity {
                                 {breakLoop = true;}
                                 */
                             }
-
-                            tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")), Utils.XMLGetElementValue(s, "desc"));
+                            // will add only program for channel in MyChannel list
+                            if (tvProgram.GetProgramListIndex(ChannelId)!=-1)
+                            {
+                                tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")), Utils.XMLGetElementValue(s, "desc"));
+                            }
                             builder.setLength(0);
 
 
@@ -1444,6 +1454,19 @@ public class MainActivity extends ActionBarActivity {
     public boolean ChannelIsFavorite(String ChannelName)
     {
         return favoriteChannelListPreference.getBoolean(ChannelName.toUpperCase(), false);
+    }
+
+    public boolean ChannelIsMyChannel(String ChannelName)
+    {
+        boolean result= myChannelsPreference.getBoolean(ChannelName.toUpperCase(), false);
+        if (!result)
+        {
+
+           Map<String,?> m=myChannelsPreference.getAll();
+           if (m.size()==0)
+               result=true;
+        }
+        return result;
     }
 
 

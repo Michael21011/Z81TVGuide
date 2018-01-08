@@ -145,7 +145,7 @@ import android.widget.AdapterView;
                 Utils.WriteSharedPreference(Utils.FavoritSetParamName,position);
 
 
-                SharedPreferences.Editor ed = MainActivity.favoriteChannelListPreference.edit();
+                SharedPreferences.Editor ed = MainActivity.myChannelsPreference.edit();
                 ed.clear();
                 Map<String,String> normalMap=Utils.GetNormalaizedList();
                 for (int i=0;i<favoritProgram[position].length; i=i+1){

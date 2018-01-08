@@ -35,6 +35,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     private ContextMenu popupMenu;
     private Tracker mTracker;
     private String filterString;
+    private  Z81TVGuide application;
 
 
     @Override
@@ -42,12 +43,12 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         filterString = new String("");
 
-        Z81TVGuide application = (Z81TVGuide) getApplication();
+        application = (Z81TVGuide) getApplication();
         mTracker = application.getDefaultTracker();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
-        programList =    MainActivity.tvProgram.GetFilteredItem(programListIndex);
+        programList =    application.tvProgram.GetFilteredItem(programListIndex);
         filterString =getIntent().getStringExtra(MainActivity.const_filterString);
         setContentView(R.layout.one_channel_program);
         setTitle(programList.ChannelName);
@@ -80,7 +81,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         //Log.i(TAG, "Setting screen name: " + name);
         mTracker.setScreenName("Image~OneChannelProgramActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        programList =    MainActivity.tvProgram.GetFilteredItem(programListIndex);
+        programList =    application.tvProgram.GetFilteredItem(programListIndex);
 
     }
 

@@ -24,7 +24,7 @@ public class ProgramList implements Serializable  {
     public String ChannelName;
     public Integer DigitalNumber;
     public Integer AnalogNumber;
-    public TVProgram tvProgram;
+    //public TVProgram tvProgram;
     public String IconUrl;
     private boolean isNew;
 
@@ -46,10 +46,13 @@ public class ProgramList implements Serializable  {
     }
     public boolean IsNew()
     {
+        return false;
+        /*
        if (tvProgram==null)
            return isNew;
         else
         return !tvProgram.IsFirstRun && isNew;
+        */
     }
     public String getDigitalNumberLabel(boolean ShowEmpty) {
         if (DigitalNumber.equals(-1))
@@ -311,7 +314,8 @@ public class ProgramList implements Serializable  {
     }
 
     public boolean ShouldHighligt() {
-       boolean result;
+       boolean result=false;
+       /*
         if (tvProgram.IsFirstRun)
         {return false;}
         else {
@@ -322,6 +326,10 @@ public class ProgramList implements Serializable  {
 
             } else return true;
         }
+
+
+         */
+       return false;
     }
 
 
