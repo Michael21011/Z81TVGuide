@@ -20,6 +20,10 @@
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_menu_refresh"
         sabd:showAsAction="always" />
+    <item android:id="@+id/action_shownotes"
+        android:title="@string/action_shownotes_off"
+        android:icon="@drawable/ic_action_notes_off"
+        sabd:showAsAction="never" />
     <item android:id="@+id/action_download"
         android:title="@string/action_download"
         android:icon="@drawable/ic_menu_download"

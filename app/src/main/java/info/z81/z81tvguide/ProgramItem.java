@@ -35,5 +35,14 @@ public class ProgramItem implements Serializable  {
         return result;
     };
 
+    public byte[] WriteToCache(){
+        byte[] b_title=Title.getBytes();
+        b_title = Utils.AddSizeToBytes(b_title);
+        byte[] b_datestart=Utils.longToBytes(DateStart.getTime());
+        return Utils.CombyneBytes(b_title,b_datestart);
+    }
 
+    public void LoadFromCache(byte[] one){
+
+    }
 }

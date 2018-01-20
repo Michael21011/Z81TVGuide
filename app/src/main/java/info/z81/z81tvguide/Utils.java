@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static info.z81.z81tvguide.MainActivity.settingPreference;
+
 
 /**
  * Created by Michael on 24.04.2015.
@@ -62,7 +64,7 @@ public class Utils {
 
         if (ChannelName.equalsIgnoreCase("Техно 24")) {
             id = R.drawable.a24tehno;
-        } else if (ChannelName.equalsIgnoreCase("8 канал") || ChannelName.equalsIgnoreCase("8 канал (Беларусь)")) {
+        } else if (ChannelName.equalsIgnoreCase(consts.c_8Channel)) {
             id = R.drawable.a8moj;
 
         } else if (ChannelName.equalsIgnoreCase(consts.c_A2)) {
@@ -432,6 +434,7 @@ public class Utils {
         list.put("365 дней","365 дней");
         list.put("5 канал (Россия)","5 канал (Россия)");
         list.put("5-й канал (Укр)","5-й канал (Укр)");
+        list.put("8 канал (Беларусь)",consts.c_8Channel);
         list.put("8 Канал (Минск)","8 канал");
         list.put("8 Канал (СПб)","8 Канал (СПб)");
         list.put("A-ONE","A-ONE");
@@ -771,4 +774,74 @@ public class Utils {
     }
 
 
+
+    public static byte[] longToBytes(long l) {
+        byte[] result = new byte[8];
+        for (int i = 7; i >= 0; i--) {
+            result[i] = (byte)(l & 0xFF);
+            l >>= 8;
+        }
+        return result;
+    }
+
+
+
+    public static long bytesToLong(byte[] b) {
+        long result = 0;
+        for (int i = 0; i < 8; i++) {
+            result <<= 8;
+            result |= (b[i] & 0xFF);
+        }
+        return result;
+    }
+
+
+    public static byte[] intToBytes(int l) {
+        byte[] result = new byte[4];
+        for (int i = 3; i >= 0; i--) {
+            result[i] = (byte)(l & 0xFF);
+            l >>= 4;
+        }
+        return result;
+    }
+
+
+
+    public static int bytesToInt(byte[] b) {
+        int result = 0;
+        for (int i = 0; i < 4; i++) {
+            result <<= 4;
+            result |= (b[i] & 0xFF);
+        }
+        return result;
+    }
+public static byte[] CombyneBytes(byte[] one , byte[] two ) {
+
+    byte[] combined = new byte[one.length + two.length];
+
+    for (int i = 0; i < combined.length; ++i) {
+        combined[i] = i < one.length ? one[i] : two[i - one.length];
+    }
+    return combined;
+   }
+
+    public static byte[] AddSizeToBytes(byte[] one) {
+
+        int size = one.length;
+        byte[] two = intToBytes(size);
+
+        return CombyneBytes(two, one);
+    }
+
+    public static Boolean Preference_ShowNotes(){
+        return settingPreference.getBoolean(MainActivity.APP_PREFERENCES_SHOWNOTES, true);
+
+    }
+
+
+    public static void WritePreference_ShowNotes(Boolean ShowNotes){
+        SharedPreferences.Editor editor = settingPreference.edit();
+        editor.putBoolean(MainActivity.APP_PREFERENCES_SHOWNOTES, ShowNotes);
+        editor.commit();
+    }
 }

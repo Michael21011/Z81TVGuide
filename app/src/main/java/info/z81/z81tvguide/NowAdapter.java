@@ -13,12 +13,14 @@ public class NowAdapter extends BaseAdapter{
     private final Context context;
     private final NowList list;
     private TVProgram tvProgram;
+    private boolean ShowNotes;
     
-    public NowAdapter(Context context, NowList values, TVProgram tvProgram) {
+    public NowAdapter(Context context, NowList values, TVProgram tvProgram, boolean showNotes) {
         super();
     	this.list = values;
         this.context = context;
         this.tvProgram = tvProgram;
+        ShowNotes=showNotes;
 
     }
     
@@ -71,12 +73,12 @@ public class NowAdapter extends BaseAdapter{
 
         holder.imageView.setTag(Integer.valueOf(currentItem.ChannelId));
         holder.descView.setText(currentItem.Description);
-       /* if (currentItem.Description.isEmpty())
-            holder.descView.setVisibility(View.GONE);
-        else
+        if (ShowNotes && !currentItem.Description.equals(""))
             holder.descView.setVisibility(View.VISIBLE);
-            */
-            holder.descView.setHeight(0);
+        else {
+            holder.descView.setVisibility(View.GONE);
+            //holder.descView.setHeight(0);
+        }
         // ��������� ������ ��� Windows � iPhone
    /*     String s = names[position];
         if (s.startsWith("Windows7") || s.startsWith("iPhone")

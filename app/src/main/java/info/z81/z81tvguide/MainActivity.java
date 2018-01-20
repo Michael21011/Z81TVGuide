@@ -94,6 +94,7 @@ public class MainActivity extends ActionBarActivity {
     //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
     //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
     public static final String APP_PREFERENCES_VIDEOTUTORIALVERSION = "videotutorialversion";
+    public static final String APP_PREFERENCES_SHOWNOTES="shownotes";
     public static final int videotutorialversion = 1;
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
@@ -114,6 +115,7 @@ public class MainActivity extends ActionBarActivity {
 
     private int XMLLoadProgress = 20;
     private Boolean ShowOnlyFavorites = true;
+    public Boolean ShowNotes = true;
     private Boolean NeedRefreshList = false;
     private Boolean NeedRebuildList = false;
     private Boolean NeedDownloadFuture = false;
@@ -161,6 +163,11 @@ public class MainActivity extends ActionBarActivity {
             UpdateContentInBackground(this);
         }
         registerForContextMenu(findViewById(R.id.listView1));
+
+        if (settingPreference.contains(APP_PREFERENCES_SHOWNOTES)) {
+            // Получаем число из настроек
+            ShowNotes = Utils.Preference_ShowNotes();
+        }
 
 
         int videoversion = 0;
@@ -235,7 +242,7 @@ public class MainActivity extends ActionBarActivity {
     protected void updateListView() {
 
         final ListView lv1 = (ListView) findViewById(R.id.listView1);
-        NowAdapter adapter = new NowAdapter(this, nowList, tvProgram);
+        NowAdapter adapter = new NowAdapter(this, nowList, tvProgram, ShowNotes);
         lv1.setAdapter(adapter);
         SetListViewListeners();
     }
@@ -455,6 +462,13 @@ public class MainActivity extends ActionBarActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_actions, menu);
+        if (ShowNotes) {
+
+            menu.findItem(R.id.action_shownotes).setTitle(R.string.action_shownotes_on);
+        }
+        else {
+            menu.findItem(R.id.action_shownotes).setTitle(R.string.action_shownotes_off);
+        }
         return super.onCreateOptionsMenu(menu);
 
 
@@ -523,6 +537,16 @@ public class MainActivity extends ActionBarActivity {
                         .build());
                 openTutorialVideo();
                 return true;
+
+            case R.id.action_shownotes:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("ShowNotes")
+                        .build());
+                SwithShowNotes(item);
+                return true;
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -552,6 +576,24 @@ public class MainActivity extends ActionBarActivity {
         UpdateContentInBackground(this);
         //showContentInBackground(null);
     }
+
+    private void SwithShowNotes(MenuItem item) {
+        ShowNotes = !ShowNotes;
+        if (ShowNotes) {
+            item.setIcon(R.drawable.ic_action_notes_on);
+            item.setTitle(R.string.action_shownotes_on);
+        } else {item.setIcon(R.drawable.ic_action_notes_off);
+        item.setTitle(R.string.action_shownotes_off);}
+        SharedPreferences.Editor editor = settingPreference.edit();
+        editor.putBoolean(APP_PREFERENCES_SHOWNOTES, ShowNotes);
+        editor.commit();
+
+
+        UpdateContentInBackground(this);
+        //showContentInBackground(null);
+    }
+
+
 
     private void openChannelListActivity(String ChannelName) {
         Intent intent = new Intent(this, ChannelListActivity.class);
@@ -1078,6 +1120,7 @@ public class MainActivity extends ActionBarActivity {
                     breakLoop = false;
                     Boolean ProgramStarted = true;
                     Boolean ProgramFinished = false;
+                    Boolean LastChannelWasSkipped = false;
 
                     while (!breakLoop && ChannelCount>0){
                         // process the line.
@@ -1103,6 +1146,7 @@ public class MainActivity extends ActionBarActivity {
                             String ChannelId = Utils.XMLGetAttributeValue(s, "programme", "channel");
                             if (!LatestChannel.equals(ChannelId)) {
                                 CurentLineNo++;
+                                LastChannelWasSkipped = (tvProgram.GetProgramListIndex(ChannelId)==-1);
                                 LatestChannel = ChannelId;
                                 publishProgress((int) (XMLLoadProgress + CurentLineNo * (100 - XMLLoadProgress) / ChannelCount));
                              /*   if (( (XMLLoadProgress+ CurentLineNo * (100-XMLLoadProgress ) / ChannelCount)>60))
@@ -1110,9 +1154,11 @@ public class MainActivity extends ActionBarActivity {
                                 */
                             }
                             // will add only program for channel in MyChannel list
-                            if (tvProgram.GetProgramListIndex(ChannelId)!=-1)
+
+                            if (!LastChannelWasSkipped )
                             {
                                 tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")), Utils.XMLGetElementValue(s, "desc"));
+                                LastChannelWasSkipped = false;
                             }
                             builder.setLength(0);
 
@@ -1137,6 +1183,7 @@ public class MainActivity extends ActionBarActivity {
 
 
                 tvProgram.sort();
+                myApplication.tvProgram=tvProgram;
 
                 FileOutputStream fos = new FileOutputStream(GetFullFilePath(SerializedFilePath));
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -1270,7 +1317,7 @@ public class MainActivity extends ActionBarActivity {
                 FileInputStream fis = new FileInputStream(GetFullFilePath(SerializedFilePath));
                 ObjectInputStream oin = new ObjectInputStream(fis);
                 tvProgram = (TVProgram) oin.readObject();
-
+                myApplication.tvProgram=tvProgram;
                 NeedRebuildList = false;
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Event")
@@ -1370,7 +1417,7 @@ public class MainActivity extends ActionBarActivity {
                         }
 
                         if (pi != null) {
-                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, pi.Description, pl.DigitalNumber, pi.Position);
+                            nowList.Add(pl.ChannelId, pl.ChannelName, pi.Title, pi.DateStart, ShowNotes?pi.Description:"", pl.DigitalNumber, pi.Position);
                         }
                     }
                 }

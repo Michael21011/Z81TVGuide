@@ -3,6 +3,9 @@ package info.z81.z81tvguide;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -330,6 +333,40 @@ public class ProgramList implements Serializable  {
 
          */
        return false;
+    }
+
+    public void WriteToCache(){
+
+    }
+
+    public void LoadFromCache(){
+
+    }
+
+
+    private void writeObject(ObjectOutputStream out) throws IOException
+    {
+        out.writeUTF(ChannelId);
+        out.writeUTF(ChannelName);
+        out.writeInt(DigitalNumber);
+
+        out.writeUTF(IconUrl);
+        out.writeBoolean(isNew);
+        out.writeObject(list);
+
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+    {
+        ChannelId = in.readUTF();
+        ChannelName = in.readUTF();
+        DigitalNumber = in.readInt();
+
+        IconUrl = in.readUTF();
+        isNew = in.readBoolean();
+        list = (ArrayList<ProgramItem>)in.readObject();
+        filteredList  = list;
+
     }
 
 

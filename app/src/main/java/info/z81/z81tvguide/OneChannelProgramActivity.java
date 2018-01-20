@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -48,7 +49,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
-        programList =    application.tvProgram.GetFilteredItem(programListIndex);
+        programList =    application.tvProgram.GetItem(programListIndex);
         filterString =getIntent().getStringExtra(MainActivity.const_filterString);
         setContentView(R.layout.one_channel_program);
         setTitle(programList.ChannelName);
@@ -146,6 +147,17 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.onechannel_option, menu);
 
+        if (Utils.Preference_ShowNotes()) {
+
+            menu.findItem(R.id.action_shownotes).setTitle(R.string.action_shownotes_on);
+            menu.findItem(R.id.action_shownotes).setIcon(R.drawable.ic_action_notes_on);
+
+        }
+        else {
+            menu.findItem(R.id.action_shownotes).setTitle(R.string.action_shownotes_off);
+            menu.findItem(R.id.action_shownotes).setIcon(R.drawable.ic_action_notes_off);
+        }
+
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = null;
@@ -219,6 +231,33 @@ searchView.setQuery(filterString, false);
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_shownotes:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("ShowNotes")
+                        .build());
+                SwithShowNotes(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void SwithShowNotes(MenuItem item) {
+        Boolean ShowNotes=!Utils.Preference_ShowNotes();
+        if (Utils.Preference_ShowNotes()) {
+            item.setIcon(R.drawable.ic_action_notes_on);
+            item.setTitle(R.string.action_shownotes_on);
+        } else {item.setIcon(R.drawable.ic_action_notes_off);
+            item.setTitle(R.string.action_shownotes_off);}
+        Utils.WritePreference_ShowNotes(ShowNotes);
+        updateListView();
+
+    }
 
 
     @Override

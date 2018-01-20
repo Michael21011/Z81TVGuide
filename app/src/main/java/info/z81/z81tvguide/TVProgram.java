@@ -3,6 +3,9 @@ package info.z81.z81tvguide;
 import android.content.SharedPreferences;
 import android.hardware.camera2.params.BlackLevelPattern;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +30,11 @@ public class  TVProgram implements Serializable{
         int s = MainActivity.knownChannelListPreference.getAll().size();
         IsFirstRun = (s == 0);
 
+    }
+    public void UpdateFilter()
+    {
+        filteredList = new ArrayList<>();
+        filteredList.addAll(list);
     }
 
     public void Clear() {
@@ -80,7 +88,7 @@ public class  TVProgram implements Serializable{
 
     public int GetProgramListIndex(String ChannelId) {
         for (int j = 0; j < ChannelCount(); j++) {
-            if (this.GetItem(j).ChannelId.equals(ChannelId)) {
+            if (Integer.parseInt(this.GetItem(j).ChannelId)==Integer.parseInt(ChannelId)) {
                 return j;
             }
 
@@ -111,9 +119,10 @@ public class  TVProgram implements Serializable{
     public ProgramList GetFilteredItem(int arg0) {
         if (filteredList==null)
         {
-            return null;
+            filteredList = new ArrayList<>();
+            filteredList.addAll(list);
         }
-        else if (arg0<filteredList.size()) {
+        if (arg0<filteredList.size()) {
             return filteredList.get(arg0);
         }
         else
@@ -193,6 +202,23 @@ public class  TVProgram implements Serializable{
 
     public void sort() {
         Collections.sort(list, new ChannelCustomComparator());
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException
+    {
+        out.writeObject(list);
+        out.writeObject(defaultChannelNumbers);
+
+
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+    {
+
+        list = (ArrayList<ProgramList>)in.readObject();
+        defaultChannelNumbers = (DefaultChannelNumbers)in.readObject();
+        UpdateFilter();
+
     }
 
 

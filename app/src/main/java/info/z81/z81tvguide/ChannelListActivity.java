@@ -273,7 +273,9 @@ public class ChannelListActivity extends ActionBarActivity {
     public void OpenOneChannelProgramActivity(int ItemIndex)
     {
         Intent intent = new Intent(ChannelListActivity.this, OneChannelProgramActivity.class);
-        intent.putExtra(MainActivity.const_programListIndex, ItemIndex);
+
+
+        intent.putExtra(MainActivity.const_programListIndex, tvProgram.GetProgramListIndex(tvProgram.GetFilteredItem(ItemIndex).ChannelId));
         intent.putExtra(MainActivity.const_filterString, filterString);
 
         startActivity(intent);

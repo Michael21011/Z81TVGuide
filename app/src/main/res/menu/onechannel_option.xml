@@ -6,5 +6,9 @@
         sabd:showAsAction="collapseActionView|ifRoom"
         sabd:actionViewClass="android.widget.SearchView"
         />
+    <item android:id="@+id/action_shownotes"
+        android:title="@string/action_shownotes_off"
+        android:icon="@drawable/ic_action_notes_off"
+        sabd:showAsAction="always" />
 
 </menu>

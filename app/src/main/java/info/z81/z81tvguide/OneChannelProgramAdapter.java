@@ -15,6 +15,7 @@ public class OneChannelProgramAdapter extends BaseAdapter{
     private final Context context;
     private final ProgramList list;
     private int currentItemIndex;
+    private Boolean showNotes;
 
 
 
@@ -24,6 +25,8 @@ public class OneChannelProgramAdapter extends BaseAdapter{
         this.list = values;
         this.context = context;
         this.list.ApplyFilter(FilterString);
+        showNotes = Utils.Preference_ShowNotes();
+
         this.currentItemIndex = list.GetCurrentItemIndex(0);
 
     }
@@ -32,6 +35,8 @@ public class OneChannelProgramAdapter extends BaseAdapter{
         public TextView itemTimeView;
         public TextView itemCaptionView;
         public TextView dayHeaderView;
+        public TextView descView;
+
 
     }
     @Override
@@ -49,6 +54,7 @@ public class OneChannelProgramAdapter extends BaseAdapter{
             holder.itemTimeView = (TextView) rowView.findViewById(R.id.itemTime);
             holder.itemCaptionView = (TextView) rowView.findViewById(R.id.itemCaption);
             holder.dayHeaderView = (TextView) rowView.findViewById(R.id.dayHeader);
+            holder.descView = (TextView) rowView.findViewById(R.id.desc);
 
             rowView.setTag(holder);
 
@@ -59,6 +65,8 @@ public class OneChannelProgramAdapter extends BaseAdapter{
         ProgramItem currentItem = (ProgramItem)list.GetItem(position);
         holder.itemTimeView.setText(currentItem.GetDateStartTimeOnly());
         holder.itemCaptionView.setText(currentItem.Title);
+        holder.descView.setText(currentItem.Description);
+
         if (list.IsFirstItemForDay(position)) {
             holder.dayHeaderView.setVisibility(View.VISIBLE);
             holder.dayHeaderView.setText(currentItem.GetDayHeader());
@@ -81,11 +89,11 @@ public class OneChannelProgramAdapter extends BaseAdapter{
 
         }
 
-/*        if (currentItem.Description.isEmpty())
+        if (currentItem.Description.equals("") || !showNotes)
             holder.descView.setVisibility(View.GONE);
         else
             holder.descView.setVisibility(View.VISIBLE);
-  */
+
 
 
         return rowView;
