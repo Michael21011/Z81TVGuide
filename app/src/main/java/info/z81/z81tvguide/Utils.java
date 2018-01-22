@@ -239,6 +239,17 @@ public class Utils {
             id = R.drawable.boomerang;
         } else if (ChannelName.equalsIgnoreCase(consts.c_Индийскоекино)) {
             id = R.drawable.inida;
+        } else if (ChannelName.equalsIgnoreCase(consts.c_FineLivingNetwork)) {
+            id = R.drawable.finelivingnetwork;
+        } else if (ChannelName.equalsIgnoreCase(consts.c_Оружие)) {
+            id = R.drawable.orujie;
+        } else if (ChannelName.equalsIgnoreCase(consts.c_Спорт1укр)) {
+            id = R.drawable.sport1ukr;
+        } else if (ChannelName.equalsIgnoreCase(consts.c_Спорт2укр)) {
+            id = R.drawable.sport2ukr;
+        } else if (ChannelName.equalsIgnoreCase(consts.c_Т24)) {
+            id = R.drawable.texno24;
+
         } else
             id = R.drawable.empty;
 
@@ -435,7 +446,7 @@ public class Utils {
         list.put("5 канал (Россия)","5 канал (Россия)");
         list.put("5-й канал (Укр)","5-й канал (Укр)");
         list.put("8 канал (Беларусь)",consts.c_8Channel);
-        list.put("8 Канал (Минск)","8 канал");
+        list.put("8 Канал (Минск)",consts.c_8Channel);
         list.put("8 Канал (СПб)","8 Канал (СПб)");
         list.put("A-ONE","A-ONE");
         list.put("AMC","AMC");
