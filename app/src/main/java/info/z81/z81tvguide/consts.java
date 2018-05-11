@@ -5,6 +5,7 @@ package info.z81.z81tvguide;
  */
 
 public  class  consts {
+    public static final String c_PlustTV = "+TV";
     public static final String c_1HD = "1HD";
     public static final String c_2ChannelMogilev = "2 КАНАЛ Могилёв";
     public static final String c_2plus2 = "2+2";
@@ -52,6 +53,7 @@ public  class  consts {
     public static final String c_EurosportHD = "Eurosport HD";
     public static final String c_EurosportNews = "Eurosport News";
     public static final String c_ExtremeSports = "Extreme Sports";
+    public static final String c_FashionOne = "Fashion One";
     public static final String c_FashionOneHD = "Fashion One HD";
     public static final String c_FashionTV = "Fashion TV";
     public static final String c_Filmbox = "Filmbox";
@@ -222,6 +224,7 @@ public  class  consts {
     public static final String c_МатчФутбол2 = "Матч! Футбол2";
     public static final String c_Матьидитя = "Мать и дитя";
     public static final String c_Минск24ДОК = "Минск 24ДОК";
+    public static final String c_МинскТВ = "c_Минск ТВ";
     public static final String c_МИР = "Мир";
     public static final String c_МИР24 = "МИР 24";
     public static final String c_МирHD = "Мир HD";
