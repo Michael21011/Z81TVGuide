@@ -206,7 +206,7 @@ public  class  consts {
     public static final String c_Культура = "Россия-Культура";
     public static final String c_КухняТВ = "Кухня ТВ";
     public static final String c_КХЛ = "КХЛ";
-    public static final String c_КХЛHD = "КХЛ ТВ";
+    public static final String c_КХЛHD = "КХЛ HD";
     public static final String c_ЛДПРТВ = "ЛДПР ТВ";
     public static final String c_ЛидаТВ = "Лида ТВ";
     public static final String c_ЛяМинор = "Ля-Минор";
@@ -222,7 +222,6 @@ public  class  consts {
     public static final String c_МатчФутбол1 = "Матч! Футбол 1";
     public static final String c_МатчФутбол3 = "Матч! Футбол 3";
     public static final String c_МатчФутбол2 = "Матч! Футбол2";
-    public static final String c_Матьидитя = "Мать и дитя";
     public static final String c_Минск24ДОК = "Минск 24ДОК";
     public static final String c_МинскТВ = "c_Минск ТВ";
     public static final String c_МИР = "Мир";

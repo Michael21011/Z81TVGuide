@@ -73,7 +73,7 @@ public class  TVProgram implements Serializable{
             if (item.ChannelId.equals(ChannelId)) {
                 return true;
             }
-            ;
+
         }
         return false;
     }
@@ -88,7 +88,10 @@ public class  TVProgram implements Serializable{
 
     public int GetProgramListIndex(String ChannelId) {
         for (int j = 0; j < ChannelCount(); j++) {
+            /* channel id could be none integer
             if (Integer.parseInt(this.GetItem(j).ChannelId)==Integer.parseInt(ChannelId)) {
+            */
+            if (this.GetItem(j).ChannelId.equals(ChannelId)) {
                 return j;
             }
 
@@ -141,7 +144,7 @@ public class  TVProgram implements Serializable{
         int lastresult = -2;
         for (int j = 0; j < list.size(); j++) {
             if (GetItem(j).Count() > 0) {
-                if ((GetItem(j).FirstDate().compareTo(today) < 0) & (GetItem(j).LastDate().compareTo(today) > 0)) {
+                if (((GetItem(j).FirstDate().compareTo(today) < 0)||( GetItem(j).FirstDate().getTime() - today.getTime()<1000*60*60)) & (GetItem(j).LastDate().compareTo(today) > 0)) {
                     // It is current
                     result = 0;
                 } else if (GetItem(j).FirstDate().compareTo(today) > 0) {

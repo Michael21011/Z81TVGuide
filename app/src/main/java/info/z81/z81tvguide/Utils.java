@@ -266,11 +266,25 @@ public class Utils {
     }
 
     public static Date StringToDate(String InputString) {
-        int year = Integer.parseInt(InputString.subSequence(0, 4).toString());
-        int month = Integer.parseInt(InputString.subSequence(4, 6).toString());
-        int day = Integer.parseInt(InputString.subSequence(6, 8).toString());
-        int hour = Integer.parseInt(InputString.subSequence(8, 10).toString());
-        int min = Integer.parseInt(InputString.subSequence(10, 12).toString());
+        int year;
+        int month;
+        int day;
+        int hour;
+        int min;
+        if (InputString.subSequence(4, 5).toString().equals("-"))
+        { year = Integer.parseInt(InputString.subSequence(0, 4).toString());
+            month = Integer.parseInt(InputString.subSequence(5, 7).toString());
+            day = Integer.parseInt(InputString.subSequence(8, 10).toString());
+            hour = Integer.parseInt(InputString.subSequence(11, 13).toString());
+            min = Integer.parseInt(InputString.subSequence(14, 16).toString());
+        }
+        else {
+            year = Integer.parseInt(InputString.subSequence(0, 4).toString());
+            month = Integer.parseInt(InputString.subSequence(4, 6).toString());
+            day = Integer.parseInt(InputString.subSequence(6, 8).toString());
+            hour = Integer.parseInt(InputString.subSequence(8, 10).toString());
+            min = Integer.parseInt(InputString.subSequence(10, 12).toString());
+        }
         Calendar StartDate = Calendar.getInstance();
         StartDate.set(year, month - 1, day, hour, min);
         return StartDate.getTime();
@@ -385,7 +399,7 @@ public class Utils {
         try {
             result = prefs.getInt(refName, defValue);
         } catch (Exception ex) {
-            result = 0;
+            result = defValue;
         }
         return result;
     }
@@ -446,6 +460,7 @@ public class Utils {
         list.put("2 КАНАЛ Могилёв","2 КАНАЛ Могилёв");
         list.put("2+2","2+2");
         list.put("2x2","2x2");
+        list.put("Канал 2x2","2x2");
         list.put("2x2 +2","2x2 +2");
         list.put("360 Подмосковье","360 Подмосковье");
         list.put("360° Подмосковье HD","360° Подмосковье HD");
@@ -460,7 +475,7 @@ public class Utils {
         list.put("AMEDIA 2","A2");
         list.put("А2","A2");
         list.put("Amedia Hit","Amedia Hit");
-        list.put("Amedia Premium HD","Amedia Premium HD");
+        list.put("Amedia Premium","Amedia Premium HD");
         list.put("Amedia1","Amedia1");
         list.put("Ani","Ani");
         list.put("Animal Family HD","Animal Family HD");
@@ -476,7 +491,10 @@ public class Utils {
         list.put("Cinema","Cinema");
         list.put("Cinema (Космос ТВ)","Cinema (Космос ТВ)");
         list.put("Da Vinci","Da Vinci");
-        list.put("Discovery Channel Россия","Discovery");
+        list.put("Discovery Channel Россия",consts.c_DiscoveryChannel);
+        list.put("Discovery Channel Россия",consts.c_DiscoveryChannel);
+        list.put("Discovery Восточная Европа",consts.c_DiscoveryChannel);
+
         list.put("Discovery HD Showcase","Discovery HD Showcase");
         list.put("Discovery Science","Discovery Science");
         list.put("Discovery World","Discovery World");
@@ -485,7 +503,8 @@ public class Utils {
         list.put("Eureka HD","Eureka HD");
         list.put("EuroNews","EuroNews");
         list.put("Europa Plus TV","Europa Plus TV");
-        list.put("Eurosport","Eurosport");
+        list.put("Eurosport",consts.c_Eurosport);
+        list.put("Eurosport 1",consts.c_Eurosport);
         list.put("Eurosport 2","Eurosport 2");
         list.put("Eurosport 2 HD","Eurosport 2 HD");
         list.put("Eurosport HD","Eurosport HD");
@@ -548,7 +567,8 @@ public class Utils {
         list.put("TiJi","TiJi");
         list.put("TLC","TLC");
         list.put("Topsong TV","Topsong TV");
-        list.put("Travel Channel","Travel Channel");
+        list.put("Travel Channel",consts.c_TravelChannel);
+        list.put("Travel",consts.c_TravelChannel);
         list.put("Travel Channel HD","Travel Channel HD");
         list.put("Travel+Adventure","Travel and Adventure");
         list.put("Travel+Adventure HD","Travel and Adventure HD");
@@ -563,15 +583,18 @@ public class Utils {
         list.put("TV1000 Русское кино","ТВ-1000. Русское кино");
         list.put("VH1 Classic","VH1 Classic");
         list.put("VH1 European","VH1 European");
-        list.put("Viasat Explore","Виасат Эксплорер");
+        list.put("Viasat Explore",consts.c_ViasatExplore);
+        list.put("Viasat Explorer",consts.c_ViasatExplore);
         list.put("Viasat History","Виасат Хистори");
         list.put("Viasat Nature CEE","Виасат Нэйчер");
         list.put("Viasat Sport","Спортивный телеканал Виасат");
         list.put("World Fashion Channel","");
         list.put("Zee-TV","Zee Russia");
         list.put("Zooпарк","Zooпарк");
-        list.put("Авто 24","Авто 24");
+        list.put("Авто 24",consts.c_Авто24);
+        list.put("Авто24 HD",consts.c_Авто24);
         list.put("Авто Плюс","Авто Плюс");
+        list.put("Авто+","Авто Плюс");
         list.put("Анекдот ТВ","Анекдот ТВ");
         list.put("Арт-Видео","Арт-Видео");
         list.put("Беларусь 1","Беларусь 1");
@@ -584,8 +607,8 @@ public class Utils {
         list.put("Беларусь 4 Могилёв","Беларусь 4 Могилёв");
         list.put("Беларусь 5","Беларусь 5");
         list.put("Беларусь-24","Беларусь-24");
-        list.put("БелБизнесЧенел (ББЧ)","БелБизнесЧенел");
-        list.put("БелБизнесЧенел (РБК)","БелБизнесЧенел");
+        list.put("БелБизнесЧенел (ББЧ)",consts.c_БелБизнесЧенел);
+        list.put("БелБизнесЧенел (РБК)",consts.c_БелБизнесЧенел);
         list.put("БЕЛМУЗТВ","БЕЛМУЗТВ");
         list.put("Бестселлер Плюс","Бестселлер Плюс");
         list.put("Бобёр","Бобёр");
@@ -597,7 +620,8 @@ public class Utils {
         list.put("ВТВ","ВТВ");
         list.put("Гродно Плюс","Гродно Плюс");
         list.put("Губерния 33","Губерния 33");
-        list.put("Детский","Детский");
+        list.put("Детский",consts.c_Детский);
+        list.put("Детский канал",consts.c_Детский);
         list.put("Детский мир","Детский мир");
         list.put("Детский мир + Телеклуб","Детский мир + Телеклуб");
         list.put("Дождь","Дождь");
@@ -620,7 +644,8 @@ public class Utils {
         list.put("Звезда","Звезда");
         list.put("Здоровое ТВ","Здоровое ТВ");
         list.put("Зоо ТВ","Зоо ТВ");
-        list.put("Иллюзион+","Иллюзион+");
+        list.put("Иллюзион+",consts.c_ИллюзионPlus);
+        list.put("Иллюзион +",consts.c_ИллюзионPlus);
         list.put("Индийское кино","Индийское кино");
         list.put("Инфо ТВ-КОМ (Кричев)","Инфо ТВ-КОМ (Кричев)");
         list.put("История","История");
@@ -638,7 +663,8 @@ public class Utils {
         list.put("КИНОМИКС","Киномикс");
         list.put("Кинопоказ","Кинопоказ");
         list.put("КиноПремиум HD","КиноПремиум HD");
-        list.put("Кинопремьера HD","Кинопремьера HD");
+        list.put("Кинопремьера HD",consts.c_КинопремьераHD);
+        list.put("Кинопремьера",consts.c_КинопремьераHD);
         list.put("Киносвидание","Киносвидание");
         list.put("Киносемья","Киносемья");
         list.put("Киносерия","Киносерия");
@@ -647,17 +673,20 @@ public class Utils {
         list.put("Конный мир HD","Конный мир HD");
         list.put("Красная линия","Красная линия");
         list.put("Кто есть кто","Кто есть кто");
-        list.put("Культура","Россия-Культура");
-        list.put("Россия Культура","Россия-Культура");
+        list.put("Культура",consts.c_Культура);
+        list.put("Россия Культура",consts.c_Культура);
 
         list.put("Кухня ТВ","Кухня ТВ");
+
         list.put("КХЛ",consts.c_КХЛ);
         list.put("КХЛ-ТВ",consts.c_КХЛ);
         list.put("КХЛ HD",consts.c_КХЛHD);
         list.put("ЛДПР ТВ","ЛДПР ТВ");
         list.put("Лида ТВ","Лида ТВ");
         list.put("Ля-Минор",consts.c_ЛяМинор);
-        list.put("Мама","Мама");
+        list.put("Мама",consts.c_Мама);
+        list.put("Мать и дитя",consts.c_Мама);
+
         list.put("Матч HD","Матч HD");
         list.put("Матч ТВ","Матч ТВ");
         list.put("МАТЧ! АРЕНА","МАТЧ! АРЕНА");
@@ -739,8 +768,10 @@ public class Utils {
         list.put("Рыжий","Рыжий");
         list.put("Сарафан ТВ",consts.c_Сарафан);
         list.put("Светлое ТВ","Светлое ТВ");
-        list.put("Сетанта Спорт","Сетанта cпорт");
-        list.put("Сетанта Спорт Плюс","Сетанта спорт+");
+        list.put("Сетанта Спорт",consts.c_СетантаСпорт);
+        list.put("Сетанта Спорт Плюс",consts.c_СетантаСпортПлюс );
+        list.put("Setanta Sports +",consts.c_СетантаСпортПлюс );
+
         list.put("Скиф Витебск","Скиф Витебск");
         list.put("Совершенно секретно","Совершенно секретно");
         list.put("Союз","Союз");
@@ -783,7 +814,9 @@ public class Utils {
         list.put("ТРО","ТРО");
         list.put("Усадьба","Усадьба-ТВ");
         list.put("Успех","Успех");
-        list.put("Феникс+ Кино","Феникс+ Кино");
+        list.put("Феникс+ Кино",consts.c_ФениксPlusКино);
+        list.put("Феникс+Кино",consts.c_ФениксPlusКино);
+
         list.put("Футбол","Футбол");
         list.put("Футбол 1(укр)","Футбол 1(укр)");
         list.put("Футбол 2(укр)","Футбол 2(укр)");

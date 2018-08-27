@@ -94,8 +94,12 @@ public class MainActivity extends ActionBarActivity {
     //  private static String FileURL = "http://www.teleguide.info/download/new3/xmltv.xml.gz";
     //   private static String FileURL = "https://onedrive.live.com/redir?resid=16289EE13DCB02CD!620&authkey=!ABE_0Cb3lnujxcE&ithint=file%2czip";
     public static final String APP_PREFERENCES_VIDEOTUTORIALVERSION = "videotutorialversion";
+
     public static final String APP_PREFERENCES_SHOWNOTES="shownotes";
     public static final int videotutorialversion = 1;
+    public static final String APP_PREFERENCES_STARTUPMESSAGEVERSION = "startupmessageversion";
+    public static final int startupmessageversion = 1;
+
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
@@ -114,6 +118,7 @@ public class MainActivity extends ActionBarActivity {
     private Boolean IsForceUnzipFile = false;
 
     private int XMLLoadProgress = 20;
+    private int SaveToCacheProgress = 5;
     private Boolean ShowOnlyFavorites = true;
     public Boolean ShowNotes = true;
     private Boolean NeedRefreshList = false;
@@ -170,6 +175,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
+
         int videoversion = 0;
         if (settingPreference.contains(APP_PREFERENCES_VIDEOTUTORIALVERSION)) {
             // Получаем число из настроек
@@ -202,6 +208,36 @@ public class MainActivity extends ActionBarActivity {
         SharedPreferences.Editor editor = settingPreference.edit();
         editor.putInt(APP_PREFERENCES_VIDEOTUTORIALVERSION, videotutorialversion);
         editor.commit();
+
+
+
+        int startupversion = 0;
+        if (settingPreference.contains(APP_PREFERENCES_STARTUPMESSAGEVERSION)) {
+            // Получаем число из настроек
+            startupversion = settingPreference.getInt(APP_PREFERENCES_STARTUPMESSAGEVERSION, 0);
+        }
+        if (startupmessageversion > startupversion) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Входящее сообщение")
+                    .setMessage("МТИС перестал публиковать программу, поэтому будет использована программа telecom.by. Вы можете выбрать другой источник в НАСТРОЙКАХ.")
+                    //.setIcon(R.drawable.ic_android_cat)
+                    .setPositiveButton("Закрыть",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //openTutorialVideo();
+                                    dialog.cancel();
+                                }
+                            }
+                    )
+                    ;
+            AlertDialog alert = builder.create();
+            alert.show();
+
+        }
+        SharedPreferences.Editor editor1 = settingPreference.edit();
+        editor1.putInt(APP_PREFERENCES_STARTUPMESSAGEVERSION, startupmessageversion);
+        editor1.commit();
+
 
     }
 
@@ -328,7 +364,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void LoadProvider() {
-        int ProviderIndex = Utils.ReadSharedPreference(Utils.ProgramProviderParamName, 0);
+        int ProviderIndex = Utils.ReadSharedPreference(Utils.ProgramProviderParamName, 4);
         switch (ProviderIndex) {
             case 1:
                 Provider = new TeleGuideInfoProvider();
@@ -336,8 +372,14 @@ public class MainActivity extends ActionBarActivity {
             case 2:
                 Provider = new EPGProvider();
                 break;
+            case 3:
+                Provider = new CosmosTV();
+                break;
+            case 4:
+                Provider = new VelcomProvider();
+                break;
             default:
-                Provider = new MTISProvider();
+                Provider =  new VelcomProvider();
 
         }
     }
@@ -692,8 +734,14 @@ public class MainActivity extends ActionBarActivity {
 
 
     private void downloadList(boolean old) {
-        if (old)
-            downloadFile(Provider.FilePreviousURL());
+        if (old) {
+            { if (Provider.FilePreviousURL()!=null)
+            {downloadFile(Provider.FilePreviousURL());}
+
+
+            }
+
+        }
         else
             downloadFile(Provider.DownloadUrl());
 
@@ -1052,9 +1100,10 @@ public class MainActivity extends ActionBarActivity {
                     String ResultFile = "";
                     if (Provider.LocalFileName().contains("gz")) {
                         ResultFile = unpackGZIP(Params[0], Provider.LocalFileName(), ResultFile);
-                    } else {
+                    } else if (Provider.LocalFileName().contains("zip")) {
                         ResultFile = unpackZip(Params[0], Provider.LocalFileName(), ResultFile);
                     }
+                      else {ResultFile=Params[0]+"/"+Provider.LocalFileName();}
                     if (ResultFile.equals("")) {
                         // refreshList(null);
                         return null;
@@ -1070,6 +1119,7 @@ public class MainActivity extends ActionBarActivity {
                     Boolean channelStarted = false;
                     Boolean channelFinished = false;
                     tvProgram.Clear();
+                    int ChannelsInFileCount = 0;
                     Date startD = new Date();
                     String CurrentString;
 
@@ -1094,6 +1144,7 @@ public class MainActivity extends ActionBarActivity {
                             channelFinished = false;
                         }
                         if (channelFinished) {
+                            ChannelsInFileCount = ChannelsInFileCount+1;
                             String s=builder.toString();
                             String channelName=Utils.NormalazeChannelName(Utils.XMLGetElementValue(s, "display-name"), normalMap);
                             // add only channels for MyChannel list
@@ -1148,7 +1199,11 @@ public class MainActivity extends ActionBarActivity {
                                 CurentLineNo++;
                                 LastChannelWasSkipped = (tvProgram.GetProgramListIndex(ChannelId)==-1);
                                 LatestChannel = ChannelId;
-                                publishProgress((int) (XMLLoadProgress + CurentLineNo * (100 - XMLLoadProgress) / ChannelCount));
+                                publishProgress((int) (XMLLoadProgress + CurentLineNo * (100 - XMLLoadProgress-SaveToCacheProgress) / ChannelCount));
+                                if (CurentLineNo==ChannelsInFileCount)
+                                {
+                                    breakLoop = true;
+                                }
                              /*   if (( (XMLLoadProgress+ CurentLineNo * (100-XMLLoadProgress ) / ChannelCount)>60))
                                 {breakLoop = true;}
                                 */
@@ -1181,10 +1236,10 @@ public class MainActivity extends ActionBarActivity {
                     fr.close();
                 }
 
-
+                //mProgressDialog.setMessage(getString(R.string.task_sorting));
                 tvProgram.sort();
                 myApplication.tvProgram=tvProgram;
-
+                //mProgressDialog.setMessage(getString(R.string.task_save_cache));
                 FileOutputStream fos = new FileOutputStream(GetFullFilePath(SerializedFilePath));
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(tvProgram);

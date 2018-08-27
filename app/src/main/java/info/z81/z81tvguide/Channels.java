@@ -243,7 +243,6 @@ public class Channels {
                 consts.c_МатчФутбол1,
                 consts.c_МатчФутбол3,
                 consts.c_МатчФутбол2,
-                consts.c_Матьидитя,
                 consts.c_Минск24ДОК,
                 consts.c_МИР,
                 consts.c_МИР24,

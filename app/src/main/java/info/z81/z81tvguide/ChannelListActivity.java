@@ -58,6 +58,7 @@ public class ChannelListActivity extends ActionBarActivity {
             InitialChannelPosition = tvProgram.GetProgramListIndex(currentChannelId);
         }
         invalidateOptionsMenu();
+        SetShowOnlyFavorites(tvProgram.FavoritChannelsSelected());
         updateListView();
         handleIntent(getIntent());
 
@@ -210,8 +211,14 @@ public class ChannelListActivity extends ActionBarActivity {
         }
 
     }
+
+    private void SetShowOnlyFavorites(boolean Only)
+    {
+        ShowOnlyFavorites = Only;
+
+    }
     private void SwithShowOnlyFavorites(MenuItem item) {
-        ShowOnlyFavorites = !ShowOnlyFavorites;
+        SetShowOnlyFavorites(!ShowOnlyFavorites);
         if (ShowOnlyFavorites) {
             item.setIcon(R.drawable.ic_layout_star_selected);
         } else item.setIcon(R.drawable.ic_layout_star);

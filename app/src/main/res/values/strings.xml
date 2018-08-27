@@ -58,6 +58,8 @@
     <string name="task_load_object">Read from cache</string>
     <string name="action_shownotes_on">Description: on</string>
     <string name="action_shownotes_off">Description: off</string>
+    <string name="task_save_cache">Saving a cache...</string>
+    <string name="task_sorting">Sorting...</string>
 
 
 </resources>
