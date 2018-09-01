@@ -69,10 +69,10 @@ public class ChannelAdapter extends BaseAdapter{
         holder.imageView.setImageResource(currentItem.getChannelLogo());}
 
 
-        holder.imageView.setTag(position);
+        holder.imageView.setTag(currentItem.ChannelId);
 
         holder.NumberDigitalView.setText(currentItem.getDigitalNumberLabel(true));
-        holder.NumberDigitalView.setTag(Integer.valueOf(currentItem.ChannelId));
+        holder.NumberDigitalView.setTag(currentItem.ChannelId);
 
         holder.channelIdView.setText(currentItem.ChannelId);
 
@@ -81,7 +81,7 @@ public class ChannelAdapter extends BaseAdapter{
         } else {
         holder.starView.setImageResource(android.R.drawable.star_off);}
 
-        holder.starView.setTag(Integer.valueOf(currentItem.ChannelId));
+        holder.starView.setTag(currentItem.ChannelId);
         if (currentItem.ShouldHighligt())
         {
             rowView.setBackgroundColor(android.support.v7.appcompat.R.color.highlighted_text_material_light);

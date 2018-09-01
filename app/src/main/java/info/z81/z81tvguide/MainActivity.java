@@ -657,9 +657,8 @@ public class MainActivity extends ActionBarActivity {
                 .setCategory("RowClick")
                 .setAction("ChannelLogoClick")
                 .build());
-        Integer tag1 = (Integer) view.getTag();
-        String tag = tag1.toString();
-        int index = tvProgram.GetProgramListIndex(tag);
+        String tag1 =  (String)view.getTag();
+        int index = tvProgram.GetProgramListIndex(tag1);
 
         openOneChannelProgram(index);
     }

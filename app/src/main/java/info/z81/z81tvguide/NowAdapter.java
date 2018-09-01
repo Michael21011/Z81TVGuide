@@ -70,8 +70,7 @@ public class NowAdapter extends BaseAdapter{
                 holder.imageView.setImageResource(currentItem.getChannelLogo());}
 
 
-
-        holder.imageView.setTag(Integer.valueOf(currentItem.ChannelId));
+        holder.imageView.setTag(currentItem.ChannelId);
         holder.descView.setText(currentItem.Description);
         if (ShowNotes && !currentItem.Description.equals(""))
             holder.descView.setVisibility(View.VISIBLE);

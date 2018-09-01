@@ -112,6 +112,7 @@ public class ChannelListActivity extends ActionBarActivity {
             searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
             searchView.setQueryHint(getString(R.string.SearchQueryHint));
 
+
             searchView.setOnQueryTextListener(
                     new SearchView.OnQueryTextListener() {
                         @Override
@@ -258,7 +259,7 @@ public class ChannelListActivity extends ActionBarActivity {
                         .setCategory("RowClick")
                         .setAction("onItemLongClick")
                         .build());
-                OpenOneChannelProgramActivity(position);
+                OpenOneChannelProgramActivity(tvProgram.GetFilteredItem(position).ChannelId);
 
                 return true;
             }
@@ -272,17 +273,17 @@ public class ChannelListActivity extends ActionBarActivity {
                         .setCategory("RowClick")
                         .setAction("onItemClick")
                         .build());
-                OpenOneChannelProgramActivity(position);
+                OpenOneChannelProgramActivity(tvProgram.GetFilteredItem(position).ChannelId);
             }
         });
     }
 
-    public void OpenOneChannelProgramActivity(int ItemIndex)
+    public void OpenOneChannelProgramActivity(String channelId)
     {
         Intent intent = new Intent(ChannelListActivity.this, OneChannelProgramActivity.class);
 
 
-        intent.putExtra(MainActivity.const_programListIndex, tvProgram.GetProgramListIndex(tvProgram.GetFilteredItem(ItemIndex).ChannelId));
+        intent.putExtra(MainActivity.const_programListIndex, tvProgram.GetProgramListIndex(channelId));
         intent.putExtra(MainActivity.const_filterString, filterString);
 
         startActivity(intent);
@@ -293,8 +294,8 @@ public class ChannelListActivity extends ActionBarActivity {
                 .setCategory("RowClick")
                 .setAction("onStarClick")
                 .build());
-        Integer  tag1  =  (Integer)v.getTag();
-        String tag =  tag1.toString();
+
+        String tag =  (String)v.getTag();
         ProgramList pl =  tvProgram.GetProgramList(tag);
         pl.setStared(!pl.isStared());
         adapter.notifyDataSetChanged();
@@ -306,8 +307,9 @@ public class ChannelListActivity extends ActionBarActivity {
                 .setCategory("RowClick")
                 .setAction("onChannelLogoClick")
                 .build());
-        Integer  tag1  =  (Integer)v.getTag();
-        OpenOneChannelProgramActivity(tag1);
+        String  tag1  =  (String)v.getTag();
+        String  channelId  =  tvProgram.GetItem(tvProgram.GetProgramListIndex(tag1)).ChannelId;
+        OpenOneChannelProgramActivity(channelId);
 
     }
 
@@ -316,8 +318,8 @@ public class ChannelListActivity extends ActionBarActivity {
                 .setCategory("RowClick")
                 .setAction("onNumberDigitalClick")
                 .build());
-        Integer  tag1  =  (Integer)v.getTag();
-        currentProgram = tvProgram.GetItem(tvProgram.GetProgramListIndex(tag1.toString()));
+        String  tag1  =  (String)v.getTag();
+        currentProgram = tvProgram.GetItem(tvProgram.GetProgramListIndex(tag1));
         InputText(m_Text);
     }
 
