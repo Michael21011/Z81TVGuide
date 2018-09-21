@@ -22,8 +22,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,7 +32,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     private int programListIndex;
     private int programItemIndex;
     private ContextMenu popupMenu;
-    private Tracker mTracker;
+
     private String filterString;
     private  Z81TVGuide application;
 
@@ -45,7 +43,6 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         filterString = new String("");
 
         application = (Z81TVGuide) getApplication();
-        mTracker = application.getDefaultTracker();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
@@ -80,8 +77,8 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     public void onResume() {
         super.onResume();
         //Log.i(TAG, "Setting screen name: " + name);
-        mTracker.setScreenName("Image~OneChannelProgramActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        Analitic.getInstance().NewScreen("OneChannelProgramActivity");
+
         programListIndex = getIntent().getIntExtra(MainActivity.const_programListIndex, 0);
         programList =    application.tvProgram.GetItem(programListIndex);
 
@@ -90,10 +87,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
     }
 
     private void doMySearch(String query) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("OneChannelDoMySearch")
-                .build());
+        Analitic.getInstance().NewClick("OneChannel","OneChannelDoMySearch");
 
         filterString = query;
         updateListView();
@@ -134,10 +128,7 @@ public class OneChannelProgramActivity extends ActionBarActivity {
         SetListViewListeners();
      //    lv1.setOnCreateContextMenuListener(this);
         lv1.setSelection(programList.GetCurrentItemIndex(0));
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Event")
-                .setAction("updateListView")
-                .build());
+        Analitic.getInstance().NewEvent("channelUpdateListView");
 
 
     }
@@ -239,10 +230,9 @@ searchView.setQuery(filterString, false);
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_shownotes:
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("ShowNotes")
-                        .build());
+                Analitic.getInstance().NewClick("OneChannel","ShowNotes");
+
+
                 SwithShowNotes(item);
                 return true;
             default:
@@ -305,10 +295,8 @@ searchView.setQuery(filterString, false);
     }
 
     private void ShareItem(){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("ShareItem")
-                .build());
+        Analitic.getInstance().NewClick("OneChannel","ShareItem");
+
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         int position=programItemIndex;
@@ -323,10 +311,8 @@ searchView.setQuery(filterString, false);
     }
 
     private void SearchInInternetItem(){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("SearchInInternetItem")
-                .build());
+        Analitic.getInstance().NewClick("OneChannel","SearchInInternetItem");
+
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         int position=programItemIndex;
@@ -351,10 +337,8 @@ searchView.setQuery(filterString, false);
     }
 
     private void CopyItem(){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("CopyItem")
-                .build());
+        Analitic.getInstance().NewClick("OneChannel","CopyItem");
+
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 
         int position=programItemIndex;
@@ -371,10 +355,8 @@ searchView.setQuery(filterString, false);
     }
 
     private void ReminderItem(){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("ReminderItem")
-                .build());
+        Analitic.getInstance().NewClick("OneChannel","ReminderItem");
+
 
         final ListView lv1 = (ListView) findViewById(R.id.oneChannelProgramListView);
 

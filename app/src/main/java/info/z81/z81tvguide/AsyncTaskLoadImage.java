@@ -14,7 +14,6 @@ package info.z81.z81tvguide;
         import android.util.Log;
         import android.widget.ImageView;
 
-        import org.apache.http.protocol.HTTP;
 
 public class AsyncTaskLoadImage  extends AsyncTask<String, String, Bitmap> {
     private final static String TAG = "AsyncTaskLoadImage";

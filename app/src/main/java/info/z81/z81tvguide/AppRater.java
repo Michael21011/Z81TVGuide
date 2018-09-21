@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+
+
 
 /**
  * Created on 26.05.2016.
@@ -29,7 +29,7 @@ public class AppRater {
     private final static int DAYS_UNTIL_PROMPT = 14;
     private final static int LAUNCHES_UNTIL_PROMPT = 56;
 
-    public static void app_launched(Context mContext, Tracker tracker) {
+    public static void app_launched(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences("z81tvgudeapprater", 0);
         if (prefs.getBoolean("dontshowagain", false)) { return ; }
 
@@ -50,18 +50,20 @@ public class AppRater {
         if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
             if (System.currentTimeMillis() >= date_firstLaunch +
                     (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-                showRateDialog(mContext, editor, tracker);
+                showRateDialog(mContext, editor);
             }
         }
 
         editor.commit();
     }
 
-    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor, final Tracker tracker) {
-        tracker.send(new HitBuilders.EventBuilder()
+    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+        Analitic.getInstance().NewScreen("AppRater");
+     /*   tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("AppRater")
                 .setAction("ShowDialog")
                 .build());
+                */
         final Dialog dialog = new Dialog(mContext);
         dialog.setTitle(mContext.getString(R.string.rate));
         int AdditionButtonVisibility = View.VISIBLE;
@@ -85,17 +87,21 @@ public class AppRater {
         b1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (CallFromMenu) {
-                    tracker.send(new HitBuilders.EventBuilder()
+                    Analitic.getInstance().NewClick("AppRater","RateFromAction");
+                    /*tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("AppRater")
                             .setAction("RateFromAction")
                             .build());
+                            */
                 }
                 else
                 {
-                    tracker.send(new HitBuilders.EventBuilder()
+                    Analitic.getInstance().NewClick("AppRater","Rate");
+                   /* tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("AppRater")
                             .setAction("Rate")
                             .build());
+                            */
                 }
                 if (editor != null) {
                     editor.putBoolean("dontshowagain", true);
@@ -112,10 +118,11 @@ public class AppRater {
         b2.setText(mContext.getString(R.string.remind_me_later));
         b2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                tracker.send(new HitBuilders.EventBuilder()
+                Analitic.getInstance().NewClick("AppRater","RemindLater");
+/*                tracker.send(new HitBuilders.EventBuilder()
                         .setCategory("AppRater")
                         .setAction("RemindLater")
-                        .build());
+                        .build());*/
                 if (editor != null) {
                     editor.putLong("launch_count", 0);
                     editor.commit();
@@ -130,10 +137,11 @@ public class AppRater {
         b3.setText(mContext.getString(R.string.no_thanks));
         b3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                tracker.send(new HitBuilders.EventBuilder()
+                Analitic.getInstance().NewClick("AppRater","DontShowAgain");
+/*                tracker.send(new HitBuilders.EventBuilder()
                         .setCategory("AppRater")
                         .setAction("DontShowAgain")
-                        .build());
+                        .build());*/
                 if (editor != null) {
                     editor.putBoolean("dontshowagain", true);
                     editor.commit();

@@ -23,8 +23,6 @@ import android.app.AlertDialog;
 import android.widget.EditText;
 import android.content.DialogInterface;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 public class ChannelListActivity extends ActionBarActivity {
 
@@ -34,7 +32,6 @@ public class ChannelListActivity extends ActionBarActivity {
     TVProgram tvProgram;
     ChannelAdapter adapter;
     SharedPreferences  favoriteChannelListPreference;
-    private Tracker mTracker;
     private Integer InitialChannelPosition;
     private Boolean ShowOnlyFavorites=true;
 
@@ -42,7 +39,7 @@ public class ChannelListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Z81TVGuide application = (Z81TVGuide) getApplication();
-        mTracker = application.getDefaultTracker();
+
 
         tvProgram =  ((Z81TVGuide) getApplication()).tvProgram;
         setContentView(R.layout.activity_channel_list);
@@ -69,8 +66,7 @@ public class ChannelListActivity extends ActionBarActivity {
         super.onResume();
         tvProgram =  ((Z81TVGuide) getApplication()).tvProgram;
         //Log.i(TAG, "Setting screen name: " + name);
-        mTracker.setScreenName("Image~ChannelListActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        Analitic.getInstance().NewScreen("ChannelListActivity");
 
     }
 
@@ -176,10 +172,8 @@ public class ChannelListActivity extends ActionBarActivity {
 
         switch (item.getItemId()) {
             case R.id.action_ShowOnlyFavorites:
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("SwithShowOnlyFavorites")
-                        .build());
+                Analitic.getInstance().NewClick("ChannelList","SwithShowOnlyFavorites");
+
                 SwithShowOnlyFavorites(item);
                 return true;
             case R.id.action_search:
@@ -192,17 +186,13 @@ public class ChannelListActivity extends ActionBarActivity {
             	sendMessage(null);
                 return true;
           */  case R.id.action_mark_favorite_all:
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("MarkAllAsFavorites")
-                        .build());
+                Analitic.getInstance().NewClick("ChannelList","MarkAllAsFavorites");
+
                 MarkAllFavorites(true);
                 return true;
             case R.id.action_mark_favorite_none:
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("MarkAllAsNonFavorites")
-                        .build());
+                Analitic.getInstance().NewClick("ChannelList","MarkAllAsNonFavorites");
+
 
                 MarkAllFavorites(false);
                 return true;
@@ -255,10 +245,8 @@ public class ChannelListActivity extends ActionBarActivity {
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("RowClick")
-                        .setAction("onItemLongClick")
-                        .build());
+                Analitic.getInstance().NewClick("ChannelList","onItemLongClick");
+
                 OpenOneChannelProgramActivity(tvProgram.GetFilteredItem(position).ChannelId);
 
                 return true;
@@ -269,10 +257,8 @@ public class ChannelListActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("RowClick")
-                        .setAction("onItemClick")
-                        .build());
+                Analitic.getInstance().NewClick("ChannelList","onItemClick");
+
                 OpenOneChannelProgramActivity(tvProgram.GetFilteredItem(position).ChannelId);
             }
         });
@@ -290,10 +276,7 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     public void onStarClick(View v){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RowClick")
-                .setAction("onStarClick")
-                .build());
+        Analitic.getInstance().NewClick("ChannelList","onStarClick");
 
         String tag =  (String)v.getTag();
         ProgramList pl =  tvProgram.GetProgramList(tag);
@@ -303,10 +286,8 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     public void onChannelLogoClick(View v){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RowClick")
-                .setAction("onChannelLogoClick")
-                .build());
+        Analitic.getInstance().NewClick("ChannelList","onChannelLogoClick");
+
         String  tag1  =  (String)v.getTag();
         String  channelId  =  tvProgram.GetItem(tvProgram.GetProgramListIndex(tag1)).ChannelId;
         OpenOneChannelProgramActivity(channelId);
@@ -314,10 +295,8 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     public void onNumberDigitalClick(View v){
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RowClick")
-                .setAction("onNumberDigitalClick")
-                .build());
+        Analitic.getInstance().NewClick("ChannelList","onNumberDigitalClick");
+
         String  tag1  =  (String)v.getTag();
         currentProgram = tvProgram.GetItem(tvProgram.GetProgramListIndex(tag1));
         InputText(m_Text);
@@ -370,10 +349,7 @@ public class ChannelListActivity extends ActionBarActivity {
     }
 
     private void doMySearch(String query) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("ChannelListDoMySearch")
-                .build());
+        Analitic.getInstance().NewClick("Action","ChannelListDoMySearch");
         filterString = query;
         updateListView();
 
