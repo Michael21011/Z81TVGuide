@@ -38,7 +38,7 @@ import android.widget.AdapterView;
 
 
 /**
- * A login screen that offers login via email/password.
+ * A settings screen that allow select source of data
  */
 
     public class SettingsActivity extends Activity {
