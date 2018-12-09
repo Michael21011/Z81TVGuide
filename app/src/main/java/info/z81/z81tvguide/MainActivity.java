@@ -1158,7 +1158,7 @@ public class MainActivity extends ActionBarActivity {
 
                             if (!LastChannelWasSkipped )
                             {
-                                tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")), Utils.XMLGetElementValue(s, "desc"));
+                                tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.DateAdd(Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")),java.util.Calendar.HOUR,Provider.HourShift()), Utils.XMLGetElementValue(s, "desc"));
                                 LastChannelWasSkipped = false;
                             }
                             builder.setLength(0);

@@ -9,6 +9,9 @@ public abstract class CustomProvider {
     public abstract String LocalFileName();
     public abstract String FilePreviousURL();
     public abstract String ProviderName();
+    public int HourShift(){
+        return 0;
+    }
 
 
 }

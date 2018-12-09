@@ -20,4 +20,9 @@ public class VelcomProvider extends CustomProvider {
     public String ProviderName() {
         return "telecom.by";
     }
+
+    @Override
+    public int HourShift() {
+        return 3;
+    }
 }
