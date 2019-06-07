@@ -1186,11 +1186,11 @@ public class MainActivity extends ActionBarActivity {
                 tvProgram.sort();
                 myApplication.tvProgram=tvProgram;
                 //mProgressDialog.setMessage(getString(R.string.task_save_cache));
-                FileOutputStream fos = new FileOutputStream(GetFullFilePath(SerializedFilePath));
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(tvProgram);
-                oos.flush();
-                oos.close();
+                    FileOutputStream fos = new FileOutputStream(GetFullFilePath(SerializedFilePath));
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(tvProgram);
+                    oos.flush();
+                    oos.close();
 
                 NeedRebuildList = false;
                 Analitic.getInstance().NewEvent("ParseFileTask");
