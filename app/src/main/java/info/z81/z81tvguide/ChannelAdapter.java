@@ -3,6 +3,7 @@ package info.z81.z81tvguide;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,7 @@ public class ChannelAdapter extends BaseAdapter{
         holder.starView.setTag(currentItem.ChannelId);
         if (currentItem.ShouldHighligt())
         {
-            rowView.setBackgroundColor(android.support.v7.appcompat.R.color.highlighted_text_material_light);
+            rowView.setBackgroundColor(ContextCompat.getColor(context, android.support.v7.appcompat.R.color.highlighted_text_material_light));
         }
 
         return rowView;

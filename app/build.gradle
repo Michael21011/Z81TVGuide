@@ -6,8 +6,8 @@ android {
         applicationId "info.z81.z81tvguide"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 68
-        versionName '1.49'
+        versionCode 70
+        versionName '1.51'
 
     }
     dexOptions {
@@ -25,6 +25,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.0.+'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:appcompat-v7:28.0.+'
 }

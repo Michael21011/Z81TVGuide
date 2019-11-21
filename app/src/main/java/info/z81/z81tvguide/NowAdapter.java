@@ -72,12 +72,16 @@ public class NowAdapter extends BaseAdapter{
 
         holder.imageView.setTag(currentItem.ChannelId);
         holder.descView.setText(currentItem.Description);
-        if (ShowNotes && !currentItem.Description.equals(""))
+            if (currentItem.Description.equals("") || !ShowNotes)
+                holder.descView.setVisibility(View.GONE);
+            else
+                holder.descView.setVisibility(View.VISIBLE);
+        /*if (ShowNotes && !currentItem.Description.equals(""))
             holder.descView.setVisibility(View.VISIBLE);
         else {
             holder.descView.setVisibility(View.GONE);
             //holder.descView.setHeight(0);
-        }
+        }*/
         // ��������� ������ ��� Windows � iPhone
    /*     String s = names[position];
         if (s.startsWith("Windows7") || s.startsWith("iPhone")

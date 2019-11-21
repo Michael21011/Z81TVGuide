@@ -59,7 +59,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
@@ -78,7 +78,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     public static SharedPreferences digitalNumberPreference;
@@ -754,6 +754,7 @@ public class MainActivity extends ActionBarActivity {
         ZipInputStream zis;
         try {
             String filename;
+
             is = new FileInputStream(path + "/" + zipname);
             zis = new ZipInputStream(new BufferedInputStream(is));
             ZipEntry ze;
@@ -768,10 +769,18 @@ public class MainActivity extends ActionBarActivity {
                 // it will generate an Exception...
                 if (ze.isDirectory()) {
                     File fmd = new File(path + filename);
+                    String canonicalPath = fmd.getCanonicalPath();
+                    if (!canonicalPath.startsWith(path)){
+                        throw new Exception("ZIP extract security issue.");
+                    }
                     fmd.mkdirs();
                     continue;
                 }
                 File outputfile = new File(path, filename);
+                String canonicalPath = outputfile.getCanonicalPath();
+                if (!canonicalPath.startsWith(path)){
+                    throw new Exception("ZIP extract security issue.");
+                }
                 FileOutputStream fout = new FileOutputStream(outputfile);
 
                 // cteni zipu a zapis
@@ -787,6 +796,9 @@ public class MainActivity extends ActionBarActivity {
 
             zis.close();
         } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
