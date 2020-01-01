@@ -473,7 +473,7 @@ public class Utils {
         list.put("A-ONE","A-ONE");
         list.put("AMC","AMC");
         list.put("AMEDIA 2","A2");
-        list.put("А2","A2");
+        list.put("А2",consts.c_A2);
         list.put("Amedia Hit","Amedia Hit");
         list.put("Amedia Premium","Amedia Premium HD");
         list.put("Amedia1","Amedia1");
@@ -502,6 +502,7 @@ public class Utils {
         list.put("English Club TV","English Club TV");
         list.put("Eureka HD","Eureka HD");
         list.put("EuroNews","EuroNews");
+        list.put("Евроновости",consts.c_EuroNews);
         list.put("Europa Plus TV","Europa Plus TV");
         list.put("Eurosport",consts.c_Eurosport);
         list.put("Eurosport 1",consts.c_Eurosport);

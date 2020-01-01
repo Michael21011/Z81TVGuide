@@ -52,7 +52,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_big_description" />
+            <TextView
+                android:id="@+id/timeShiftLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_timeshift_label" />
 
+            <Spinner
+                android:id="@+id/timeShiftSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/timeShiftArray"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
     </ScrollView>
+
+
 </LinearLayout>

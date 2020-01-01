@@ -60,6 +60,7 @@
     <string name="action_shownotes_off">Description: off</string>
     <string name="task_save_cache">Saving a cache...</string>
     <string name="task_sorting">Sorting...</string>
+    <string name="settings_timeshift_label">Коррекция времени передач в часах</string>
 
 
 </resources>

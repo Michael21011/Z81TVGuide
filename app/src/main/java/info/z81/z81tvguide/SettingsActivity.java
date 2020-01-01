@@ -43,7 +43,7 @@ import android.widget.AdapterView;
 
     public class SettingsActivity extends Activity {
     String[] data = {"Этот провайдер больше не доступен", "teleguide.info", "epg.by","Cosmos","telecom.by"};
-    String[] favoriteSet = {"МТИС Цифровой", "Аксиома-сервис", "Атлант Телеком", "Космос ТВ *в планах*", "НТВ-Плюс *в планах*", "Триколор *в планах*", "Zala Базовый", "Zala Все включено","Voka"};
+    String[] favoriteSet = {"МТИС Цифровой", "Аксиома-сервис", "Атлант Телеком", "Космос ТВ *в планах*", "НТВ-Плюс *в планах*", "Триколор *в планах*", "Zala Базовый", "Zala Все включено","Voka","Все от провайдера"};
     String[][] favoritProgram = {
             /* 0 МТИС Цифровой*/ {
                 consts.c_PlustTV,
@@ -136,7 +136,7 @@ import android.widget.AdapterView;
             consts.c_Мужскоекино, consts.c_МУЛЬТ, consts.c_Мультимания, consts.c_НТВБеларусь, consts.c_Нашфутбол, "Настоящее Страшное ТВ", consts.c_Наука2, consts.c_Ностальгия, consts.c_ОНТ, consts.c_Оружие, consts.c_Охотаирыбалка, "Охотник и Рыболов HD", "Первый Музыкальный HD", consts.c_ПерецInternational,
             consts.c_РТРБеларусь, consts.c_РетроТВ, "Родное кино", consts.c_РусскийЭкстрим, consts.c_СТВ, consts.c_Сарафан, consts.c_СетантаСпорт, consts.c_СетантаСпортПлюс, consts.c_Совершенносекретно, consts.c_Союз, consts.c_ТВ3, consts.c_ТНТ, consts.c_Усадьба, consts.c_ФениксPlusКино, consts.c_ШансонTB},
 
-            /* 3 Космос ТВ */ {consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5},
+            /* 3 Космос ТВ */ {consts.c_1HD, consts.c_2multi2, consts.c_8Channel,consts.c_A2, consts.c_AmediaHit, consts.c_AmediaPremiumHD, consts.c_AnimalPlanet, consts.c_DTX, consts.c_DiscoveryScience, consts.c_DiscoveryHDShowcase, consts.c_EuropaPlusTV, consts.c_Eurosport, consts.c_Eurosport2, consts.c_Galaxy,consts.c_MTVLiveHD, consts.c_NickelodeonHD, consts.c_OutdoorChannel, consts.c_RTGHD, consts.c_RTGTV, consts.c_RuTV, consts.c_TLC,consts.c_TiJi, consts.c_TravelAdventure,consts.c_ViasatHistory, consts.c_АвтоПлюс, consts.c_БелБизнесЧенел, consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5, consts.c_БоксТВ,consts.c_ВТВ,consts.c_Время, consts.c_ДОМАШНИЕЖИВОТНЫЕ, consts.c_Драйв, consts.c_Загороднаяжизнь, consts.c_ЗдоровоеТВ, consts.c_Индийскоекино, consts.c_КарусельINT, consts.c_Кинокомедия, consts.c_КинопремьераHD, consts.c_Киносерия,consts.c_Кинохит, consts.c_КухняТВ, consts.c_Мама, consts.c_МИР, consts.c_МирHD, consts.c_Мирсериала, consts.c_МояПланета, consts.c_МузыкаПервого, consts.c_МУЛЬТ, consts.c_НастоящееСтрашноеТелевидение,consts.c_Наука2, consts.c_Нашелюбимоекино, consts.c_НашеНовоеКино, consts.c_Ностальгия, consts.c_ОНТ, consts.c_Охотаирыбалка, consts.c_ОхотникиРыболовHD, consts.c_ПерецInternational, consts.c_РетроТВ, consts.c_РусскийИллюзион, consts.c_РусскийЭкстрим, consts.c_СТВ, consts.c_Сарафан,consts.c_TVXXI, consts.c_Телекафе, consts.c_ФениксPlusКино, consts.c_Футбол, consts.c_ШансонTB},
             /* 4 НТВ-Плюс */ {consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5},
             /* 5 Триколор */ {consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5},
             /* 6 Zala */ {consts.c_8Channel, consts.c_A2, consts.c_Драйв, consts.c_EuroNews, consts.c_EuropaPlusTV, consts.c_History, "MIНСК TV", consts.c_NickJr, consts.c_RTVI, consts.c_RuTV, consts.c_SONYSCIFI, consts.c_СТВ,
@@ -249,11 +249,13 @@ import android.widget.AdapterView;
             consts.c_ФениксPlusКино,
             consts.c_ШансонTB,
             // consts.c_amc,
-             }
-
+             },
+            // [9] Все от провайдера
+            {}
     };
     Spinner sourceSpinner;
     Spinner faforitSpinner;
+    Spinner timeShiftSpinner;
 
     /**
      * Called when the activity is first created.
@@ -321,6 +323,31 @@ import android.widget.AdapterView;
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
+        timeShiftSpinner= (Spinner) findViewById(R.id.timeShiftSpinner);
+        int timeShift = Utils.ReadSharedPreference(MainActivity.APP_PREFERENCES_TIMESHIFT, 0);
+        String[] choose = getResources().getStringArray(R.array.timeShiftArray);
+        for (int i = 0; i < choose.length; i++) {
+            if (Integer.parseInt(choose[i])==timeShift) {
+                timeShiftSpinner.setSelection(i);
+                break;
+            }
+        }
+        timeShiftSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                String[] choose = getResources().getStringArray(R.array.timeShiftArray);
+
+                Utils.WriteSharedPreference(MainActivity.APP_PREFERENCES_TIMESHIFT, Integer.parseInt(choose[position]));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+
     }
 
     @Override
@@ -331,7 +358,7 @@ import android.widget.AdapterView;
             if (findViewById(R.id.faforitSpinner).isEnabled()) {
                 Map<String, String> normalMap = Utils.GetNormalaizedList();
                 for (int i = 0; i < favoritProgram[faforitSpinner.getSelectedItemPosition()].length; i = i + 1) {
-                    ed.putBoolean(Utils.NormalazeChannelName(favoritProgram[faforitSpinner.getSelectedItemPosition()][i], normalMap).toUpperCase(), true);
+                    ed.putBoolean(Utils.NormalazeChannelName(favoritProgram[faforitSpinner.getSelectedItemPosition()][i], normalMap).toUpperCase(), true && faforitSpinner.getSelectedItemPosition()!=9);
                 }
             }
             ed.commit();

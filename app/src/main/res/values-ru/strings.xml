@@ -65,5 +65,6 @@
     <string name="action_shownotes_on">Описание: вкл</string>
     <string name="action_shownotes_off">Описание: выкл</string>
     <string name="task_sorting">Сортировка...</string>
+    <string name="settings_timeshift_label">Коррекция времени</string>
 
 </resources>

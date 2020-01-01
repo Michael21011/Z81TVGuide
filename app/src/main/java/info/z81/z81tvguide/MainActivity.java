@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int videotutorialversion = 1;
     public static final String APP_PREFERENCES_STARTUPMESSAGEVERSION = "startupmessageversion";
     public static final int startupmessageversion = 1;
-
+    public static final String APP_PREFERENCES_TIMESHIFT="timeshiftsetting";
 
     public static String IconDownloadPathMask = "https://raw.githubusercontent.com/Michael21011/Z81TVGuide/RollBecasuLoop/Icons/%s.png";
 
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean UpdateInProgress = false;
     public  TVProgram tvProgram;
     private int currentPosition = 0;
+    private int timeShiftSetting = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         settingPreference = getSharedPreferences("settings", MODE_PRIVATE);
         myChannelsPreference= getSharedPreferences("myChannels", MODE_PRIVATE);
 
+
         LoadProvider();
 
 
@@ -171,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
             ShowNotes = Utils.Preference_ShowNotes();
         }
 
+        if (settingPreference.contains(APP_PREFERENCES_TIMESHIFT)){
+            timeShiftSetting = settingPreference.getInt(APP_PREFERENCES_TIMESHIFT,0);
+        }
 
 
         int videoversion = 0;
@@ -252,8 +257,12 @@ public class MainActivity extends AppCompatActivity {
         /* if (mProgressDialog != null)
             mProgressDialog.dismiss();
             */
+        Integer oldTimeShiftSetting = timeShiftSetting;
+        if (settingPreference.contains(APP_PREFERENCES_TIMESHIFT)){
+            timeShiftSetting = settingPreference.getInt(APP_PREFERENCES_TIMESHIFT,0);
+        }
         if (!updateInProgress()) {
-            if (NeedRebuildList) {
+            if (NeedRebuildList || timeShiftSetting!=oldTimeShiftSetting)  {
                 showContentInBackground(null);
             } else if (NeedRefreshList) {
                 NeedRefreshList = false;
@@ -1170,7 +1179,7 @@ public class MainActivity extends AppCompatActivity {
 
                             if (!LastChannelWasSkipped )
                             {
-                                tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.DateAdd(Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")),java.util.Calendar.HOUR,Provider.HourShift()), Utils.XMLGetElementValue(s, "desc"));
+                                tvProgram.AddProgram(ChannelId, Utils.XMLGetElementValue(s, "title"), Utils.DateAdd(Utils.StringToDate(Utils.XMLGetAttributeValue(s, "programme", "start")),java.util.Calendar.HOUR,Provider.HourShift()+timeShiftSetting), Utils.XMLGetElementValue(s, "desc"));
                                 LastChannelWasSkipped = false;
                             }
                             builder.setLength(0);
