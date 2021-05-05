@@ -141,7 +141,7 @@ public class OneChannelProgramActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.onechannel_option, menu);
 
-        if (Utils.Preference_ShowNotes()) {
+        if (Utils.Preference_ShowNotes("chanel")) {
 
             menu.findItem(R.id.action_shownotes).setTitle(R.string.action_shownotes_on);
             menu.findItem(R.id.action_shownotes).setIcon(R.drawable.ic_action_notes_on);
@@ -241,15 +241,14 @@ searchView.setQuery(filterString, false);
     }
 
     private void SwithShowNotes(MenuItem item) {
-        Boolean ShowNotes=!Utils.Preference_ShowNotes();
-        if (Utils.Preference_ShowNotes()) {
+        Boolean ShowNotes=!Utils.Preference_ShowNotes("chanel");
+        if (ShowNotes) {
             item.setIcon(R.drawable.ic_action_notes_on);
             item.setTitle(R.string.action_shownotes_on);
         } else {item.setIcon(R.drawable.ic_action_notes_off);
             item.setTitle(R.string.action_shownotes_off);}
-        Utils.WritePreference_ShowNotes(ShowNotes);
+        Utils.WritePreference_ShowNotes(ShowNotes, "chanel");
         updateListView();
-
     }
 
 

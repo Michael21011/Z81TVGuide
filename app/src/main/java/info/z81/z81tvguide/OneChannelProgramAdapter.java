@@ -25,7 +25,7 @@ public class OneChannelProgramAdapter extends BaseAdapter{
         this.list = values;
         this.context = context;
         this.list.ApplyFilter(FilterString);
-        showNotes = Utils.Preference_ShowNotes();
+        showNotes = Utils.Preference_ShowNotes("chanel");
 
         this.currentItemIndex = list.GetCurrentItemIndex(0);
 

@@ -5,9 +5,9 @@ android {
     defaultConfig {
         applicationId "info.z81.z81tvguide"
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 72
-        versionName '1.72'
+        targetSdkVersion 29
+        versionCode 73
+        versionName '1.73'
 
     }
     dexOptions {

@@ -56,6 +56,8 @@ public  class  consts {
     public static final String c_FashionOne = "Fashion One";
     public static final String c_FashionOneHD = "Fashion One HD";
     public static final String c_FashionTV = "Fashion TV";
+    public static final String c_FashionLifeStyle = "Fashion & Life Style";
+
     public static final String c_Filmbox = "Filmbox";
     public static final String c_FineLivingNetwork = "Fine Living Network";
     public static final String c_FoodNetwork = "Food Network";
@@ -67,6 +69,7 @@ public  class  consts {
     public static final String c_Gulli = "Gulli";
     public static final String c_HDLife = "HD Life";
     public static final String c_History = "History";
+    public static final String c_History2 = "History 2";
     public static final String c_HistoryRussiaHD = "History Россия HD";
     public static final String c_IDxtra = "ID xtra";
     public static final String c_IQHD= "IQ HD";
@@ -105,6 +108,8 @@ public  class  consts {
     public static final String c_SonyТВHD = "Sony ТВ HD";
     public static final String c_STVЖАРА = "STV-ЖАРА";
     public static final String c_TiJi = "TiJi";
+    public static final String c_TimelessDizi = "Timeless Dizi Channel";
+
     public static final String c_TLC = "TLC";
     public static final String c_TopsongTV = "Topsong TV";
     public static final String c_TravelChannel = "Travel Channel";
@@ -118,12 +123,14 @@ public  class  consts {
     public static final String c_TV1000MegahitHD = "TV1000 Megahit HD";
     public static final String c_TV1000PremiumHD = "TV1000 Premium HD";
     public static final String c_TV1000Русскоекино = "ТВ-1000. Русское кино";
+    public static final String c_UFC = "UFC";
     public static final String c_VH1Classic = "VH1 Classic";
     public static final String c_VH1European = "VH1 European";
     public static final String c_ViasatExplore = "Виасат Эксплорер";
     public static final String c_ViasatHistory = "Виасат Хистори";
     public static final String c_ViasatNatureCEE = "Виасат Нэйчер";
     public static final String c_ViasatSport = "Спортивный телеканал Виасат";
+
     public static final String c_WorldFashionChannel = "WorldFashionChannel";
     public static final String c_ZeeTV = "Zee Russia";
     public static final String c_Zooпарк = "Zooпарк";
@@ -144,6 +151,8 @@ public  class  consts {
     public static final String c_Беларусь24 = "Беларусь-24";
     public static final String c_БелБизнесЧенел = "БелБизнесЧенел";
     public static final String c_БЕЛМУЗТВ = "БЕЛМУЗТВ";
+    public static final String c_Белрос = "БелРосТв";
+
     public static final String c_БестселлерПлюс = "Бестселлер Плюс";
     public static final String c_Бобёр = "Бобёр";
     public static final String c_БоксТВ = "Бокс ТВ";
@@ -152,6 +161,7 @@ public  class  consts {
     public static final String c_Вопросыиответы = "Вопросы и ответы";
     public static final String c_Время = "Время";
     public static final String c_ВТВ = "ВТВ";
+    public static final String c_Глазамитуриста = "Глазами туриста";
     public static final String c_ГродноПлюс = "Гродно Плюс";
     public static final String c_Губерния33 = "Губерния 33";
     public static final String c_Детский = "Детский";
@@ -162,7 +172,6 @@ public  class  consts {
     public static final String c_Домкино = "Дом кино";
     public static final String c_ДомКиноПремиум = "Дом Кино Премиум";
     public static final String c_ДОМАШНИЕЖИВОТНЫЕ = "Домашние животные";
-    public static final String c_Домашний = "Домашний";
     public static final String c_ДомашнийInt = "Домашний I";
     public static final String c_ДомашнийкинотеатрHD = "Домашний кинотеатр HD";
     public static final String c_ДомашнийМагазин = "Домашний Магазин";
@@ -170,6 +179,8 @@ public  class  consts {
     public static final String c_Еврокино = "Еврокино";
     public static final String c_ЕГЭТВ = "ЕГЭ ТВ";
     public static final String c_ЕДАHD = "ЕДА HD";
+    public static final String c_ЕдаПремиум = "Еда Премиум";
+
     public static final String c_Живаяпланета = "Живая планета";
     public static final String c_ЖИВИ = "ЖИВИ!";
     public static final String c_Загороднаяжизнь = "Загородная жизнь";
@@ -185,6 +196,8 @@ public  class  consts {
     public static final String c_КаналDisney = "Канал Disney";
     public static final String c_Карусель = "Карусель";
     public static final String c_КарусельINT = "Карусель INT";
+    public static final String c_Квартал = "Квартал ТВ";
+
     public static final String c_КВНТВ = "КВН ТВ";
     public static final String c_КиноТВ = "Кино ТВ";
     public static final String c_КинозалSD1 = "Кинозал SD1";
@@ -256,7 +269,6 @@ public  class  consts {
     public static final String c_Открытыймир = "Открытый мир";
     public static final String c_ОТР = "ОТР";
     public static final String c_Охотаирыбалка = "Охота и рыбалка";
-    public static final String c_ОхотникиРыболов = "Охотник и Рыболов";
     public static final String c_ОхотникиРыболовHD = "Охотник и Рыболов HD";
     public static final String c_ПервыйЕвропа = "Первый (Европа)";
     public static final String c_ПервыйРоссия = "Первый (Россия)";
@@ -269,6 +281,8 @@ public  class  consts {
     public static final String c_Психология21 = "Психология 21";
     public static final String c_Пятница = "Пятница";
     public static final String c_ПятницаPlus2 = "Пятница +2";
+    public static final String c_ПятыйInternational = "Пятый International";
+
     public static final String c_РадостьМоя = "Радость Моя";
     public static final String c_РазТВ = "Раз ТВ";
     public static final String c_РБК = "РБК";
@@ -304,6 +318,7 @@ public  class  consts {
     public static final String c_СТС = "СТС";
     public static final String c_СТСInternational = "СТС International";
     public static final String c_СТСLove = "СТС Love";
+    public static final String c_ТайныГалактики = "Тайны Галактики";
     public static final String c_Т24 = "Т24";
     public static final String c_ТВ3 = "ТВ-3";
     public static final String c_ТВЦентр = "ТВ-Центр";
@@ -339,4 +354,7 @@ public  class  consts {
     public static final String c_ЭгоистТВ = "Эгоист ТВ";
     public static final String c_ЮТВ = "Ю ТВ";
     public static final String c_ЮморBOX = "Юмор BOX";
+    public static final String c_Ясное = "Ясное ТВ";
+
+
 }

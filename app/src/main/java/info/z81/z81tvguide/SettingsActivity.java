@@ -1,34 +1,10 @@
 package info.z81.z81tvguide;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build.VERSION;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -42,83 +18,76 @@ import android.widget.AdapterView;
  */
 
     public class SettingsActivity extends Activity {
-    String[] data = {"Этот провайдер больше не доступен", "teleguide.info", "epg.by","Cosmos","telecom.by"};
+    String[] data = {"Этот провайдер больше не доступен", "teleguide.info", "epg.by","Cosmos","telecom.by","epg.it999.ru"};
     String[] favoriteSet = {"МТИС Цифровой", "Аксиома-сервис", "Атлант Телеком", "Космос ТВ *в планах*", "НТВ-Плюс *в планах*", "Триколор *в планах*", "Zala Базовый", "Zala Все включено","Voka","Все от провайдера"};
-    String[][] favoritProgram = {
+    String[][] supportedProgram = {
             /* 0 МТИС Цифровой*/ {
-                consts.c_PlustTV,
-                consts.c_1HD,
-            consts.c_8Channel,
-            consts.c_A2,
-            consts.c_EuroNews,
-            consts.c_EuropaPlusTV,
-            consts.c_EnglishClubTV,
-            consts.c_FashionOneHD,
-            consts.c_FOX,
-            consts.c_Galaxy,
-            consts.c_Gulli,
-            consts.c_HDLife,
-            consts.c_History,
-            consts.c_IQHD,
-            consts.c_MTVHitsInternational,
-            consts.c_NationalGeographic,
-            consts.c_Nickelodeon,
-            consts.c_ParamountComedy,
-            consts.c_RuTV,
-
-            consts.c_SONYSCIFI,
-            consts.c_SonyTurbo,
-            consts.c_TV1000,
-            consts.c_TV1000Action,
-            consts.c_TV1000ComedyHD,
-            consts.c_TV1000Русскоекино,
-            consts.c_ViasatExplore,
-            consts.c_ViasatHistory,
-            consts.c_ViasatNatureCEE,
             consts.c_АвтоПлюс,
-            consts.c_БЕЛМУЗТВ,
+            consts.c_БелБизнесЧенел,
+            consts.c_Белрос,
+            consts.c_ДОМАШНИЕЖИВОТНЫЕ,
+            consts.c_ЕдаПремиум,
+            consts.c_Кинокомедия,
+            consts.c_КИНОМИКС,
+            consts.c_КинопремьераHD,
+            consts.c_Киносвидание,
+            consts.c_Киносемья,
+            consts.c_Мужскоекино,
+            consts.c_ОхотникиРыболовHD,
+            consts.c_Культура,
+            consts.c_Союз,
+            consts.c_ТНТMusic,
+            consts.c_ТайныГалактики,
+            consts.c_Усадьба,
+            consts.c_PlustTV,
+consts.c_ПятыйInternational,
+            consts.c_8Channel,
+            consts.c_АнекдотТВ,
             consts.c_Беларусь1,
             consts.c_Беларусь2,
             consts.c_Беларусь3,
             consts.c_Беларусь5,
+            consts.c_БЕЛМУЗТВ,
             consts.c_ВТВ,
-            consts.c_ДОМАШНИЕЖИВОТНЫЕ,
-            consts.c_Домашний,
             consts.c_Домкино,
-            consts.c_КИНОМИКС,
-            consts.c_Киносемья,
-            consts.c_КХЛHD,
+            consts.c_ДомашнийInt,
+            consts.c_EnglishClubTV,
+            consts.c_RTVI,
+            consts.c_EuropaPlusTV,
+            consts.c_FashionLifeStyle,
+            consts.c_Глазамитуриста,
+            consts.c_History2,
+            consts.c_History,
             consts.c_КарусельINT,
-            consts.c_Культура,
-            consts.c_ЛяМинор,
-            consts.c_МинскТВ,
+            consts.c_Квартал,
             consts.c_МИР,
-            consts.c_МирHD,
-            consts.c_МУЛЬТ,
-            consts.c_МояПланета,
-            consts.c_Мужскоекино,
+            consts.c_НаноТВ,
+            consts.c_NickJr,
+            consts.c_Nickelodeon,
             consts.c_НТВБеларусь,
-            consts.c_Наука2,
-            consts.c_НашфутболHD,
             consts.c_ОНТ,
-            consts.c_Охотаирыбалка,
-            consts.c_ПерецInternational,
-            consts.c_РБК,
+            consts.c_ParamountComedy,
             consts.c_РТРБеларусь,
             consts.c_РусскийИллюзион,
-            consts.c_Сарафан,
-            consts.c_СветлоеТВ,
+            consts.c_SET,
             consts.c_СетантаСпорт,
             consts.c_СетантаСпортПлюс,
+            consts.c_ШансонTB,
+            consts.c_SONYSCIFI,
             consts.c_СТВ,
+            consts.c_СветлоеТВ,
             consts.c_ТВ3,
-            consts.c_Сарафан,
-            consts.c_Союз,
-            consts.c_Т24,
+            consts.c_TimelessDizi,
             consts.c_ТНТ,
-            consts.c_ТРО,
-            consts.c_Усадьба,
-            consts.c_ШансонTB},
+            consts.c_TravelAdventure,
+            consts.c_TV1000,
+            consts.c_TV1000Русскоекино,
+            consts.c_UFC,
+            consts.c_ViasatExplore,
+            consts.c_ViasatHistory,
+            consts.c_ViasatNatureCEE,
+            consts.c_Ясное,
+            consts.c_Звезда},
             
             /* 1 Аксиома-сервис */ {"+TV Belviasat", "365 Дней", consts.c_8Channel, "CNN International", consts.c_DiscoveryChannel, consts.c_EuroNews, consts.c_Eurosport, consts.c_Eurosport2, "JimJam", "Mezzo", consts.c_NationalGeographic, consts.c_Nickelodeon, consts.c_RTVI, consts.c_TV1000,
             consts.c_TV1000Action, consts.c_TV1000Русскоекино, "VH1 European", consts.c_ViasatExplore, consts.c_ViasatHistory, "VViasat Nature CEE", consts.c_БЕЛМУЗТВ, consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5, consts.c_РБК, consts.c_ВТВ,
@@ -131,7 +100,7 @@ import android.widget.AdapterView;
             consts.c_ParamountComedy, consts.c_RTVI, consts.c_TV1000, consts.c_TV1000Action,
             consts.c_TV1000Русскоекино, consts.c_TiJi, consts.c_TravelChannel, "Travel Channel HD", "Travel+Adventure HD", "VH1 European", "VH1 Classic", consts.c_ViasatExplore, consts.c_ViasatHistory, consts.c_ViasatNatureCEE,
             "Viasat Nature/History HD", consts.c_АвтоПлюс, consts.c_РБК,
-            consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5, consts.c_БЕЛМУЗТВ, "Русский бестселлер (международный)", consts.c_ВТВ, consts.c_Детский, consts.c_Домашний, consts.c_Драйв, consts.c_Еврокино, "Здоровое Телевидение", "Зоопарк",
+            consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь5, consts.c_БЕЛМУЗТВ, "Русский бестселлер (международный)", consts.c_ВТВ, consts.c_Детский, consts.c_ДомашнийInt, consts.c_Драйв, consts.c_Еврокино, "Здоровое Телевидение", "Зоопарк",
             consts.c_ИллюзионPlus, consts.c_Индийскоекино, consts.c_КХЛ, consts.c_КарусельINT, "Кинозал 1", "Кинозал 2", "Кинозал HD", consts.c_КИНОМИКС, "Кинопремьера", consts.c_Киносемья, consts.c_Кинохит, consts.c_Культура, consts.c_КухняТВ, consts.c_Мама, consts.c_МИР, consts.c_МояПланета,
             consts.c_Мужскоекино, consts.c_МУЛЬТ, consts.c_Мультимания, consts.c_НТВБеларусь, consts.c_Нашфутбол, "Настоящее Страшное ТВ", consts.c_Наука2, consts.c_Ностальгия, consts.c_ОНТ, consts.c_Оружие, consts.c_Охотаирыбалка, "Охотник и Рыболов HD", "Первый Музыкальный HD", consts.c_ПерецInternational,
             consts.c_РТРБеларусь, consts.c_РетроТВ, "Родное кино", consts.c_РусскийЭкстрим, consts.c_СТВ, consts.c_Сарафан, consts.c_СетантаСпорт, consts.c_СетантаСпортПлюс, consts.c_Совершенносекретно, consts.c_Союз, consts.c_ТВ3, consts.c_ТНТ, consts.c_Усадьба, consts.c_ФениксPlusКино, consts.c_ШансонTB},
@@ -142,7 +111,7 @@ import android.widget.AdapterView;
             /* 6 Zala */ {consts.c_8Channel, consts.c_A2, consts.c_Драйв, consts.c_EuroNews, consts.c_EuropaPlusTV, consts.c_History, "MIНСК TV", consts.c_NickJr, consts.c_RTVI, consts.c_RuTV, consts.c_SONYSCIFI, consts.c_СТВ,
             consts.c_ViasatExplore, consts.c_ViasatHistory, consts.c_ViasatNatureCEE, consts.c_TV1000, consts.c_TV1000Русскоекино,
             consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь4, consts.c_Беларусь5, "БелБизнесЧенел", consts.c_РБК, consts.c_БЕЛМУЗТВ, "БУГ-ТВ", "Варяг", consts.c_ВТВ,
-            "Гомель ТВ", "Гродно Плюс", consts.c_Детскиймир, consts.c_Домашний, consts.c_Еврокино, consts.c_КИНОМИКС, "Лида ТВ", consts.c_РТВЛюбимоекино, consts.c_МИР, consts.c_МояПланета, consts.c_Мужскоекино, consts.c_Наука2, consts.c_НТВБеларусь,
+            "Гомель ТВ", "Гродно Плюс", consts.c_Детскиймир, consts.c_ДомашнийInt, consts.c_Еврокино, consts.c_КИНОМИКС, "Лида ТВ", consts.c_РТВЛюбимоекино, consts.c_МИР, consts.c_МояПланета, consts.c_Мужскоекино, consts.c_Наука2, consts.c_НТВБеларусь,
             consts.c_ОНТ, consts.c_Охотаирыбалка, "Первый музыкальный канал", consts.c_ПерецInternational, "Пинск", consts.c_Культура,
             consts.c_РТРБеларусь, consts.c_РусскийИллюзион, consts.c_Сарафан, consts.c_СТВ, consts.c_TVXXI, consts.c_ТВ3, "Телеканал «+TV»", "Телеканал «СИТИ»", "Телеканал «ТВТ»", consts.c_2multi2, "Телемагазин",
             consts.c_ТНТ, consts.c_Усадьба, consts.c_ШансонTB, consts.c_SonyTurbo, consts.c_Кинокомедия},
@@ -152,7 +121,7 @@ import android.widget.AdapterView;
             consts.c_TVXXI, consts.c_TV1000Action, consts.c_TV1000Русскоекино, consts.c_TV1000, consts.c_TiJi, consts.c_TravelChannel, consts.c_TravelAdventure, consts.c_ViasatExplore, consts.c_ViasatHistory, consts.c_ViasatNatureCEE,
             consts.c_A2, "БУГ-ТВ",
             "БелБизнесЧенел", consts.c_БЕЛМУЗТВ, consts.c_Беларусь1, consts.c_Беларусь2, consts.c_Беларусь3, consts.c_Беларусь4, consts.c_Беларусь5, consts.c_ВТВ, "Варяг", "Гомель ТВ", "Гродно Плюс", consts.c_Детский, consts.c_Детскиймир,
-            consts.c_Домкино, consts.c_Домашний, consts.c_Драйв, consts.c_Еврокино, consts.c_ИллюзионPlus, consts.c_Индийскоекино, consts.c_КХЛ, consts.c_2multi2, consts.c_КИНОМИКС, consts.c_Кинохит, consts.c_КухняТВ, "Лида ТВ", consts.c_МИР,
+            consts.c_Домкино, consts.c_ДомашнийInt, consts.c_Драйв, consts.c_Еврокино, consts.c_ИллюзионPlus, consts.c_Индийскоекино, consts.c_КХЛ, consts.c_2multi2, consts.c_КИНОМИКС, consts.c_Кинохит, consts.c_КухняТВ, "Лида ТВ", consts.c_МИР,
             consts.c_МояПланета, consts.c_Мужскоекино, consts.c_Мультимания, consts.c_НТВБеларусь, consts.c_Нашфутбол, consts.c_Наука2, consts.c_НашеНовоеКино, consts.c_Ностальгия, consts.c_ОНТ, consts.c_Оружие, consts.c_Охотаирыбалка,
             "Первый музыкальный канал", consts.c_ПерецInternational, "Пинск", consts.c_РБК, consts.c_РТВЛюбимоекино, consts.c_РТВЛюбимоекино, consts.c_РТРБеларусь, consts.c_Культура, consts.c_РусскийИллюзион, consts.c_РусскийЭкстрим,
             consts.c_СТВ, consts.c_Сарафан, consts.c_СетантаСпорт, consts.c_Совершенносекретно, consts.c_Союз, consts.c_Спорт1укр, consts.c_Спорт2укр, consts.c_ТВ3, consts.c_ТНТMusic, consts.c_ТНТ, consts.c_ТРО, "Телеканал «+TV»",
@@ -190,7 +159,7 @@ import android.widget.AdapterView;
             consts.c_TV1000,
             consts.c_TV1000Action,
             consts.c_TV1000Русскоекино,
-            consts.c_TravelAdventureHD,
+            consts.c_TravelAdventure,
             consts.c_TravelChannel,
             consts.c_ViasatExplore,
             consts.c_ViasatHistory,
@@ -205,7 +174,6 @@ import android.widget.AdapterView;
             consts.c_Беларусь5,
             consts.c_ВТВ,
             consts.c_Детский,
-            consts.c_Домашний,
             consts.c_ДомашнийInt,
             consts.c_Драйв,
             consts.c_Еврокино,
@@ -242,7 +210,7 @@ import android.widget.AdapterView;
             consts.c_СетантаСпортПлюс,
             consts.c_Союз,
             consts.c_Т24,
-            consts.c_ТВ3Минск,
+            consts.c_ТВ3,
             consts.c_ТНТInternational,
             consts.c_ТНТMusic,
             consts.c_Усадьба,
@@ -357,8 +325,8 @@ import android.widget.AdapterView;
             ed.clear();
             if (findViewById(R.id.faforitSpinner).isEnabled()) {
                 Map<String, String> normalMap = Utils.GetNormalaizedList();
-                for (int i = 0; i < favoritProgram[faforitSpinner.getSelectedItemPosition()].length; i = i + 1) {
-                    ed.putBoolean(Utils.NormalazeChannelName(favoritProgram[faforitSpinner.getSelectedItemPosition()][i], normalMap).toUpperCase(), true && faforitSpinner.getSelectedItemPosition()!=9);
+                for (int i = 0; i < supportedProgram[faforitSpinner.getSelectedItemPosition()].length; i = i + 1) {
+                    ed.putBoolean(Utils.NormalazeChannelName(supportedProgram[faforitSpinner.getSelectedItemPosition()][i], normalMap).toUpperCase(), true && faforitSpinner.getSelectedItemPosition()!=9);
                 }
             }
             ed.commit();

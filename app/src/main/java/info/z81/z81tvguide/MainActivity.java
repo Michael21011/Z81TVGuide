@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (settingPreference.contains(APP_PREFERENCES_SHOWNOTES)) {
             // Получаем число из настроек
-            ShowNotes = Utils.Preference_ShowNotes();
+            ShowNotes = Utils.Preference_ShowNotes(this.getLocalClassName());
         }
 
         if (settingPreference.contains(APP_PREFERENCES_TIMESHIFT)){
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadProvider() {
-        int ProviderIndex = Utils.ReadSharedPreference(Utils.ProgramProviderParamName, 4);
+        int ProviderIndex = Utils.ReadSharedPreference(Utils.ProgramProviderParamName, 1);
         switch (ProviderIndex) {
             case 1:
                 Provider = new TeleGuideInfoProvider();
@@ -368,6 +368,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 4:
                 Provider = new VelcomProvider();
+                break;
+            case 5:
+                Provider = new It999Provider();
                 break;
             default:
                 Provider =  new VelcomProvider();
@@ -588,10 +591,7 @@ public class MainActivity extends AppCompatActivity {
             item.setTitle(R.string.action_shownotes_on);
         } else {item.setIcon(R.drawable.ic_action_notes_off);
         item.setTitle(R.string.action_shownotes_off);}
-        SharedPreferences.Editor editor = settingPreference.edit();
-        editor.putBoolean(APP_PREFERENCES_SHOWNOTES, ShowNotes);
-        editor.commit();
-
+        Utils.WritePreference_ShowNotes(ShowNotes, this.getLocalClassName());
 
         UpdateContentInBackground(this);
         //showContentInBackground(null);
@@ -1091,6 +1091,7 @@ public class MainActivity extends AppCompatActivity {
                     String CurrentString;
 
 //loop for channel
+                    myChannelsPreference= getSharedPreferences("myChannels", MODE_PRIVATE);
                     StringBuilder builder = new StringBuilder();
                     Map<String,String> normalMap=Utils.GetNormalaizedList();
 

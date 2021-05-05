@@ -503,7 +503,7 @@ public class Utils {
         list.put("Eureka HD","Eureka HD");
         list.put("EuroNews","EuroNews");
         list.put("Евроновости",consts.c_EuroNews);
-        list.put("Europa Plus TV","Europa Plus TV");
+        list.put("Europa Plus TV",consts.c_EuropaPlusTV);
         list.put("Eurosport",consts.c_Eurosport);
         list.put("Eurosport 1",consts.c_Eurosport);
         list.put("Eurosport 2","Eurosport 2");
@@ -514,6 +514,8 @@ public class Utils {
         list.put("Fashion One HD","Fashion One HD");
         list.put("Fashion One",consts.c_FashionOne);
         list.put("Fashion TV",consts.c_FashionTV);
+        list.put("HDFASHION&LifeStyle",consts.c_FashionLifeStyle);
+
         list.put("Filmbox","Filmbox");
         list.put("Fine Living Network","Fine Living Network");
         list.put("Food Network","Food Network");
@@ -525,7 +527,9 @@ public class Utils {
 
         list.put("Gulli","Gulli");
         list.put("HD Life","HD Life");
-        list.put("History","History");
+        list.put("History",consts.c_History);
+        list.put("History HD",consts.c_History);
+        list.put("History 2","History 2");
         list.put("History Россия HD","History Россия HD");
         list.put("ID xtra","ID xtra");
         list.put("IQ HD","IQ HD");
@@ -551,7 +555,8 @@ public class Utils {
         list.put("Ocean TV","Ocean TV");
         list.put("Outdoor Channel","Outdoor Channel");
         list.put("Paramount Channel","Paramount Channel");
-        list.put("Paramount Comedy","Paramount Comedy");
+        list.put("Paramount Comedy",consts.c_ParamountComedy);
+        list.put("Paramount Comedy HD",consts.c_ParamountComedy);
         list.put("RTG HD","RTG HD");
         list.put("RTG Interantional","RTG Interantional");
         list.put("RTG TV","RTG TV");
@@ -560,43 +565,54 @@ public class Utils {
         list.put("Rusong TV","Rusong TV");
         list.put("Russia Today","Russia Today");
         list.put("RUSSIAN MUSICBOX","RUSSIAN MUSICBOX");
-        list.put("SET","SET");
+        list.put("SET",consts.c_SET);
+        list.put("SET IN",consts.c_SET);
+
         list.put("SONY SCI-FI","SONY Sci-Fi");
         list.put("Sony Turbo","Sony Turbo");
         list.put("Sony ТВ HD","Sony ТВ HD");
         list.put("STV-ЖАРА","STV-ЖАРА");
         list.put("TiJi","TiJi");
+        list.put("Timeless Dizi Channel","Timeless Dizi Channel");
         list.put("TLC","TLC");
         list.put("Topsong TV","Topsong TV");
         list.put("Travel Channel",consts.c_TravelChannel);
         list.put("Travel",consts.c_TravelChannel);
         list.put("Travel Channel HD","Travel Channel HD");
-        list.put("Travel+Adventure","Travel and Adventure");
-        list.put("Travel+Adventure HD","Travel and Adventure HD");
+        list.put("Travel+Adventure",consts.c_TravelAdventure);
+        list.put("Travel+Adventure HD",consts.c_TravelAdventure);
+        list.put("travel+adventure",consts.c_TravelAdventure);
+
         list.put("TV XXI","TV XXI");
         list.put("TV1000","ТВ 1000");
+        list.put("TV 1000",consts.c_TV1000);
         list.put("TV1000 Action","ТВ 1000-Экшн");
         list.put("TV1000 Comedy HD","TV 1000 Comedy");
         list.put("ViP Comedy","TV 1000 Comedy");
 
         list.put("TV1000 Megahit HD","TV1000 Megahit HD");
         list.put("TV1000 Premium HD","TV1000 Premium HD");
-        list.put("TV1000 Русское кино","ТВ-1000. Русское кино");
+        list.put("TV1000 Русское кино", consts.c_TV1000Русскоекино);
+        list.put("ТВ-1000. Русское кино",consts.c_TV1000Русскоекино);
+        list.put("TV 1000 Русское кино",consts.c_TV1000Русскоекино);
+
+        list.put("UFC HD orig",consts.c_UFC);
         list.put("VH1 Classic","VH1 Classic");
         list.put("VH1 European","VH1 European");
         list.put("Viasat Explore",consts.c_ViasatExplore);
         list.put("Viasat Explorer",consts.c_ViasatExplore);
         list.put("Viasat History","Виасат Хистори");
-        list.put("Viasat Nature CEE","Виасат Нэйчер");
+        list.put("Viasat Nature CEE",consts.c_ViasatNatureCEE);
+        list.put("Viasat Nature",consts.c_ViasatNatureCEE);
         list.put("Viasat Sport","Спортивный телеканал Виасат");
         list.put("World Fashion Channel","");
         list.put("Zee-TV","Zee Russia");
         list.put("Zooпарк","Zooпарк");
         list.put("Авто 24",consts.c_Авто24);
         list.put("Авто24 HD",consts.c_Авто24);
-        list.put("Авто Плюс","Авто Плюс");
-        list.put("Авто+","Авто Плюс");
-        list.put("Анекдот ТВ","Анекдот ТВ");
+        list.put("Авто Плюс", consts.c_АвтоПлюс);
+        list.put("Авто+", consts.c_АвтоПлюс);
+        list.put("Анекдот ТВ", consts.c_АнекдотТВ);
         list.put("Арт-Видео","Арт-Видео");
         list.put("Беларусь 1","Беларусь 1");
         list.put("Беларусь 2","Беларусь 2");
@@ -606,11 +622,15 @@ public class Utils {
         list.put("Беларусь 4 Гомель","Беларусь 4 Гомель");
         list.put("Беларусь 4 Гродно","Беларусь 4 Гродно");
         list.put("Беларусь 4 Могилёв","Беларусь 4 Могилёв");
-        list.put("Беларусь 5","Беларусь 5");
+        list.put("Беларусь 5",consts.c_Беларусь5);
+        list.put("Беларусь 5 BY",consts.c_Беларусь5);
+        list.put("Беларусь 5 HD",consts.c_Беларусь5);
+
         list.put("Беларусь-24","Беларусь-24");
         list.put("БелБизнесЧенел (ББЧ)",consts.c_БелБизнесЧенел);
         list.put("БелБизнесЧенел (РБК)",consts.c_БелБизнесЧенел);
         list.put("БЕЛМУЗТВ","БЕЛМУЗТВ");
+        list.put("БелРосТв","БелРос");
         list.put("Бестселлер Плюс","Бестселлер Плюс");
         list.put("Бобёр","Бобёр");
         list.put("Бокс ТВ","Бокс ТВ");
@@ -618,7 +638,9 @@ public class Utils {
         list.put("В гостях у сказки","В гостях у сказки");
         list.put("Вопросы и ответы","Вопросы и ответы");
         list.put("Время","Время");
-        list.put("ВТВ","ВТВ");
+        list.put("ВТВ",consts.c_ВТВ);
+        list.put("ВТВ (СТС)",consts.c_ВТВ);
+        list.put("Глазами туриста HD", consts.c_Глазамитуриста);
         list.put("Гродно Плюс","Гродно Плюс");
         list.put("Губерния 33","Губерния 33");
         list.put("Детский",consts.c_Детский);
@@ -630,7 +652,7 @@ public class Utils {
         list.put("Дом кино","Дом кино");
         list.put("Дом Кино Премиум","Дом Кино Премиум");
         list.put("ДОМАШНИЕ ЖИВОТНЫЕ","Домашние животные");
-        list.put("Домашний","Домашний");
+        list.put("Домашний",consts.c_ДомашнийInt);
         list.put("Домашний Int","Домашний I");
         list.put("Домашний кинотеатр HD","Домашний кинотеатр HD");
         list.put("Домашний Магазин","Домашний Магазин");
@@ -638,11 +660,15 @@ public class Utils {
         list.put("Еврокино","Еврокино");
         list.put("ЕГЭ ТВ","ЕГЭ ТВ");
         list.put("ЕДА HD","ЕДА HD");
+        list.put("Еда Premium 50",consts.c_ЕдаПремиум);
+        list.put("Еда Премиум",consts.c_ЕдаПремиум);
         list.put("Живая планета","Живая планета");
         list.put("ЖИВИ!","ЖИВИ!");
         list.put("Загородная жизнь","Загородная жизнь");
         list.put("Загородный","Загородный");
-        list.put("Звезда","Звезда");
+        list.put("Звезда",consts.c_Звезда);
+        list.put("Телеканал Звезда",consts.c_Звезда);
+
         list.put("Здоровое ТВ","Здоровое ТВ");
         list.put("Зоо ТВ","Зоо ТВ");
         list.put("Иллюзион+",consts.c_ИллюзионPlus);
@@ -655,6 +681,7 @@ public class Utils {
         list.put("Карусель","Карусель");
         list.put("Карусель INT",consts.c_КарусельINT);
         list.put("Карусель International",consts.c_КарусельINT);
+        list.put("Квартал ТВ","Квартал ТВ");
         list.put("КВН ТВ","КВН ТВ");
         list.put("Кино ТВ","Кино ТВ");
         list.put("Кинозал SD1","Кинозал SD1");
@@ -735,8 +762,8 @@ public class Utils {
         list.put("Открытый мир","Открытый мир");
         list.put("ОТР","ОТР");
         list.put("Охота и рыбалка","Охота и рыбалка");
-        list.put("Охотник и Рыболов","Охотник и Рыболов");
-        list.put("Охотник и Рыболов HD","Охотник и Рыболов HD");
+        list.put("Охотник и Рыболов",consts.c_ОхотникиРыболовHD);
+        list.put("Охотник и Рыболов HD",consts.c_ОхотникиРыболовHD);
         list.put("Первый (Европа)","Первый (Европа)");
         list.put("Первый (Россия)","Первый (Россия)");
         list.put("Первый HD","Первый HD");
@@ -768,10 +795,12 @@ public class Utils {
         list.put("Русский Экстрим","Русское экстремальное телевидение");
         list.put("Рыжий","Рыжий");
         list.put("Сарафан ТВ",consts.c_Сарафан);
-        list.put("Светлое ТВ","Светлое ТВ");
+        list.put("Светлое ТВ",consts.c_СветлоеТВ);
         list.put("Сетанта Спорт",consts.c_СетантаСпорт);
+        list.put("Setanta Sports HD",consts.c_СетантаСпорт);
         list.put("Сетанта Спорт Плюс",consts.c_СетантаСпортПлюс );
         list.put("Setanta Sports +",consts.c_СетантаСпортПлюс );
+        list.put("Setanta Sports 2",consts.c_СетантаСпортПлюс );
 
         list.put("Скиф Витебск","Скиф Витебск");
         list.put("Совершенно секретно","Совершенно секретно");
@@ -787,6 +816,7 @@ public class Utils {
         list.put("Страна","Страна");
         list.put("СТС","СТС");
         list.put("СТС International","СТС International");
+        list.put("Galaxy",consts.c_ТайныГалактики );
         list.put("СТС Love","СТС Love");
         list.put("Т24","Т24");
         list.put("24 Техно","Т24");
@@ -794,6 +824,7 @@ public class Utils {
         list.put("ТВ-Центр","ТВ-Центр");
         list.put("ТВ3 +2","ТВ3 +2");
         list.put("ТВ3 Минск","ТВ 3");
+        list.put("ТВ3",consts.c_ТВ3);
         list.put("Твой Дом","Твой Дом");
         list.put("ТДК","ТДК");
         list.put("Театр","Театр");
@@ -826,6 +857,7 @@ public class Utils {
         list.put("Эгоист ТВ","Эгоист ТВ");
         list.put("Ю ТВ","Ю ТВ");
         list.put("Юмор BOX","Юмор BOX");
+        list.put("Яснае ТВ HD",consts.c_Ясное);
         return Collections.unmodifiableMap(list);
     }
     public static String NormalazeChannelName(String channelName, Map<String, String> list){
@@ -895,15 +927,15 @@ public static byte[] CombyneBytes(byte[] one , byte[] two ) {
         return CombyneBytes(two, one);
     }
 
-    public static Boolean Preference_ShowNotes(){
-        return settingPreference.getBoolean(MainActivity.APP_PREFERENCES_SHOWNOTES, true);
+    public static Boolean Preference_ShowNotes(String postfix){
+        return settingPreference.getBoolean(MainActivity.APP_PREFERENCES_SHOWNOTES+postfix, true);
 
     }
 
 
-    public static void WritePreference_ShowNotes(Boolean ShowNotes){
+    public static void WritePreference_ShowNotes(Boolean ShowNotes, String postfix){
         SharedPreferences.Editor editor = settingPreference.edit();
-        editor.putBoolean(MainActivity.APP_PREFERENCES_SHOWNOTES, ShowNotes);
+        editor.putBoolean(MainActivity.APP_PREFERENCES_SHOWNOTES+postfix, ShowNotes);
         editor.commit();
     }
 }
